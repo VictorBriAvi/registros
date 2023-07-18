@@ -1,8 +1,9 @@
-import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AgregarProducto from "./components/productos/AgregarProducto";
 import Inicio from "./components/Inicio";
-
 import EditarProducto from "./components/productos/EditarProducto";
 import Productos from "./components/productos/Productos";
 import Servicios from "./components/servicios/servicios";
@@ -25,47 +26,74 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Inicio />}></Route>
+        <Route path="/registros/" element={<Inicio />}></Route>
         {/** Aca comienza el route de productos */}
-        <Route path="/productos" element={<Productos />}></Route>
-        <Route path="/crear-producto" element={<AgregarProducto />}></Route>
-        <Route path="/editar-producto/:id" element={<EditarProducto />}></Route>
+        <Route path="/registros/productos" element={<Productos />}></Route>
+        <Route
+          path="/registros/crear-producto"
+          element={<AgregarProducto />}
+        ></Route>
+        <Route
+          path="/registros/editar-producto/:id"
+          element={<EditarProducto />}
+        ></Route>
 
         {/** Aca comienza el route de servicios */}
-        <Route path="/servicios" element={<Servicios />}></Route>
-        <Route path="/crear-servicio/" element={<AgregarServicio />}></Route>
-        <Route path="/editar-servicio/:id" element={<EditarServicio />}></Route>
+        <Route path="/registros/servicios" element={<Servicios />}></Route>
+        <Route
+          path="/registros/crear-servicio/"
+          element={<AgregarServicio />}
+        ></Route>
+        <Route
+          path="/registros/editar-servicio/:id"
+          element={<EditarServicio />}
+        ></Route>
 
         {/** Aca comienza el route de colaboradores */}
-        <Route path="/colaboradores" element={<Colaboradores />}></Route>
         <Route
-          path="/crear-colaborador"
+          path="/registros/colaboradores"
+          element={<Colaboradores />}
+        ></Route>
+        <Route
+          path="/registros/crear-colaborador"
           element={<AgregarColaborador />}
         ></Route>
         <Route
-          path="/editar-colaboradores/:id"
+          path="/registros/editar-colaboradores/:id"
           element={<EditarColaborador />}
         />
         {/** Aca comienza el route de clientes */}
-        <Route path="/clientes" element={<Clientes />}></Route>
-        <Route path="/crear-cliente" element={<AgregarCliente />}></Route>
-        <Route path="/editar-cliente/:id" element={<EditarCliente />}></Route>
+        <Route path="/registros/clientes" element={<Clientes />}></Route>
+        <Route
+          path="/registros/crear-cliente"
+          element={<AgregarCliente />}
+        ></Route>
+        <Route
+          path="/registros/editar-cliente/:id"
+          element={<EditarCliente />}
+        ></Route>
 
         {/** Aca comienza el route de tipos de servicios */}
-        <Route path="/tiposDeServicios" element={<TiposDeServicios />}></Route>
         <Route
-          path="/crear-tipoDeServicio"
+          path="/registros/tiposDeServicios"
+          element={<TiposDeServicios />}
+        ></Route>
+        <Route
+          path="/registros/crear-tipoDeServicio"
           element={<AgregarTipoDeServicio />}
         ></Route>
         <Route
-          path="/editar-tipoDeServicio/:id"
+          path="/registros/editar-tipoDeServicio/:id"
           element={<EditarTipoDeServicio />}
         />
         {/** Aca comienza el route de tipos de pago */}
-        <Route path="/tiposDePago" element={<TiposDePago />}></Route>
-        <Route path="/crear-tipoDePago" element={<AgregarTipoDePago />}></Route>
+        <Route path="/registros/tiposDePago" element={<TiposDePago />}></Route>
         <Route
-          path="/editar-tipoDePago/:id"
+          path="/registros/crear-tipoDePago"
+          element={<AgregarTipoDePago />}
+        ></Route>
+        <Route
+          path="/registros/editar-tipoDePago/:id"
           element={<EditarTipoDePago />}
         ></Route>
       </Routes>

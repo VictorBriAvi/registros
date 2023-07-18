@@ -92,7 +92,7 @@ const EditarProducto = () => {
     console.log(productoActualizado);
     updateProducto(productoById.id, productoActualizado);
     Swal.fire("Buen Trabajo!", "has modificado el producto!", "success");
-    navigate("/productos");
+    navigate("/registros/productos");
   };
 
   if (!productoById) {
@@ -217,7 +217,7 @@ const EditarProducto = () => {
                   {<AiOutlineSave />} Agregar
                 </button>
 
-                <Link to={"/productos"}>
+                <Link to={"/registros/productos"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

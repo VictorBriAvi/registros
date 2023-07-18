@@ -25,14 +25,14 @@ const Clientes = () => {
           <hr />
           <div className="contenedor_button">
             <div className="container my-2">
-              <Link to={`/crear-cliente/`}>
+              <Link to={`/registros/crear-cliente/`}>
                 <button className="btn btn-primary font-weight-normal ">
                   {<AiFillFileAdd />} Agregar
                 </button>
               </Link>
             </div>
             <div className="container my-2">
-              <Link to={"/servicios"}>
+              <Link to={"/registros/servicios"}>
                 <button className="btn btn-info font-weight-normal text-white    ">
                   {<AiOutlineRollback />} Regresar
                 </button>
@@ -53,7 +53,9 @@ const Clientes = () => {
                   <td>{cliente.nombreCompletoCliente}</td>
 
                   <td>
-                    <Link to={`/editar-cliente/${cliente.id}`}>
+                    <Link
+                      to={`/registros/registros/editar-cliente/${cliente.id}`}
+                    >
                       <button className="btn btn-primary font-weight-normal me-3">
                         {<AiFillEdit />}
                       </button>

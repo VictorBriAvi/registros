@@ -76,7 +76,7 @@ const EditarCliente = () => {
     console.log(clienteActualizado);
     updateCliente(clienteById.id, clienteActualizado);
     Swal.fire("Buen Trabajo!", "has modificado al colaborador!", "success");
-    navigate("/clientes");
+    navigate("/registros/clientes");
   };
 
   if (!clienteById) {

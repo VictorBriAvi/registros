@@ -73,7 +73,7 @@ const AgregarProducto = () => {
     try {
       const respuesta = await addProducto(producto);
       console.log(respuesta);
-      navigate("/productos");
+      navigate("/registros/productos");
     } catch (error) {
       console.log(error);
     }
@@ -178,7 +178,7 @@ const AgregarProducto = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/productos"}>
+                <Link to={"/registros/productos"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

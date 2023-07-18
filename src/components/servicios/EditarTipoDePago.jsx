@@ -72,7 +72,7 @@ const EditarTipoDePago = () => {
       "has modificado modificado un tipo de pago!",
       "success"
     );
-    navigate("/tiposDePago");
+    navigate("/registros/tiposDePago");
   };
 
   if (!tipoDePagoById) {
@@ -121,7 +121,7 @@ const EditarTipoDePago = () => {
                   {<AiOutlineSave />} Agregar
                 </button>
 
-                <Link to={"/tiposDetiposDePago"}>
+                <Link to={"/registros/tiposDetiposDePago"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

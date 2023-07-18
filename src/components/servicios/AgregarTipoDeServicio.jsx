@@ -47,7 +47,7 @@ const AgregarTipoDeServicio = () => {
     try {
       const response = await addTipoDeServicio(servicio);
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");
-      navigate("/tiposDeServicios");
+      navigate("/registros/tiposDeServicios");
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -90,7 +90,7 @@ const AgregarTipoDeServicio = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/tiposDeServicios"}>
+                <Link to={"/registros/tiposDeServicios"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

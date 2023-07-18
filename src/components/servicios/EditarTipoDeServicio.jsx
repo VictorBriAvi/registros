@@ -68,7 +68,7 @@ const EditarTipoDeServicio = () => {
 
     updateTipoDeServicio(tipoDeServicioById.id, tipoDeServicioActualizado);
     Swal.fire("Buen Trabajo!", "has modificado al cliente!", "success");
-    navigate("/tiposDeServicios");
+    navigate("/registros/tiposDeServicios");
   };
 
   if (!tipoDeServicioById) {
@@ -117,7 +117,7 @@ const EditarTipoDeServicio = () => {
                   {<AiOutlineSave />} Agregar
                 </button>
 
-                <Link to={"/tiposDeServicios"}>
+                <Link to={"/registros/tiposDeServicios"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

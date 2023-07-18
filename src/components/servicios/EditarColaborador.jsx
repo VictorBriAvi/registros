@@ -92,7 +92,7 @@ const EditarColaboradores = () => {
     console.log(colaboradorActualizado);
     updateColaborador(colaboradorById.id, colaboradorActualizado);
     Swal.fire("Buen Trabajo!", "has modificado al colaborador!", "success");
-    navigate("/colaboradores");
+    navigate("/registros/colaboradores");
   };
 
   if (!colaboradorById) {
@@ -202,7 +202,7 @@ const EditarColaboradores = () => {
                   <button className="btn btn-primary font-weight-normal me-4">
                     {<AiOutlineSave />} Agregar
                   </button>
-                  <Link to={"/colaboradores"}>
+                  <Link to={"/registros/colaboradores"}>
                     <button className="btn btn-info font-weight-normal">
                       {<AiOutlineRollback />} Regresar
                     </button>

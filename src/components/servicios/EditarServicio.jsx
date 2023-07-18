@@ -121,7 +121,7 @@ const EditarServicio = () => {
     }
 
     updateServicio(servicioById.id, servicioActualizado);
-    navigate("/servicios");
+    navigate("/registros/servicios");
   };
 
   if (!servicioById) {
@@ -238,7 +238,7 @@ const EditarServicio = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/servicios"}>
+                <Link to={"/registros/servicios"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

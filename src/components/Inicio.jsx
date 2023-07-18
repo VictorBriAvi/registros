@@ -5,10 +5,10 @@ const Inicio = () => {
     <div>
       <h1>Inicio de programa</h1>
       <hr />
-      <Link to={"/productos"}>
+      <Link to={"/registros/productos"}>
         <button>Stock</button>
       </Link>
-      <Link to={"/servicios"}>
+      <Link to={"/registros/servicios"}>
         <button>Servicios</button>
       </Link>
     </div>

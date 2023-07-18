@@ -25,14 +25,14 @@ const Productos = () => {
         <div className="col-xs-12">
           <div className="contenedor_button">
             <div className="container my-2">
-              <Link to={`/crear-producto/`}>
+              <Link to={`/registros/crear-producto/`}>
                 <button className="btn btn-primary font-weight-normal ">
                   {<AiFillFileAdd />} Agregar
                 </button>
               </Link>
             </div>
             <div className="container my-2">
-              <Link to={"/"}>
+              <Link to={"/registros/"}>
                 <button className="btn btn-info font-weight-normal text-white    ">
                   {<AiOutlineRollback />} Regresar
                 </button>
@@ -60,7 +60,7 @@ const Productos = () => {
                   <td>{producto.precioProducto}</td>
 
                   <td>
-                    <Link to={`/editar-producto/${producto.id}`}>
+                    <Link to={`/registros/editar-producto/${producto.id}`}>
                       <button className="btn btn-primary font-weight-normal me-3">
                         {<AiFillEdit />}
                       </button>

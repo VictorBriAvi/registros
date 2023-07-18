@@ -1,6 +1,6 @@
 import { AiOutlineSave, AiOutlineRollback } from "react-icons/ai";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Select from "react-select";
 import useClienteLogic from "../../Hooks/useClienteLogic";
@@ -14,6 +14,7 @@ import useServicioLogic from "../../Hooks/useServiciosLogic";
 import Swal from "sweetalert2";
 
 const AgregarServicio = () => {
+  const navigate = useNavigate();
   const { clientes, isLoading } = useClienteLogic();
   const { colaboradores } = useColaboradoresLogic();
   const { tiposDePago } = useTiposDePagoLogic();
@@ -120,6 +121,7 @@ const AgregarServicio = () => {
       });
       console.log(response);
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");
+      navigate("/registros/servicios");
     } catch (error) {
       console.log(error);
     }
@@ -239,7 +241,7 @@ const AgregarServicio = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/servicios"}>
+                <Link to={"/registros/servicios"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

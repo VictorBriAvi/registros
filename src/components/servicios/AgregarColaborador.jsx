@@ -78,7 +78,7 @@ const AgregarColaborador = () => {
     try {
       const respuesta = await addColaborador(colaborador);
       console.log(respuesta);
-      navigate("/colaboradores");
+      navigate("/registros/colaboradores");
     } catch (error) {
       console.log(error);
     }
@@ -159,7 +159,7 @@ const AgregarColaborador = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/colaboradores"}>
+                <Link to={"/registros/colaboradores"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

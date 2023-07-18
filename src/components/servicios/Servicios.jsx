@@ -18,25 +18,25 @@ const Servicios = () => {
           <div>
             <h1>Ventas</h1>
             <div className="">
-              <Link to={"/colaboradores"}>
+              <Link to={"/registros/colaboradores"}>
                 <button className="btn btn-outline-primary me-3">
                   Colaboradores
                 </button>
               </Link>
 
-              <Link to={"/clientes"}>
+              <Link to={"/registros/clientes"}>
                 <button className="btn btn-outline-primary me-3">
                   Clientes
                 </button>
               </Link>
 
-              <Link to={"/tiposDeServicios"}>
+              <Link to={"/registros/tiposDeServicios"}>
                 <button className="btn btn-outline-primary me-3">
                   Servicios
                 </button>
               </Link>
 
-              <Link to={"/tiposDePago"}>
+              <Link to={"/registros/tiposDePago"}>
                 <button className="btn btn-outline-primary me-3">
                   Tipos de pago
                 </button>
@@ -47,14 +47,14 @@ const Servicios = () => {
           <hr />
           <div className="contenedor_button">
             <div className="container my-2">
-              <Link to={`/crear-servicio/`}>
+              <Link to={`/registros/crear-servicio/`}>
                 <button className="btn btn-primary font-weight-normal ">
                   {<AiFillFileAdd />} Agregar
                 </button>
               </Link>
             </div>
             <div className="container my-2">
-              <Link to={"/"}>
+              <Link to={"/registros/"}>
                 <button className="btn btn-info font-weight-normal text-white    ">
                   {<AiOutlineRollback />} Regresar
                 </button>

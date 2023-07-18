@@ -51,7 +51,7 @@ const AgregarTipoDePago = () => {
         "has agregado un nuevo tipo de pago!",
         "success"
       );
-      navigate("/tiposDePago");
+      navigate("/registros/tiposDePago");
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -95,7 +95,7 @@ const AgregarTipoDePago = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/tiposDePago"}>
+                <Link to={"/registros/tiposDePago"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>
