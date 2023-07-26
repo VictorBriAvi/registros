@@ -3,9 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Toast } from "../../Alert/Aler";
 import useProductoLogic from "../../Hooks/useProductoLogic";
+import { useThemeContext } from "../../context/ThemeContext";
+import "../../style/botones.css";
 
 const AgregarProducto = () => {
   const { addProducto, productos } = useProductoLogic();
+  const { contextTheme } = useThemeContext();
   const navigate = useNavigate();
 
   const [producto, setProducto] = useState({
@@ -80,112 +83,116 @@ const AgregarProducto = () => {
   };
 
   return (
-    <div className="container">
-      <div className="text-center">
-        <h1>Agregar Producto</h1>
-        <h5>Aca puedes agregar los productos</h5>
-        <hr />
-      </div>
-      <div className="row">
-        <div className="col-sm-12">
-          <form onSubmit={handleSubmit}>
-            <div>
-              <div className="my-2">
-                <label htmlFor="1">
-                  Ingrese el codigo del producto{" "}
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
-              </div>
+    <div className={`${contextTheme} contenedor`}>
+      <div className="container">
+        <div className="text-center">
+          <h1>Agregar Producto</h1>
+          <h5>Aca puedes agregar los productos</h5>
+          <hr />
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <form onSubmit={handleSubmit}>
+              <div>
+                <div className="my-2">
+                  <label htmlFor="1">
+                    Ingrese el codigo del producto{" "}
+                    <span className="text-danger  fw-bold">*</span>
+                  </label>
+                </div>
 
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="1"
-                  placeholder="codigo producto"
-                  name="codigoProducto"
-                  value={producto.codigoProducto}
-                  onChange={handleChange}
-                />
-                <label htmlFor="1">Codigo Producto </label>
-              </div>
-            </div>
-
-            <div>
-              <div className="my-2">
-                <label htmlFor="2">
-                  Ingresa el nombre del producto{" "}
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
-              </div>
-
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="2"
-                  name="nombreProducto"
-                  placeholder="nombre del producto"
-                  pattern="[A-Za-z\s]*"
-                  value={producto.nombreProducto}
-                  onChange={handleChange}
-                />
-                <label htmlFor="2">Nombre Producto</label>
-              </div>
-            </div>
-            <div>
-              <div className="my-2">
-                <label htmlFor="3">Ingresa la descripcion del producto </label>
-              </div>
-
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="3"
-                  name="descripcionProducto"
-                  placeholder="descripcion del producto"
-                  pattern="[A-Za-z\s]*"
-                  onInput={handleChange}
-                  value={producto.descripcionProducto}
-                />
-                <label htmlFor="3">Descripcion Producto</label>
-              </div>
-            </div>
-            <div>
-              <div className="my-2">
-                <label htmlFor="4">
-                  Ingresa el valor del producto{" "}
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
-              </div>
-
-              <div className="form-floating mb-3">
-                <input
-                  type="number"
-                  className="form-control"
-                  id="4"
-                  placeholder="precio producto"
-                  name="precioProducto"
-                  pattern="[0-9]+"
-                  value={producto.precioProducto}
-                  onInput={handleChange}
-                />
-                <label htmlFor="4">Precio Producto</label>
+                <div className="form-floating  letras">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="1"
+                    placeholder="codigo producto"
+                    name="codigoProducto"
+                    value={producto.codigoProducto}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="1">Codigo Producto </label>
+                </div>
               </div>
 
               <div>
-                <button className="btn btn-primary font-weight-normal me-4">
-                  {<AiOutlineSave />} Agregar
-                </button>
-                <Link to={"/registros/productos"}>
-                  <button className="btn btn-info font-weight-normal">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
+                <div className="my-2">
+                  <label htmlFor="2">
+                    Ingresa el nombre del producto
+                    <span className="text-danger  fw-bold">*</span>
+                  </label>
+                </div>
+
+                <div className="form-floating mb-3 letras">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="2"
+                    name="nombreProducto"
+                    placeholder="nombre del producto"
+                    pattern="[A-Za-z\s]*"
+                    value={producto.nombreProducto}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="2">Nombre Producto</label>
+                </div>
               </div>
-            </div>
-          </form>
+              <div>
+                <div className="my-2">
+                  <label htmlFor="3">
+                    Ingresa la descripcion del producto{" "}
+                  </label>
+                </div>
+
+                <div className="form-floating mb-3 letras">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="3"
+                    name="descripcionProducto"
+                    placeholder="descripcion del producto"
+                    pattern="[A-Za-z\s]*"
+                    onInput={handleChange}
+                    value={producto.descripcionProducto}
+                  />
+                  <label htmlFor="3">Descripcion Producto</label>
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <label htmlFor="4">
+                    Ingresa el valor del producto{" "}
+                    <span className="text-danger  fw-bold">*</span>
+                  </label>
+                </div>
+
+                <div className="form-floating mb-3 letras">
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="4"
+                    placeholder="precio producto"
+                    name="precioProducto"
+                    pattern="[0-9]+"
+                    value={producto.precioProducto}
+                    onInput={handleChange}
+                  />
+                  <label htmlFor="4">Precio Producto</label>
+                </div>
+
+                <div className="boton">
+                  <button className="btn btn-primary font-weight-normal me-4">
+                    {<AiOutlineSave />} Agregar
+                  </button>
+                  <Link to={"/registros/productos"}>
+                    <button className="btn btn-info font-weight-normal">
+                      {<AiOutlineRollback />} Regresar
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

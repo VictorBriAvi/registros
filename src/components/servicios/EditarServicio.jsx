@@ -14,6 +14,8 @@ import FichaInformacion from "../components/FichaInformacion";
 import { useEffect } from "react";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import Swal from "sweetalert2";
+import "../../style/productos.css";
+import "../../style/botones.css";
 
 const EditarServicio = () => {
   const params = useParams();
@@ -136,7 +138,7 @@ const EditarServicio = () => {
         <hr />
       </div>
       <div className="row">
-        <div className="col-sm-12">
+        <div className="col-sm-12 ">
           <form onSubmit={handleSubmit}>
             <div>
               <div className="my-2">

@@ -6,10 +6,13 @@ import Swal from "sweetalert2";
 
 import { Toast } from "../../Alert/Aler";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
+import "../../style/botones.css";
+import { useThemeContext } from "../../context/ThemeContext";
 
 const AgregarTipoDePago = () => {
   const navigate = useNavigate();
   const { addTipoDePago, tiposDePago } = useTiposDePagoLogic();
+  const { contextTheme } = useThemeContext();
 
   const [tipoDePago, setTipoDePago] = useState({
     nombreTipoDePago: "",
@@ -58,40 +61,40 @@ const AgregarTipoDePago = () => {
     }
   };
   return (
-    <div className="container">
-      <div className="text-center">
-        <h1>Agregar Tipos de pago</h1>
-        <h5>Aca puedes agregar los tipos de pago</h5>
-        <hr />
-      </div>
-      <div className="row">
-        <div className="col-sm-12">
-          <form onSubmit={handleSubmit}>
-            <div>
-              <div className="my-2">
-                <label htmlFor="1">
-                  Ingrese el tipo de pago
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
-              </div>
-
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="1"
-                  placeholder="tipoDePago"
-                  name="nombreTipoDePago"
-                  value={tipoDePago.nombreServicio}
-                  onChange={handleChange}
-                  pattern="[A-Za-z\s]+"
-                />
-                <label htmlFor="1">Ingrese el tipo de pago </label>
-              </div>
-            </div>
-
-            <div>
+    <div className={`${contextTheme} contenedor`}>
+      <div className="container">
+        <div className="text-center">
+          <h1>Agregar Tipos de pago</h1>
+          <h5>Aca puedes agregar los tipos de pago</h5>
+          <hr />
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <form onSubmit={handleSubmit}>
               <div>
+                <div className="my-2">
+                  <label htmlFor="1">
+                    Ingrese el tipo de pago
+                    <span className="text-danger  fw-bold">*</span>
+                  </label>
+                </div>
+
+                <div className="form-floating mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="1"
+                    placeholder="tipoDePago"
+                    name="nombreTipoDePago"
+                    value={tipoDePago.nombreServicio}
+                    onChange={handleChange}
+                    pattern="[A-Za-z\s]+"
+                  />
+                  <label htmlFor="1">Ingrese el tipo de pago </label>
+                </div>
+              </div>
+
+              <div className="boton">
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
@@ -101,8 +104,8 @@ const AgregarTipoDePago = () => {
                   </button>
                 </Link>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>

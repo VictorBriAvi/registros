@@ -1,0 +1,36 @@
+.dark {
+    background-color: #282c34;
+    color: white;
+    height: 100%;
+
+}
+
+
+.dark .letras {
+    color: black
+}
+
+.dark .tables .contenedor {
+    background-color: #282c34;
+}
+
+
+.light {
+    background-color: #f2f4f6;
+    color: #0d3f67;
+    height: 100%;
+
+
+}
+
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    ;
+
+
+
+
+}

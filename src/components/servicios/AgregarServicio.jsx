@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Toast } from "../../Alert/Aler";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import Swal from "sweetalert2";
+import "../../style/botones.css";
 
 const AgregarServicio = () => {
   const navigate = useNavigate();
@@ -237,7 +238,7 @@ const AgregarServicio = () => {
                 />
               </div>
 
-              <div>
+              <div className="boton">
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>

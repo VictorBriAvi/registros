@@ -6,8 +6,11 @@ import Swal from "sweetalert2";
 
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import { Toast } from "../../Alert/Aler";
+import { useThemeContext } from "../../context/ThemeContext";
+import "../../style/botones.css";
 
 const AgregarTipoDeServicio = () => {
+  const { contextTheme } = useThemeContext();
   const navigate = useNavigate();
   const { addTipoDeServicio, tiposServicios } = useTiposDeServiciosLogic();
 
@@ -54,39 +57,39 @@ const AgregarTipoDeServicio = () => {
     }
   };
   return (
-    <div className="container">
-      <div className="text-center">
-        <h1>Agregar nuevo servicio</h1>
-        <h5>Aca puedes agregar los nuevos servicios</h5>
-        <hr />
-      </div>
-      <div className="row">
-        <div className="col-sm-12">
-          <form onSubmit={handleSubmit}>
-            <div>
-              <div className="my-2">
-                <label htmlFor="1">
-                  Ingrese el servicio
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
-              </div>
-
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="1"
-                  placeholder="servicio"
-                  name="nombreServicio"
-                  value={servicio.nombreServicio}
-                  onChange={handleChange}
-                />
-                <label htmlFor="1">Ingrese el servicio </label>
-              </div>
-            </div>
-
-            <div>
+    <div className={`${contextTheme} contenedor`}>
+      <div className="container">
+        <div className="text-center">
+          <h1>Agregar nuevo servicio</h1>
+          <h5>Aca puedes agregar los nuevos servicios</h5>
+          <hr />
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <form onSubmit={handleSubmit}>
               <div>
+                <div className="my-2">
+                  <label htmlFor="1">
+                    Ingrese el servicio
+                    <span className="text-danger  fw-bold">*</span>
+                  </label>
+                </div>
+
+                <div className="form-floating mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="1"
+                    placeholder="servicio"
+                    name="nombreServicio"
+                    value={servicio.nombreServicio}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="1">Ingrese el servicio </label>
+                </div>
+              </div>
+
+              <div className="boton">
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
@@ -96,8 +99,8 @@ const AgregarTipoDeServicio = () => {
                   </button>
                 </Link>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>

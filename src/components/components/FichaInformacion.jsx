@@ -1,6 +1,9 @@
+import "../../style/productos.css";
+import "../../style/botones.css";
+
 const FichaInformacion = ({ servicioById }) => {
   return (
-    <div className="col-lg-6  centrar  my-5">
+    <div className="col-lg-6   mb-5 contenedor-info ">
       <h1>Informacion del producto</h1>
       <ul className="list-group text-center">
         <li className="list-group-item d-flex justify-content-between align-items-start">

@@ -7,8 +7,12 @@ import moment from "moment";
 
 import useClienteLogic from "../../Hooks/useClienteLogic";
 import { Toast } from "../../Alert/Aler";
+import "../../style/Inicio.css";
+import "../../style/botones.css";
+import { useThemeContext } from "../../context/ThemeContext";
 
 const AgregarCliente = () => {
+  const { contextTheme } = useThemeContext();
   const navigate = useNavigate();
   const { clientes, isLoading, addCliente } = useClienteLogic();
   const [cliente, setCliente] = useState({
@@ -74,52 +78,52 @@ const AgregarCliente = () => {
   }
 
   return (
-    <div className="container">
-      <div className="text-center">
-        <h1>Agregar Cliente</h1>
-        <h5>Aca puedes agregar al cliente</h5>
-        <hr />
-      </div>
-      <div className="row">
-        <div className="col-sm-12">
-          <form onSubmit={handleSubmit}>
-            <div>
-              <div className="my-2">
-                <label htmlFor="1">
-                  Ingrese el nombre del cliente
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
+    <div className={`${contextTheme} contenedor`}>
+      <div className="container">
+        <div className="text-center">
+          <h1>Agregar Cliente</h1>
+          <h5>Aca puedes agregar al cliente</h5>
+          <hr />
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <form onSubmit={handleSubmit}>
+              <div>
+                <div className="my-2">
+                  <label htmlFor="1">
+                    Ingrese el nombre del cliente
+                    <span className="text-danger  fw-bold">*</span>
+                  </label>
+                </div>
+
+                <div className="form-floating mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="1"
+                    placeholder="nombre colaborador"
+                    name="nombreCompletoCliente"
+                    pattern="[A-Za-z\s]*"
+                    value={cliente.nombreCompletoCliente}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="1">Nombre Cliente </label>
+                </div>
               </div>
 
-              <div className="form-floating mb-3">
+              <div>
+                <label className="me-5" htmlFor="fechaNacimiento">
+                  Fecha de Nacimiento:
+                </label>
                 <input
-                  type="text"
-                  className="form-control"
-                  id="1"
-                  placeholder="nombre colaborador"
-                  name="nombreCompletoCliente"
-                  pattern="[A-Za-z\s]*"
-                  value={cliente.nombreCompletoCliente}
+                  type="date"
+                  id="fechaNacimiento"
+                  name="fechaNacimiento"
+                  value={cliente.fechaNacimiento}
                   onChange={handleChange}
                 />
-                <label htmlFor="1">Nombre Cliente </label>
               </div>
-            </div>
-
-            <div>
-              <label className="me-5" htmlFor="fechaNacimiento">
-                Fecha de Nacimiento:
-              </label>
-              <input
-                type="date"
-                id="fechaNacimiento"
-                name="fechaNacimiento"
-                value={cliente.fechaNacimiento}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mt-5">
-              <div>
+              <div className="boton">
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
@@ -129,8 +133,8 @@ const AgregarCliente = () => {
                   </button>
                 </Link>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
