@@ -161,7 +161,7 @@ const AgregarProducto = () => {
               <div>
                 <div className="my-2">
                   <label htmlFor="4">
-                    Ingresa el valor del producto{" "}
+                    Ingresa el valor del producto
                     <span className="text-danger  fw-bold">*</span>
                   </label>
                 </div>

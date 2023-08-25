@@ -9,6 +9,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
+import moment from "moment";
 
 const useServicioLogic = () => {
   const [servicios, setServicios] = useState([]);
@@ -111,12 +112,16 @@ const useServicioLogic = () => {
       const tipoDeServicioRef = doc(db, nuevoServicio.nombreServicio);
       const tipoDePagoRef = doc(db, nuevoServicio.nombreTipoDePago);
 
+      // Generar y formatear la fecha actual con moment
+      const fechaActual = moment().format("YYYY-MM-DD");
+
       // Crear el objeto de servicio con las referencias
       const servicio = {
         nombreCompletoCliente: clienteRef,
         nombreCompletoEmpleado: colaboradorRef,
         nombreServicio: tipoDeServicioRef,
         nombreTipoDePago: tipoDePagoRef,
+        fechaServicio: fechaActual,
         precioProducto: nuevoServicio.precioProducto,
       };
 

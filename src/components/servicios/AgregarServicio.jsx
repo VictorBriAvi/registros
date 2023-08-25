@@ -13,6 +13,7 @@ import { Toast } from "../../Alert/Aler";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import Swal from "sweetalert2";
 import "../../style/botones.css";
+import moment from "moment";
 
 const AgregarServicio = () => {
   const navigate = useNavigate();
@@ -103,21 +104,15 @@ const AgregarServicio = () => {
       });
       return;
     }
-    /*
-    console.log({
-      nombreCompletoCliente: `/clientes/${servicio.nombreCompletoCliente.value}`,
-      nombreCompletoEmpleado: `/colaboradores/${servicio.nombreCompletoEmpleado.value}`,
-      nombreServicio: `/tiposDeServicios/${servicio.nombreServicio.value}`,
-      nombreTipoDePago: `/tiposDePago/${servicio.nombreTipoDePago.value}`,
-      precioProducto: servicio.precioProducto,
-    });
-*/
+
     try {
+      const fechaActual = moment().format("YYYY-MM-DD");
       const response = await addServicio({
         nombreCompletoCliente: `clientes/${servicio.nombreCompletoCliente.value}`,
         nombreCompletoEmpleado: `colaboradores/${servicio.nombreCompletoEmpleado.value}`,
         nombreServicio: `tiposDeServicios/${servicio.nombreServicio.value}`,
         nombreTipoDePago: `tiposDePago/${servicio.nombreTipoDePago.value}`,
+        fechaServicio: fechaActual,
         precioProducto: servicio.precioProducto,
       });
       console.log(response);

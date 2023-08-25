@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AgregarProducto from "./components/productos/AgregarProducto";
 import Inicio from "./components/Inicio";
 import EditarProducto from "./components/productos/EditarProducto";
@@ -21,6 +21,13 @@ import AgregarTipoDePago from "./components/servicios/AgregarTipoDePago";
 import EditarTipoDePago from "./components/servicios/EditarTipoDePago";
 import AgregarServicio from "./components/servicios/AgregarServicio";
 import EditarServicio from "./components/servicios/EditarServicio";
+import Gastos from "./components/gastos/Gastos";
+import AgregarGasto from "./components/gastos/AgregarGasto";
+import TiposDeGastos from "./components/gastos/TiposDeGastos";
+import AgregarTipoDeGasto from "./components/gastos/AgregarTipoDeGasto";
+import EditarTipoDegasto from "./components/gastos/EditarTipoDegasto";
+import EditarGasto from "./components/gastos/EditarGasto";
+import ArqueoDeCaja from "./components/arqueo-de-caja/ArqueoDeCaja";
 
 function App() {
   return (
@@ -94,6 +101,36 @@ function App() {
       <Route
         path="/registros/editar-tipoDePago/:id"
         element={<EditarTipoDePago />}
+      ></Route>
+      {/** Aca comienza el route de cierres de venta */}
+      <Route path="/registros/gastos" element={<Gastos />}></Route>
+      <Route
+        path="/registros/gastos/editar-gasto/:id"
+        element={<EditarGasto />}
+      ></Route>
+      <Route
+        path="/registros/crear-tipoDeGasto"
+        element={<AgregarGasto />}
+      ></Route>
+
+      {/** Aca comienza el route de tipos de gastos*/}
+      <Route
+        path="/registros/gastos/TiposDeGastos"
+        element={<TiposDeGastos />}
+      ></Route>
+      <Route
+        path="/registros/gastos/TiposDeGastos/Agregar-TipoDeGasto"
+        element={<AgregarTipoDeGasto />}
+      ></Route>
+      <Route
+        path="/registros/gastos/TiposDeGastos/editar-tipoDeGasto/:id"
+        element={<EditarTipoDegasto />}
+      ></Route>
+
+      {/** Aca comienza el arqueo de caja*/}
+      <Route
+        path="/registros/arqueo-de-caja"
+        element={<ArqueoDeCaja />}
       ></Route>
     </Routes>
   );
