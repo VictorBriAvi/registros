@@ -14,13 +14,30 @@ const AgregarTipoDeServicio = () => {
   const navigate = useNavigate();
   const { addTipoDeServicio, tiposServicios } = useTiposDeServiciosLogic();
 
+  const opcionesServicio = [
+    "Manicura",
+    "Peluquería",
+    "Depilación",
+    "Pestaña",
+    "Color",
+  ];
+
   const [servicio, setServicio] = useState({
     nombreServicio: "",
+    tipoDeTrabajo: "",
+    precioServicio: "",
   });
   const handleChange = (e) => {
+    let value = e.target.value;
+
+    // Si el campo es "precioServicio", convierte el valor a número
+    if (e.target.name === "precioServicio") {
+      value = parseFloat(value); // O parseInt si deseas un número entero
+    }
+
     setServicio({
       ...servicio,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
@@ -87,6 +104,43 @@ const AgregarTipoDeServicio = () => {
                   />
                   <label htmlFor="1">Ingrese el servicio </label>
                 </div>
+              </div>
+              <div className="form-floating mb-3">
+                <select
+                  className="form-select"
+                  id="2"
+                  name="tipoDeTrabajo"
+                  value={servicio.tipoDeTrabajo}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccione un servicio</option>
+                  {opcionesServicio.map((opcion, index) => (
+                    <option key={index} value={opcion}>
+                      {opcion}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="2">Seleccione el servicio</label>
+              </div>
+
+              <div className="my-2">
+                <label htmlFor="3">
+                  Ingresa el valor del servicio
+                  <span className="text-danger  fw-bold">*</span>
+                </label>
+              </div>
+
+              <div className="form-floating mb-3">
+                <input
+                  type="number"
+                  className="form-control"
+                  id="3"
+                  placeholder="precio producto"
+                  name="precioServicio"
+                  pattern="[0-9]+"
+                  value={servicio.precioServicio}
+                  onChange={(e) => handleChange(e, "precioServicio")}
+                />
               </div>
 
               <div className="boton">

@@ -28,6 +28,7 @@ import AgregarTipoDeGasto from "./components/gastos/AgregarTipoDeGasto";
 import EditarTipoDegasto from "./components/gastos/EditarTipoDegasto";
 import EditarGasto from "./components/gastos/EditarGasto";
 import ArqueoDeCaja from "./components/arqueo-de-caja/ArqueoDeCaja";
+import CalculosPorcentaje from "./components/servicios/CalculosPorcentaje";
 
 function App() {
   return (
@@ -92,6 +93,12 @@ function App() {
         path="/registros/editar-tipoDeServicio/:id"
         element={<EditarTipoDeServicio />}
       />
+
+      <Route
+        path="/registros/servicios/porcentaje"
+        element={<CalculosPorcentaje />}
+      />
+
       {/** Aca comienza el route de tipos de pago */}
       <Route path="/registros/tiposDePago" element={<TiposDePago />}></Route>
       <Route

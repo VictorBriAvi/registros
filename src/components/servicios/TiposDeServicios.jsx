@@ -6,16 +6,34 @@ import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
 import { useThemeContext } from "../../context/ThemeContext";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const TiposDeServicios = () => {
   const { contextTheme } = useThemeContext();
 
-  const { tiposServicios, isLoading, deleteTipoDeServicio } =
-    useTiposDeServiciosLogic();
+  const {
+    tiposServicios,
+    isLoading,
+    deleteTipoDeServicio,
+    paginaSiguiente,
+    paginaAnterior,
+  } = useTiposDeServiciosLogic();
+
+  const paginaClickSiguiente = (e) => {
+    e.preventDefault();
+    paginaSiguiente();
+  };
+
+  const paginaClickAnterior = (e) => {
+    e.preventDefault();
+    paginaAnterior();
+  };
 
   if (isLoading) {
     return <p>Cargando...</p>;
   }
+
   return (
     <div className={`${contextTheme} contenedor`}>
       <div className="container">
@@ -41,6 +59,13 @@ const TiposDeServicios = () => {
                   </button>
                 </Link>
               </div>
+              <div className="container my-2">
+                <Link to={"/registros/servicios/porcentaje"}>
+                  <button className="btn btn-warning font-weight-normal text-white    ">
+                    Porcentaje
+                  </button>
+                </Link>
+              </div>
             </div>
             <div className="table-responsive">
               <table
@@ -48,15 +73,19 @@ const TiposDeServicios = () => {
               >
                 <thead>
                   <tr>
-                    <th>Id</th>
                     <th>Tipo de servicio</th>
+                    <th>Precio efectivo o transferencia</th>
+                    <th>Precio normal</th>
+                    <th>Categoria servicio</th>
                   </tr>
                 </thead>
                 <tbody>
                   {tiposServicios.map((tipoDeServicio) => (
                     <tr key={tipoDeServicio.id}>
                       <td>{tipoDeServicio.nombreServicio}</td>
-
+                      <td>{tipoDeServicio.precioServicio}</td>
+                      <td>{tipoDeServicio.precioServicio * 1.2}</td>
+                      <td>{tipoDeServicio.tipoDeTrabajo}</td>
                       <td>
                         <Link
                           to={`/registros/editar-tipoDeServicio/${tipoDeServicio.id}`}
@@ -82,6 +111,9 @@ const TiposDeServicios = () => {
           </div>
         </div>
       </div>
+      {/* Paso 4: Botón de "Siguiente" */}
+      <button onClick={(e) => paginaClickSiguiente(e)}>Siguiente</button>
+      <button onClick={(e) => paginaClickAnterior(e)}>Anterior</button>
     </div>
   );
 };

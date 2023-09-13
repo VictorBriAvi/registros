@@ -42,9 +42,7 @@ const Inicio = () => {
         <Link to={"/registros/servicios"}>
           <button className="btn btn-outline-primary">Servicios</button>
         </Link>
-        <Link to={"/registros/gastos"}>
-          <button className="btn btn-outline-primary">Gastos</button>
-        </Link>
+
         <Link to={"/registros/gastos"}>
           <button className="btn btn-outline-primary">Gastos</button>
         </Link>
