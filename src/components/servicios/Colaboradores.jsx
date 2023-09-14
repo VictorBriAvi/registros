@@ -11,12 +11,23 @@ import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
 import { useThemeContext } from "../../context/ThemeContext";
+import DataTable from "../components/dataTable";
 
 const Colaboradores = () => {
   const { contextTheme } = useThemeContext();
-  const { colaboradores, isLoading, deleteColaborador } =
-    useColaboradoresLogic();
-  console.log(colaboradores);
+  const {
+    colaboradores,
+    isLoading,
+    deleteColaborador,
+    paginaSiguiente,
+    paginaAnterior,
+  } = useColaboradoresLogic();
+
+  const columnaServicio = [
+    { key: "nombreCompletoEmpleado", label: "Colaborador" },
+    { key: "fechaNacimiento", label: "Fecha Nacimiento" },
+    { key: "documentoNacional", label: "Documento" },
+  ];
 
   if (isLoading) {
     return <p>Cargando...</p>;
@@ -49,45 +60,14 @@ const Colaboradores = () => {
               </div>
             </div>
             <div className="table-responsive">
-              <table
-                className={`table table-${contextTheme} table-striped table-hover table-borderless`}
-              >
-                <thead>
-                  <tr>
-                    <th>Colaborador</th>
-                    <th>Fecha Nancimiento</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {colaboradores.map((colaborador) => (
-                    <tr key={colaborador.id}>
-                      <td>{colaborador.nombreCompletoEmpleado}</td>
-                      <td>
-                        {moment(colaborador.fechaNacimiento).format(
-                          "YYYY-MM-DD"
-                        )}
-                      </td>
-
-                      <td>
-                        <Link
-                          to={`/registros/editar-colaboradores/${colaborador.id}`}
-                        >
-                          <button className="btn btn-primary font-weight-normal me-3">
-                            {<AiFillEdit />}
-                          </button>
-                        </Link>
-
-                        <button
-                          className="btn btn-danger font-weight-normal "
-                          onClick={() => deleteColaborador(colaborador.id)}
-                        >
-                          {<AiFillDelete />}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <DataTable
+                columnaServicio={columnaServicio}
+                data={colaboradores}
+                deleteData={deleteColaborador}
+                paginaSiguiente={paginaSiguiente}
+                paginaAnterior={paginaAnterior}
+                editUrl="/registros/editar-colaboradores"
+              />
             </div>
           </div>
         </div>

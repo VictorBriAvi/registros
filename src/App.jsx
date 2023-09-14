@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import AgregarProducto from "./components/productos/AgregarProducto";
 import Inicio from "./components/Inicio";
 import EditarProducto from "./components/productos/EditarProducto";

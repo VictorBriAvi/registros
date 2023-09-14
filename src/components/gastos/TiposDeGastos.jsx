@@ -1,4 +1,4 @@
-import { AiFillDelete, AiFillEdit, AiFillFileAdd } from "react-icons/ai";
+import { AiFillFileAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 import { AiOutlineRollback } from "react-icons/ai";
@@ -7,10 +7,20 @@ import "../../style/productos.css";
 import "../../style/botones.css";
 import { useThemeContext } from "../../context/ThemeContext";
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
+import DataTable from "../components/dataTable";
 const TiposDeGastos = () => {
   const { contextTheme } = useThemeContext();
-  const { tiposDeGastos, isLoadingGasto, deleteTipoDeGasto } =
-    useTiposDeGastosLogic();
+  const {
+    tiposDeGastos,
+    isLoadingGasto,
+    deleteTipoDeGasto,
+    paginaSiguiente,
+    paginaAnterior,
+  } = useTiposDeGastosLogic();
+
+  const columnaServicio = [
+    { key: "nombreTipoDeGasto", label: "Nombre del tipo de gasto" },
+  ];
 
   if (isLoadingGasto) {
     return <p>Cargando...</p>;
@@ -43,7 +53,16 @@ const TiposDeGastos = () => {
                 </Link>
               </div>
             </div>
-            <table className="table">
+            <DataTable
+              columnaServicio={columnaServicio}
+              data={tiposDeGastos}
+              deleteData={deleteTipoDeGasto}
+              paginaSiguiente={paginaSiguiente}
+              paginaAnterior={paginaAnterior}
+              editUrl="/registros/gastos/TiposDeGastos/editar-tipoDeGasto"
+            />
+            {/**
+ *             <table className="table">
               <thead>
                 <tr>
                   <th>Tipo de gasto</th>
@@ -74,6 +93,7 @@ const TiposDeGastos = () => {
                 ))}
               </tbody>
             </table>
+ */}
           </div>
         </div>
       </div>

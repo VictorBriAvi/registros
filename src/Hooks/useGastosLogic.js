@@ -7,6 +7,11 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  endBefore,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 
@@ -14,16 +19,28 @@ const useGastosLogic = () => {
   const [gastos, setGastos] = useState([]);
   const [isLoadingGasto, setIsLoading] = useState(true);
 
+  const [ultimoDoc, setUltimoDoc] = useState(null);
+  const [primerDocVisible, setPrimerDocVisible] = useState([0]);
+
   const gastosCollection = collection(db, "gastos");
 
   const getGastos = async () => {
-    setIsLoading(true);
-    const data = await getDocs(gastosCollection);
-    const gastosData = [];
+    const gastosDataArreglo = [];
+    const primeraConsulta = query(
+      collection(db, "gastos"),
+      orderBy("nombreTipoDeGasto"),
+      limit(4)
+    );
 
-    for (const doc of data.docs) {
+    const documentSnapshots = await getDocs(primeraConsulta);
+
+    const ultimoVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+    const primerVisible = documentSnapshots.docs[0];
+
+    for (const doc of documentSnapshots.docs) {
       const gastoData = doc.data();
-      // Obtener el nombre del tipo de gasto utilizando referencia
 
       const gastoRef = gastoData.nombreTipoDeGasto;
       const gastoSnapshot = await getDoc(gastoRef);
@@ -36,12 +53,70 @@ const useGastosLogic = () => {
         descripcionGasto: doc.data().descripcionGasto,
         precioGasto: doc.data().precioGasto,
       };
-      gastosData.push(gasto);
-    }
 
-    const gastosOrdenados = gastosData.sort((a, b) => a.id.localeCompare(b.id));
-    setGastos(gastosOrdenados);
+      gastosDataArreglo.push(gasto);
+    }
+    setUltimoDoc(ultimoVisible);
+    setPrimerDocVisible(primerVisible);
+    setGastos(gastosDataArreglo);
     setIsLoading(false);
+  };
+
+  const paginaSiguiente = async () => {
+    const paginacionSiguiente = query(
+      collection(db, "gastos"),
+      orderBy("nombreTipoDeGasto"),
+      startAfter(ultimoDoc),
+      limit(4)
+    );
+
+    const documentSnapshots = await getDocs(paginacionSiguiente);
+
+    if (documentSnapshots.docs.length > 0) {
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      const gastosData = documentSnapshots.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      setUltimoDoc(ultimoVisible);
+      setGastos(gastosData);
+    } else {
+      console.log("no existen mas datos");
+    }
+  };
+
+  const paginaAnterior = async () => {
+    console.log(primerDocVisible);
+    if (primerDocVisible) {
+      const paginacionAnterior = query(
+        collection(db, "gastos"),
+        orderBy("nombreTipoDeGasto"),
+        endBefore(primerDocVisible),
+        limit(4)
+      );
+
+      const documentSnapshots = await getDocs(paginacionAnterior);
+
+      if (documentSnapshots.docs.length > 0) {
+        const primerVisible = documentSnapshots.docs[0];
+        const ultimoVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+        const gastosData = documentSnapshots.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+
+        setUltimoDoc(ultimoVisible);
+        setPrimerDocVisible(primerVisible);
+        setGastos(gastosData);
+      }
+    } else {
+      console.log("no existen mas datos");
+    }
   };
 
   const getGastoById = async (id) => {
@@ -117,6 +192,8 @@ const useGastosLogic = () => {
     deleteGasto,
     getGastoById,
     updateGasto,
+    paginaAnterior,
+    paginaSiguiente,
   };
 };
 

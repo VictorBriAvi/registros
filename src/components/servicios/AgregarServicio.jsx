@@ -17,10 +17,10 @@ import moment from "moment";
 
 const AgregarServicio = () => {
   const navigate = useNavigate();
-  const { clientes, isLoading } = useClienteLogic();
-  const { colaboradores } = useColaboradoresLogic();
-  const { tiposDePago } = useTiposDePagoLogic();
-  const { tiposServicios } = useTiposDeServiciosLogic();
+  const { clientesAll, isLoading } = useClienteLogic();
+  const { colaboradoresAll } = useColaboradoresLogic();
+  const { tiposDePagoAll } = useTiposDePagoLogic();
+  const { tiposServiciosAll } = useTiposDeServiciosLogic();
 
   const { addServicio } = useServicioLogic();
 
@@ -32,28 +32,28 @@ const AgregarServicio = () => {
     nombreTipoDePago: "",
   });
 
-  const SelectTiposDeServicios = tiposServicios
-    ? tiposServicios.map((tipoDeServicio) => ({
+  const SelectTiposDeServicios = tiposServiciosAll
+    ? tiposServiciosAll.map((tipoDeServicio) => ({
         value: tipoDeServicio.id,
         label: tipoDeServicio.nombreServicio,
       }))
     : [];
 
-  const SelectTiposDePago = tiposDePago
-    ? tiposDePago.map((tipoDePago) => ({
+  const SelectTiposDePago = tiposDePagoAll
+    ? tiposDePagoAll.map((tipoDePago) => ({
         value: tipoDePago.id,
         label: tipoDePago.nombreTipoDePago,
       }))
     : [];
-  const SelectColaboradores = colaboradores
-    ? colaboradores.map((colaborador) => ({
+  const SelectColaboradores = colaboradoresAll
+    ? colaboradoresAll.map((colaborador) => ({
         value: colaborador.id,
         label: colaborador.nombreCompletoEmpleado,
       }))
     : [];
 
-  const SelectCliente = clientes
-    ? clientes.map((cliente) => ({
+  const SelectCliente = clientesAll
+    ? clientesAll.map((cliente) => ({
         value: cliente.id,
         label: cliente.nombreCompletoCliente,
       }))

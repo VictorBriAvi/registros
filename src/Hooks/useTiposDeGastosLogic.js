@@ -7,6 +7,11 @@ import {
   getDoc,
   updateDoc,
   deleteDoc,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  endBefore,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 
@@ -14,21 +19,96 @@ const useTiposDeGastosLogic = () => {
   const [tiposDeGastos, setTiposDeGastos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [ultimoDoc, setUltimoDoc] = useState([]);
+  const [primerDocVisible, setPrimerDocVisible] = useState([0]);
+
   const tiposDeGastosCollection = collection(db, "tiposDeGastos");
 
-  const getTiposDeGasto = useCallback(async () => {
-    setIsLoading(true);
-    const data = await getDocs(tiposDeGastosCollection);
-    const tipoDeGastoData = data.docs.map((doc) => ({
+  /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
+  const getTiposDeGasto = async () => {
+    const primeraConsulta = query(
+      collection(db, "tiposDeGastos"),
+      orderBy("nombreTipoDeGasto"),
+      limit(4)
+    );
+    const documentSnapshots = await getDocs(primeraConsulta);
+
+    const ultimoVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+    const primerVisible = documentSnapshots.docs[0];
+
+    const tiposDeGastoData = documentSnapshots.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
-    const tipoDeGastosOrdenados = tipoDeGastoData.sort((a, b) =>
-      a.id.localeCompare(b.id)
-    );
-    setTiposDeGastos(tipoDeGastosOrdenados);
+
+    setUltimoDoc(ultimoVisible);
+    setPrimerDocVisible(primerVisible);
+    setTiposDeGastos(tiposDeGastoData);
     setIsLoading(false);
-  }, [tiposDeGastosCollection]);
+  };
+
+  /** paginaSiguiente : Esta funcion cuando le dan al boton Siguiente y avanzo a los 4 valores siguientes */
+
+  const paginaSiguiente = async () => {
+    const paginacionSiguiente = query(
+      collection(db, "tiposDeGastos"),
+      orderBy("nombreTipoDeGasto"),
+      startAfter(ultimoDoc),
+      limit(4)
+    );
+
+    const documentSnapshots = await getDocs(paginacionSiguiente);
+
+    if (documentSnapshots.docs.length > 0) {
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      const tipoDeGastoData = documentSnapshots.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      setUltimoDoc(ultimoVisible);
+      setTiposDeGastos(tipoDeGastoData);
+    } else {
+      console.log("no existen mas datos");
+    }
+  };
+
+  /** paginaAnterior : Esta funcion cuando le dan al boton Anterior retorna a los 4 valores anteriores */
+
+  const paginaAnterior = async () => {
+    console.log(primerDocVisible);
+    if (primerDocVisible) {
+      const paginacionAnterior = query(
+        collection(db, "tiposDeGastos"),
+        orderBy("nombreTipoDeGasto"),
+        endBefore(primerDocVisible),
+        limit(4)
+      );
+
+      const documentSnapshots = await getDocs(paginacionAnterior);
+
+      if (documentSnapshots.docs.length > 0) {
+        const primerVisible = documentSnapshots.docs[0];
+        const ultimoVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+        const tipoDeGastoData = documentSnapshots.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+
+        setUltimoDoc(ultimoVisible);
+        setPrimerDocVisible(primerVisible);
+        setTiposDeGastos(tipoDeGastoData);
+      }
+    } else {
+      console.log("no existen mas datos");
+    }
+  };
 
   const addTipoDeGasto = async (nuevoTipoDeGasto) => {
     try {
@@ -78,6 +158,8 @@ const useTiposDeGastosLogic = () => {
     getTipoDeGastoById,
     updateTipoDeGasto,
     deleteTipoDeGasto,
+    paginaSiguiente,
+    paginaAnterior,
   };
 };
 

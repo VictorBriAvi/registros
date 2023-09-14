@@ -8,9 +8,28 @@ import "../../style/botones.css";
 import { useThemeContext } from "../../context/ThemeContext";
 import { useState } from "react";
 import { useEffect } from "react";
+import DataTable from "../components/dataTable";
+import { Button, Container, Form } from "react-bootstrap";
 
 const TiposDeServicios = () => {
   const { contextTheme } = useThemeContext();
+
+  const [servicio, setServicio] = useState({
+    tipoDeTrabajo: "", // Estado para almacenar la categoría seleccionada
+  });
+  const opcionesServicio = [
+    "Manicura",
+    "Peluquería",
+    "Depilación",
+    "Pestaña",
+    "Color",
+  ];
+
+  const columnaServicio = [
+    { key: "nombreServicio", label: "Tipo de servicio" },
+    { key: "precioServicio", label: "Precio efectivo o transferencia" },
+    { key: "tipoDeTrabajo", label: "Categoria servicio" },
+  ];
 
   const {
     tiposServicios,
@@ -18,16 +37,25 @@ const TiposDeServicios = () => {
     deleteTipoDeServicio,
     paginaSiguiente,
     paginaAnterior,
+    buscarCategoria,
+    getTiposDeServicios,
   } = useTiposDeServiciosLogic();
 
-  const paginaClickSiguiente = (e) => {
+  const handleFiltraCategoria = (e) => {
     e.preventDefault();
-    paginaSiguiente();
+    console.log(servicio);
+    if (servicio.tipoDeTrabajo.trim() === "") {
+      getTiposDeServicios();
+    } else {
+      buscarCategoria(servicio);
+    }
   };
 
-  const paginaClickAnterior = (e) => {
-    e.preventDefault();
-    paginaAnterior();
+  const handleSelectChange = (e) => {
+    setServicio({
+      ...servicio,
+      tipoDeTrabajo: e.target.value, // Almacena la categoría seleccionada
+    });
   };
 
   if (isLoading) {
@@ -35,7 +63,7 @@ const TiposDeServicios = () => {
   }
 
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <Container className={`${contextTheme} contenedor`}>
       <div className="container">
         <div className="row">
           <div className="col-md-12">
@@ -44,6 +72,7 @@ const TiposDeServicios = () => {
             </div>
 
             <hr />
+
             <div className="boton">
               <div className="container my-2">
                 <Link to={`/registros/crear-tipoDeServicio/`}>
@@ -67,54 +96,60 @@ const TiposDeServicios = () => {
                 </Link>
               </div>
             </div>
-            <div className="table-responsive">
-              <table
-                className={`table table-${contextTheme} table-striped table-hover table-borderless `}
-              >
-                <thead>
-                  <tr>
-                    <th>Tipo de servicio</th>
-                    <th>Precio efectivo o transferencia</th>
-                    <th>Precio normal</th>
-                    <th>Categoria servicio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tiposServicios.map((tipoDeServicio) => (
-                    <tr key={tipoDeServicio.id}>
-                      <td>{tipoDeServicio.nombreServicio}</td>
-                      <td>{tipoDeServicio.precioServicio}</td>
-                      <td>{tipoDeServicio.precioServicio * 1.2}</td>
-                      <td>{tipoDeServicio.tipoDeTrabajo}</td>
-                      <td>
-                        <Link
-                          to={`/registros/editar-tipoDeServicio/${tipoDeServicio.id}`}
-                        >
-                          <button className="btn btn-primary font-weight-normal me-3">
-                            {<AiFillEdit />}
-                          </button>
-                        </Link>
-                        <button
-                          onClick={() =>
-                            deleteTipoDeServicio(tipoDeServicio.id)
-                          }
-                          className="btn btn-danger font-weight-normal "
-                        >
-                          {<AiFillDelete />}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <Container
+              fluid
+              className=" justify-content-center align-items-center "
+            >
+              <fieldset>
+                <label htmlFor="2">Buscar por categoría</label>
+                <div className="form-floating mb-3">
+                  <div className="row ">
+                    <div className="col-md-6">
+                      {/* Establecer el ancho del select */}
+                      <Form.Select
+                        aria-label="Default select example"
+                        id="2"
+                        name="tipoDeTrabajo"
+                        value={servicio.tipoDeTrabajo}
+                        onChange={handleSelectChange}
+                        className="h-100"
+                      >
+                        <option value="">Todas</option>
+                        {opcionesServicio.map((opcion, index) => (
+                          <option key={index} value={opcion}>
+                            {opcion}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </div>
+                    <div className="col-md-6">
+                      {/* Establecer el ancho del botón */}
+                      <Button
+                        variant="primary"
+                        onClick={(e) => handleFiltraCategoria(e)}
+                      >
+                        Mi Botón
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </Container>
+            {/** COMPONENTE DATATABLE : Esto carga los datos en una tabla para mostrarlos */}
+            <DataTable
+              columnaServicio={columnaServicio}
+              data={tiposServicios}
+              deleteData={deleteTipoDeServicio}
+              paginaSiguiente={paginaSiguiente}
+              paginaAnterior={paginaAnterior}
+              editUrl="/registros/editar-tipoDeServicio"
+            />
           </div>
         </div>
       </div>
+
       {/* Paso 4: Botón de "Siguiente" */}
-      <button onClick={(e) => paginaClickSiguiente(e)}>Siguiente</button>
-      <button onClick={(e) => paginaClickAnterior(e)}>Anterior</button>
-    </div>
+    </Container>
   );
 };
 

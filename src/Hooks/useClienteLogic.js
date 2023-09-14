@@ -7,39 +7,125 @@ import {
   getDoc,
   updateDoc,
   deleteDoc,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  endBefore,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 import moment from "moment";
 
 const useClienteLogic = () => {
   const [clientes, setClientes] = useState([]);
+  const [clientesAll, setClientesAll] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [ultimoDoc, setUltimoDoc] = useState([]);
+  const [primerDocVisible, setPrimerDocVisible] = useState([null]);
 
   const clientesCollection = collection(db, "clientes");
   const getClientes = useCallback(async () => {
-    setIsLoading(true);
-    const data = await getDocs(clientesCollection);
-    const clientesData = data.docs.map((doc) => {
-      const cliente = doc.data();
-      let fechaNacimiento;
+    const primeraConsulta = query(
+      collection(db, "clientes"),
+      orderBy("nombreCompletoCliente"),
+      limit(4)
+    );
+    const documentSnapshots = await getDocs(primeraConsulta);
 
-      if (cliente.fechaNacimiento instanceof Date) {
-        fechaNacimiento = cliente.fechaNacimiento;
-      } else {
-        fechaNacimiento = new Date(cliente.fechaNacimiento);
-      }
-      const fechaNacimientoFormatted =
-        moment(fechaNacimiento).format("YYYY-MM-DD");
+    const ultimoVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
-      return {
-        ...cliente,
-        id: doc.id,
-        fechaNacimiento: fechaNacimientoFormatted,
-      };
-    });
+    const primerVisible = documentSnapshots.docs[0];
+
+    const clientesData = documentSnapshots.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    setUltimoDoc(ultimoVisible);
+    setPrimerDocVisible(primerVisible);
     setClientes(clientesData);
     setIsLoading(false);
   }, [clientesCollection]);
+
+  const getClientesAll = useCallback(async () => {
+    const primeraConsulta = query(
+      collection(db, "clientes"),
+      orderBy("nombreCompletoCliente"),
+      limit(4)
+    );
+    const documentSnapshots = await getDocs(primeraConsulta);
+
+    const clientesData = documentSnapshots.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    setClientesAll(clientesData);
+    setIsLoading(false);
+  }, [clientesCollection]);
+
+  /** paginaSiguiente : Esta funcion cuando le dan al boton Siguiente y avanzo a los 4 valores siguientes */
+
+  const paginaSiguiente = async () => {
+    const paginacionSiguiente = query(
+      collection(db, "clientes"),
+      orderBy("nombreCompletoCliente"),
+      startAfter(ultimoDoc),
+      limit(4)
+    );
+
+    const documentSnapshots = await getDocs(paginacionSiguiente);
+
+    if (documentSnapshots.docs.length > 0) {
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      const clientesData = documentSnapshots.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      setUltimoDoc(ultimoVisible);
+      setClientes(clientesData);
+    } else {
+      console.log("no existen mas datos");
+    }
+  };
+
+  /** paginaAnterior : Esta funcion cuando le dan al boton Anterior retorna a los 4 valores anteriores */
+
+  const paginaAnterior = async () => {
+    console.log(primerDocVisible);
+    if (primerDocVisible) {
+      const paginacionAnterior = query(
+        collection(db, "clientes"),
+        orderBy("nombreCompletoCliente"),
+        endBefore(ultimoDoc),
+        limit(4)
+      );
+
+      const documentSnapshots = await getDocs(paginacionAnterior);
+
+      if (documentSnapshots.docs.length > 0) {
+        const primerVisible = documentSnapshots.docs[0];
+        const ultimoVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+        const clientesData = documentSnapshots.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+
+        setUltimoDoc(ultimoVisible);
+        setPrimerDocVisible(primerVisible);
+        setClientes(clientesData);
+      }
+    } else {
+      console.log("no existen mas datos");
+    }
+  };
 
   const addCliente = async (nuevoCliente) => {
     try {
@@ -88,6 +174,7 @@ const useClienteLogic = () => {
 
   useEffect(() => {
     getClientes();
+    getClientesAll();
   }, []);
 
   return {
@@ -97,6 +184,9 @@ const useClienteLogic = () => {
     getClienteById,
     updateCliente,
     deleteCliente,
+    paginaSiguiente,
+    paginaAnterior,
+    clientesAll,
   };
 };
 

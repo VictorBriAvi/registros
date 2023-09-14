@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
-import { Button, Container, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Container, Form, InputGroup } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 
 const CalculosPorcentaje = () => {
+  const navigate = useNavigate();
   const [porcentajeAumento, setPorcentajeAumento] = useState(0);
 
   const { tiposServicios, updateTipoDeServicio, subirServiciosPorCategoria } =
@@ -61,6 +62,7 @@ const CalculosPorcentaje = () => {
         try {
           // Llamar a la función de actualización para cada servicio
           await updateTipoDeServicio(idServicio, servicioActualizado);
+          navigate("/registros/tiposDeServicios");
         } catch (error) {
           console.log(
             `Error al actualizar el servicio con ID ${idServicio}:`,
@@ -103,6 +105,15 @@ const CalculosPorcentaje = () => {
           <fieldset>
             <label>Porcentaje de Aumento:</label>
             <div className="form-floating mb-3">
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="inputGroup-sizing-default">
+                  %
+                </InputGroup.Text>
+                <Form.Control
+                  aria-label="Default"
+                  aria-describedby="inputGroup-sizing-default"
+                />
+              </InputGroup>
               <input
                 type="number"
                 value={porcentajeAumento}

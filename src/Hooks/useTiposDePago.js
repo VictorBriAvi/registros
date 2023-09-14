@@ -7,28 +7,131 @@ import {
   getDoc,
   updateDoc,
   deleteDoc,
+  orderBy,
+  limit,
+  query,
+  startAfter,
+  endBefore,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 
 const useTiposDePagoLogic = () => {
   const [tiposDePago, setTiposDePago] = useState([]);
+  const [tiposDePagoAll, setTiposDePagoAll] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [ultimoDoc, setUltimoDoc] = useState(null);
+  const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const tiposDePagoCollection = collection(db, "tiposDePago");
 
   const getTiposDePago = useCallback(async () => {
     setIsLoading(true);
-    const data = await getDocs(tiposDePagoCollection);
-    const tipoPagoData = data.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    const tipoDePagoOrdenados = tipoPagoData.sort((a, b) =>
-      a.id.localeCompare(b.id)
+    const paginacionSiguiente = query(
+      collection(db, "tiposDePago"),
+      orderBy("nombreTipoDePago"),
+      limit(4)
     );
-    setTiposDePago(tipoDePagoOrdenados);
+
+    const documentSnapshots = await getDocs(paginacionSiguiente);
+
+    if (documentSnapshots.docs.length > 0) {
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      const primerVisible = documentSnapshots.docs[0];
+
+      const tipoDePagoData = documentSnapshots.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
+      setTiposDePago(tipoDePagoData);
+    } else {
+      console.log("no existen mas datos");
+    }
     setIsLoading(false);
   }, [tiposDePagoCollection]);
+
+  const getTiposDePagoAll = useCallback(async () => {
+    setIsLoading(true);
+    const paginacionSiguiente = query(
+      collection(db, "tiposDePago"),
+      orderBy("nombreTipoDePago")
+    );
+
+    const documentSnapshots = await getDocs(paginacionSiguiente);
+
+    if (documentSnapshots.docs.length > 0) {
+      const tipoDePagoData = documentSnapshots.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      setTiposDePagoAll(tipoDePagoData);
+    } else {
+      console.log("no existen mas datos");
+    }
+    setIsLoading(false);
+  }, [tiposDePagoCollection]);
+
+  const paginaSiguiente = async () => {
+    const paginacionSiguiente = query(
+      collection(db, "tiposDePago"),
+      orderBy("nombreTipoDePago"),
+      startAfter(ultimoDoc),
+      limit(4)
+    );
+
+    const documentSnapshots = await getDocs(paginacionSiguiente);
+
+    if (documentSnapshots.docs.length > 0) {
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      const tipoDePagoData = documentSnapshots.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      setUltimoDoc(ultimoVisible);
+      setTiposDePago(tipoDePagoData);
+    } else {
+      console.log("no existen mas datos");
+    }
+  };
+
+  const paginaAnterior = async () => {
+    if (primerDocVisible) {
+      const paginacionAnterior = query(
+        collection(db, "tiposDePago"),
+        orderBy("nombreTipoDePago"),
+        endBefore(primerDocVisible),
+        limit(4)
+      );
+
+      const documentSnapshots = await getDocs(paginacionAnterior);
+
+      if (documentSnapshots.docs.length > 0) {
+        const primerVisible = documentSnapshots.docs[0];
+        const ultimoVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+        const tipoDePagoData = documentSnapshots.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+
+        setUltimoDoc(ultimoVisible);
+        setPrimerDocVisible(primerVisible);
+        setTiposDePago(tipoDePagoData);
+      }
+    } else {
+      console.log("no existen mas datos");
+    }
+  };
 
   const addTipoDePago = async (nuevoTipoDePago) => {
     try {
@@ -69,6 +172,7 @@ const useTiposDePagoLogic = () => {
 
   useEffect(() => {
     getTiposDePago();
+    getTiposDePagoAll();
   }, []);
 
   return {
@@ -78,6 +182,9 @@ const useTiposDePagoLogic = () => {
     getTipoDePagoById,
     updateTipoDePago,
     deleteTipoDePago,
+    paginaSiguiente,
+    paginaAnterior,
+    tiposDePagoAll,
   };
 };
 

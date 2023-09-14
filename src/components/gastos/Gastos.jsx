@@ -7,10 +7,23 @@ import useGastosLogic from "../../Hooks/useGastosLogic";
 import { useThemeContext } from "../../context/ThemeContext";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
+import DataTable from "../components/dataTable";
 
 const Cierres = () => {
-  const { gastos, isLoadingGasto, deleteGasto } = useGastosLogic();
+  const {
+    gastos,
+    isLoadingGasto,
+    deleteGasto,
+    paginaSiguiente,
+    paginaAnterior,
+  } = useGastosLogic();
   const { contextTheme } = useThemeContext();
+
+  const columnaServicio = [
+    { key: "nombreTipoDeGasto", label: "Tipo de gasto" },
+    { key: "descripcionGasto", label: "Descripcion" },
+    { key: "precioGasto", label: "Valor Gasto" },
+  ];
 
   if (isLoadingGasto) {
     return <p>Cargando...</p>;
@@ -49,6 +62,15 @@ const Cierres = () => {
               </div>
             </div>
             <div className="table-responsive">
+              <DataTable
+                columnaServicio={columnaServicio}
+                data={gastos}
+                deleteData={deleteGasto}
+                paginaSiguiente={paginaSiguiente}
+                paginaAnterior={paginaAnterior}
+                editUrl="/registros/gastos/editar-gasto"
+              />
+              {/**
               <table className="table table-striped table-hover table-borderless ">
                 <thead>
                   <tr>
@@ -82,6 +104,7 @@ const Cierres = () => {
                   ))}
                 </tbody>
               </table>
+               */}
             </div>
           </div>
         </div>

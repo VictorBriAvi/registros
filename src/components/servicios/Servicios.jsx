@@ -1,16 +1,31 @@
 import { Link } from "react-router-dom";
 
-import { AiFillDelete, AiFillEdit, AiFillFileAdd } from "react-icons/ai";
+import { AiFillFileAdd } from "react-icons/ai";
 
 import { AiOutlineRollback } from "react-icons/ai";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import { useThemeContext } from "../../context/ThemeContext";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
+import DataTable from "../components/dataTable";
 
 const Servicios = () => {
-  const { servicios, isLoading, deleteServicio } = useServicioLogic();
+  const {
+    servicios,
+    isLoading,
+    deleteServicio,
+    paginaSiguiente,
+    paginaAnterior,
+  } = useServicioLogic();
   const { contextTheme } = useThemeContext();
+
+  const columnaServicio = [
+    { key: "nombreCompletoEmpleado", label: "Colaborador" },
+    { key: "nombreCompletoCliente", label: "Cliente" },
+    { key: "nombreTipoDePago", label: "Tipo de pago" },
+    { key: "nombreServicio", label: "Servicio" },
+    { key: "precioProducto", label: "Precio" },
+  ];
 
   if (isLoading) {
     return <p>Cargando...</p>;
@@ -67,43 +82,14 @@ const Servicios = () => {
               </div>
             </div>
             <div className="table-responsive">
-              <table className="table table-striped table-hover table-borderless ">
-                <thead>
-                  <tr>
-                    <th>Colaborador</th>
-                    <th>Cliente</th>
-                    <th>Tipo de pago</th>
-                    <th>Servicio</th>
-                    <th>Precio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {servicios.map((servicio) => (
-                    <tr key={servicio.id}>
-                      <td>{servicio.nombreCompletoEmpleado}</td>
-                      <td>{servicio.nombreCompletoCliente}</td>
-                      <td>{servicio.nombreTipoDePago}</td>
-                      <td>{servicio.nombreServicio}</td>
-                      <td>{servicio.precioProducto}</td>
-
-                      <td>
-                        <Link to={`/registros/editar-servicio/${servicio.id}`}>
-                          <button className="btn btn-primary font-weight-normal me-3">
-                            {<AiFillEdit />}
-                          </button>
-                        </Link>
-
-                        <button
-                          onClick={() => deleteServicio(servicio.id)}
-                          className="btn btn-danger font-weight-normal "
-                        >
-                          {<AiFillDelete />}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <DataTable
+                columnaServicio={columnaServicio}
+                data={servicios}
+                deleteData={deleteServicio}
+                paginaSiguiente={paginaSiguiente}
+                paginaAnterior={paginaAnterior}
+                editUrl="/registros/editar-servicio"
+              />
             </div>
           </div>
         </div>

@@ -10,10 +10,22 @@ import useClienteLogic from "../../Hooks/useClienteLogic";
 import { useThemeContext } from "../../context/ThemeContext";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
+import DataTable from "../components/dataTable";
 
 const Clientes = () => {
   const { contextTheme } = useThemeContext();
-  const { clientes, isLoading, deleteCliente } = useClienteLogic();
+  const {
+    clientes,
+    isLoading,
+    deleteCliente,
+    paginaSiguiente,
+    paginaAnterior,
+  } = useClienteLogic();
+
+  const columnaServicio = [
+    { key: "nombreCompletoCliente", label: "Cliente" },
+    { key: "fechaNacimiento", label: "Fecha Nacimiento" },
+  ];
 
   if (isLoading) {
     return <p>Cargando...</p>;
@@ -45,37 +57,14 @@ const Clientes = () => {
               </div>
             </div>
             <div className="table-responsive">
-              <table
-                className={`table table-${contextTheme} table-striped table-hover table-borderless `}
-              >
-                <thead>
-                  <tr>
-                    <th>Cliente</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {clientes.map((cliente) => (
-                    <tr key={cliente.id}>
-                      <td>{cliente.nombreCompletoCliente}</td>
-
-                      <td>
-                        <Link to={`/registros/editar-cliente/${cliente.id}`}>
-                          <button className="btn btn-primary font-weight-normal me-3">
-                            {<AiFillEdit />}
-                          </button>
-                        </Link>
-
-                        <button
-                          className="btn btn-danger font-weight-normal "
-                          onClick={() => deleteCliente(cliente.id)}
-                        >
-                          {<AiFillDelete />}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <DataTable
+                columnaServicio={columnaServicio}
+                data={clientes}
+                deleteData={deleteCliente}
+                paginaSiguiente={paginaSiguiente}
+                paginaAnterior={paginaAnterior}
+                editUrl="/registros/editar-cliente"
+              />
             </div>
           </div>
         </div>

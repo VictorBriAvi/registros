@@ -12,10 +12,24 @@ import useProductoLogic from "../../Hooks/useProductoLogic";
 import { useThemeContext } from "../../context/ThemeContext";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
+import DataTable from "../components/dataTable";
 
 const Productos = () => {
-  const { productos, deleteProducto, isLoading } = useProductoLogic();
+  const {
+    productos,
+    deleteProducto,
+    isLoading,
+    paginaSiguiente,
+    paginaAnterior,
+  } = useProductoLogic();
   const { contextTheme } = useThemeContext();
+
+  const columnaServicio = [
+    { key: "codigoProducto", label: "Codigo Producto" },
+    { key: "nombreProducto", label: "Nombre Producto" },
+    { key: "descripcionProducto", label: "Descripcion Producto" },
+    { key: "precioProducto", label: "Precio Producto" },
+  ];
 
   console.log(contextTheme);
   if (isLoading) {
@@ -43,6 +57,25 @@ const Productos = () => {
             </div>
           </div>
           <div className="table-responsive">
+            <DataTable
+              columnaServicio={columnaServicio}
+              data={productos}
+              deleteData={deleteProducto}
+              paginaSiguiente={paginaSiguiente}
+              paginaAnterior={paginaAnterior}
+              editUrl="/registros/editar-producto"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Productos;
+
+{
+  /**
             <table
               className={`table table-${contextTheme} table-striped table-hover table-borderless `}
             >
@@ -80,11 +113,6 @@ const Productos = () => {
                 ))}
               </tbody>
             </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
-export default Productos;
+*/
+}

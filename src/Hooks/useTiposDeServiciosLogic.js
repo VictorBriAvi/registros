@@ -1,5 +1,7 @@
 import {
+  addDoc,
   collection,
+  deleteDoc,
   doc,
   endBefore,
   getDoc,
@@ -8,28 +10,33 @@ import {
   orderBy,
   query,
   startAfter,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebaseConfig/firebase";
-import { useCallback } from "react";
+
 import { useEffect } from "react";
 
 const useTiposDeServiciosLogic = () => {
   const [tiposServicios, setTiposServicios] = useState([]);
+  const [tiposServiciosAll, setTiposServiciosAll] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [ultimoDoc, setUltimoDoc] = useState([]);
-  const [primerDocVisible, setPrimerDocVisible] = useState([null]);
+  const [ultimoDoc, setUltimoDoc] = useState(null);
+  const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const tiposServiciosCollection = collection(db, "tiposDeServicios");
 
+  /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
+
   const getTiposDeServicios = async () => {
-    const primeraPaginacion = query(
+    const primeraConsulta = query(
       collection(db, "tiposDeServicios"),
       orderBy("tipoDeTrabajo"),
       limit(4)
     );
-    const documentSnapshots = await getDocs(primeraPaginacion);
+    const documentSnapshots = await getDocs(primeraConsulta);
 
     const ultimoVisible =
       documentSnapshots.docs[documentSnapshots.docs.length - 1];
@@ -47,6 +54,24 @@ const useTiposDeServiciosLogic = () => {
     setIsLoading(false);
   };
 
+  const getTiposDeServiciosAll = async () => {
+    const primeraConsulta = query(
+      collection(db, "tiposDeServicios"),
+      orderBy("tipoDeTrabajo")
+    );
+    const documentSnapshots = await getDocs(primeraConsulta);
+
+    const tiposDeServiciosData = documentSnapshots.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    setTiposServiciosAll(tiposDeServiciosData);
+    setIsLoading(false);
+  };
+
+  /** paginaSiguiente : Esta funcion cuando le dan al boton Siguiente y avanzo a los 4 valores siguientes */
+
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "tiposDeServicios"),
@@ -58,6 +83,7 @@ const useTiposDeServiciosLogic = () => {
     const documentSnapshots = await getDocs(paginacionSiguiente);
 
     if (documentSnapshots.docs.length > 0) {
+      const primerVisible = documentSnapshots.docs[0];
       const ultimoVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
@@ -68,11 +94,14 @@ const useTiposDeServiciosLogic = () => {
 
       console.log(tipoDeServiciosData);
       setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
       setTiposServicios(tipoDeServiciosData);
     } else {
       console.log("no existen mas datos");
     }
   };
+
+  /** paginaAnterior : Esta funcion cuando le dan al boton Anterior retorna a los 4 valores anteriores */
 
   const paginaAnterior = async () => {
     console.log(primerDocVisible);
@@ -80,7 +109,7 @@ const useTiposDeServiciosLogic = () => {
       const paginacionAnterior = query(
         collection(db, "tiposDeServicios"),
         orderBy("tipoDeTrabajo"),
-        endBefore(ultimoDoc),
+        endBefore(primerDocVisible),
         limit(4)
       );
 
@@ -95,10 +124,9 @@ const useTiposDeServiciosLogic = () => {
           ...doc.data(),
           id: doc.id,
         }));
-
-        console.log(tipoDeServiciosData);
-        setUltimoDoc(ultimoVisible);
         setPrimerDocVisible(primerVisible);
+        setUltimoDoc(ultimoVisible);
+
         setTiposServicios(tipoDeServiciosData);
       }
     } else {
@@ -106,6 +134,38 @@ const useTiposDeServiciosLogic = () => {
     }
   };
 
+  /** buscarCategoria: Esta funcion se va a encarga de buscar y mostrar todo segun la categoria */
+
+  const buscarCategoria = async (servicio) => {
+    /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
+
+    console.log(servicio);
+
+    const primeraConsulta = query(
+      collection(db, "tiposDeServicios"),
+      servicio
+        ? where("tipoDeTrabajo", "==", servicio.tipoDeTrabajo)
+        : null || " ",
+      orderBy("tipoDeTrabajo"),
+      limit(4)
+    );
+    const documentSnapshots = await getDocs(primeraConsulta);
+
+    const ultimoVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+    const primerVisible = documentSnapshots.docs[0];
+
+    const tiposDeServiciosData = documentSnapshots.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    setUltimoDoc(ultimoVisible);
+    setPrimerDocVisible(primerVisible);
+    setTiposServicios(tiposDeServiciosData);
+    setIsLoading(false);
+  };
   const addTipoDeServicio = async (nuevoServicio) => {
     try {
       await addDoc(tiposServiciosCollection, nuevoServicio);
@@ -193,6 +253,7 @@ const useTiposDeServiciosLogic = () => {
 
   useEffect(() => {
     getTiposDeServicios();
+    getTiposDeServiciosAll();
   }, []);
 
   return {
@@ -206,6 +267,8 @@ const useTiposDeServiciosLogic = () => {
     getTiposDeServicios,
     paginaSiguiente,
     paginaAnterior,
+    buscarCategoria,
+    tiposServiciosAll,
   };
 };
 

@@ -6,10 +6,19 @@ import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
 import "../../style/productos.css";
 import "../../style/botones.css";
 import { useThemeContext } from "../../context/ThemeContext";
+import DataTable from "../components/dataTable";
 
 const TiposDePago = () => {
   const { contextTheme } = useThemeContext();
-  const { tiposDePago, isLoading, deleteTipoDePago } = useTiposDePagoLogic();
+  const {
+    tiposDePago,
+    isLoading,
+    deleteTipoDePago,
+    paginaAnterior,
+    paginaSiguiente,
+  } = useTiposDePagoLogic();
+
+  const columnaServicio = [{ key: "nombreTipoDePago", label: "Tipo De Pago" }];
 
   if (isLoading) {
     return <p>Cargando...</p>;
@@ -40,37 +49,14 @@ const TiposDePago = () => {
                 </Link>
               </div>
             </div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Tipo de pago</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tiposDePago.map((tipoDePago) => (
-                  <tr key={tipoDePago.id}>
-                    <td>{tipoDePago.nombreTipoDePago}</td>
-
-                    <td>
-                      <Link
-                        to={`/registros/editar-tipoDePago/${tipoDePago.id}`}
-                      >
-                        <button className="btn btn-primary font-weight-normal me-3">
-                          {<AiFillEdit />}
-                        </button>
-                      </Link>
-
-                      <button
-                        onClick={() => deleteTipoDePago(tipoDePago.id)}
-                        className="btn btn-danger font-weight-normal "
-                      >
-                        {<AiFillDelete />}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <DataTable
+              columnaServicio={columnaServicio}
+              data={tiposDePago}
+              deleteData={deleteTipoDePago}
+              paginaSiguiente={paginaSiguiente}
+              paginaAnterior={paginaAnterior}
+              editUrl="/registros/editar-tipoDePago"
+            />
           </div>
         </div>
       </div>
