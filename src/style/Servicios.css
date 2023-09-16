@@ -1,0 +1,7 @@
+/* En tu archivo de estilos CSS o SCSS */
+.custom-datepicker::placeholder {
+    font-size: 1.2rem;
+    text-align: center;
+    /* Ajusta el tamaño del texto del placeholder según tus preferencias */
+    /* Otros estilos que desees aplicar */
+}

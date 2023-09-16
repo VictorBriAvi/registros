@@ -8,6 +8,12 @@ import { useThemeContext } from "../../context/ThemeContext";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
 import DataTable from "../components/dataTable";
+import { useEffect, useState } from "react";
+import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // Importa los estilos CSS
+import { Button } from "react-bootstrap";
+import "../../style/Servicios.css";
 
 const Servicios = () => {
   const {
@@ -16,8 +22,12 @@ const Servicios = () => {
     deleteServicio,
     paginaSiguiente,
     paginaAnterior,
+    getServiciosForDate,
+    getServicios,
   } = useServicioLogic();
   const { contextTheme } = useThemeContext();
+  const [fechaActual, setFechaActual] = useState("");
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
   const columnaServicio = [
     { key: "nombreCompletoEmpleado", label: "Colaborador" },
@@ -25,7 +35,36 @@ const Servicios = () => {
     { key: "nombreTipoDePago", label: "Tipo de pago" },
     { key: "nombreServicio", label: "Servicio" },
     { key: "precioProducto", label: "Precio" },
+    { key: "fechaServicio", label: "Fecha" },
   ];
+
+  console.log(servicios);
+  /*
+  const handleBuscarPorFecha = (e) => {
+    e.preventDefault();
+    // Aquí puedes usar la variable 'fechaSeleccionada' para realizar la acción deseada
+    if (fechaSeleccionada) {
+      const fechaFormateada = moment(fechaSeleccionada).format("DD/MM/YYYY");
+
+      getServiciosForDate(fechaFormateada);
+      // Realiza aquí lo que necesites con la fecha seleccionada
+    } else {
+      // Maneja el caso donde no se ha seleccionado ninguna fecha
+      console.log("Ninguna fecha seleccionada");
+      getServicios();
+    }
+  };
+  */
+
+  const handleDateChange = (date) => {
+    setFechaSeleccionada(date);
+  };
+
+  useEffect(() => {
+    // Obtiene la fecha actual y la formatea
+    const fechaActualFormateada = moment().format("DD MMMM YYYY");
+    setFechaActual(fechaActualFormateada);
+  }, []);
 
   if (isLoading) {
     return <p>Cargando...</p>;
@@ -81,15 +120,35 @@ const Servicios = () => {
                 </Link>
               </div>
             </div>
-            <div className="table-responsive">
-              <DataTable
-                columnaServicio={columnaServicio}
-                data={servicios}
-                deleteData={deleteServicio}
-                paginaSiguiente={paginaSiguiente}
-                paginaAnterior={paginaAnterior}
-                editUrl="/registros/editar-servicio"
-              />
+
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <h3>
+                Filtra por fecha
+                <DatePicker
+                  selected={fechaSeleccionada}
+                  onChange={handleDateChange}
+                  placeholderText="¿ Que fecha buscamos?"
+                  dateFormat="dd/MM/yyyy"
+                  className="custom-datepicker" // Agrega una clase personalizada
+                />
+                {/**          <Button onClick={(e) => handleBuscarPorFecha(e)}>
+                  Buscar fecha
+                </Button> */}
+              </h3>
+            </div>
+            <div>
+              <h4>Fecha actual: {fechaActual}</h4>
+              {/* Aquí puedes renderizar tu DataTable con la fecha actual */}
+              <div className="table-responsive">
+                <DataTable
+                  columnaServicio={columnaServicio}
+                  data={servicios}
+                  deleteData={deleteServicio}
+                  paginaSiguiente={paginaSiguiente}
+                  paginaAnterior={paginaAnterior}
+                  editUrl="/registros/editar-servicio"
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -16,6 +16,7 @@ const AgregarProducto = () => {
     nombreProducto: "",
     descripcionProducto: "",
     precioProducto: "",
+    stock: "",
   });
 
   const handleChange = (e) => {
@@ -159,25 +160,48 @@ const AgregarProducto = () => {
                 </div>
               </div>
               <div>
-                <div className="my-2">
-                  <label htmlFor="4">
-                    Ingresa el valor del producto
-                    <span className="text-danger  fw-bold">*</span>
-                  </label>
+                <div>
+                  <div className="my-2">
+                    <label htmlFor="4">
+                      Ingresa el valor del producto
+                      <span className="text-danger  fw-bold">*</span>
+                    </label>
+                  </div>
+                  <div className="form-floating mb-3 letras">
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="4"
+                      placeholder="precio producto"
+                      name="precioProducto"
+                      pattern="[0-9]+"
+                      value={producto.precioProducto}
+                      onInput={handleChange}
+                    />
+                    <label htmlFor="4">Precio Producto</label>
+                  </div>
                 </div>
 
-                <div className="form-floating mb-3 letras">
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="4"
-                    placeholder="precio producto"
-                    name="precioProducto"
-                    pattern="[0-9]+"
-                    value={producto.precioProducto}
-                    onInput={handleChange}
-                  />
-                  <label htmlFor="4">Precio Producto</label>
+                <div>
+                  <div className="my-2">
+                    <label htmlFor="4">
+                      Ingresa la cantida existente
+                      <span className="text-danger  fw-bold">*</span>
+                    </label>
+                  </div>
+                  <div className="form-floating mb-3 letras">
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="4"
+                      placeholder="stock producto"
+                      name="stock"
+                      pattern="[0-9]+"
+                      value={producto.stock}
+                      onInput={handleChange}
+                    />
+                    <label htmlFor="4">Stock Producto</label>
+                  </div>
                 </div>
 
                 <div className="boton">

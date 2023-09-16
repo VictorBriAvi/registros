@@ -73,6 +73,7 @@ const useGastosLogic = () => {
     const documentSnapshots = await getDocs(paginacionSiguiente);
 
     if (documentSnapshots.docs.length > 0) {
+      const primerVisible = documentSnapshots.docs[0];
       const ultimoVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
@@ -82,6 +83,7 @@ const useGastosLogic = () => {
       }));
 
       setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
       setGastos(gastosData);
     } else {
       console.log("no existen mas datos");

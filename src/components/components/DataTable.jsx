@@ -15,6 +15,7 @@ const DataTable = ({
 }) => {
   const paginaClickSiguiente = (e) => {
     e.preventDefault();
+    window.scrollTo(0, 0);
     paginaSiguiente();
   };
 
@@ -25,6 +26,10 @@ const DataTable = ({
 
   return (
     <div className="table-responsive">
+      <Container>
+        <button onClick={(e) => paginaClickAnterior(e)}>Anterior</button>
+        <button onClick={(e) => paginaClickSiguiente(e)}>Siguiente</button>
+      </Container>
       <table className={`table table-striped table-hover table-borderless `}>
         <thead>
           <tr>
@@ -58,8 +63,10 @@ const DataTable = ({
           ))}
         </tbody>
       </table>
-      <button onClick={(e) => paginaClickSiguiente(e)}>Siguiente</button>
-      <button onClick={(e) => paginaClickAnterior(e)}>Anterior</button>
+      <Container>
+        <button onClick={(e) => paginaClickAnterior(e)}>Anterior</button>
+        <button onClick={(e) => paginaClickSiguiente(e)}>Siguiente</button>
+      </Container>
     </div>
   );
 };

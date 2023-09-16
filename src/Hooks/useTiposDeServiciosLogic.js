@@ -12,6 +12,7 @@ import {
   startAfter,
   updateDoc,
   where,
+  writeBatch,
 } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebaseConfig/firebase";
@@ -34,7 +35,7 @@ const useTiposDeServiciosLogic = () => {
     const primeraConsulta = query(
       collection(db, "tiposDeServicios"),
       orderBy("tipoDeTrabajo"),
-      limit(4)
+      limit(10)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -77,7 +78,7 @@ const useTiposDeServiciosLogic = () => {
       collection(db, "tiposDeServicios"),
       orderBy("tipoDeTrabajo"),
       startAfter(ultimoDoc),
-      limit(4)
+      limit(10)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -104,13 +105,12 @@ const useTiposDeServiciosLogic = () => {
   /** paginaAnterior : Esta funcion cuando le dan al boton Anterior retorna a los 4 valores anteriores */
 
   const paginaAnterior = async () => {
-    console.log(primerDocVisible);
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "tiposDeServicios"),
         orderBy("tipoDeTrabajo"),
         endBefore(primerDocVisible),
-        limit(4)
+        limit(10)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);

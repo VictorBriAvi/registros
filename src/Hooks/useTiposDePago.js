@@ -88,6 +88,7 @@ const useTiposDePagoLogic = () => {
     const documentSnapshots = await getDocs(paginacionSiguiente);
 
     if (documentSnapshots.docs.length > 0) {
+      const primerVisible = documentSnapshots.docs[0];
       const ultimoVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
@@ -97,6 +98,7 @@ const useTiposDePagoLogic = () => {
       }));
 
       setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerDocVisible);
       setTiposDePago(tipoDePagoData);
     } else {
       console.log("no existen mas datos");

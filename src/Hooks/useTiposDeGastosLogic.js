@@ -62,6 +62,7 @@ const useTiposDeGastosLogic = () => {
     const documentSnapshots = await getDocs(paginacionSiguiente);
 
     if (documentSnapshots.docs.length > 0) {
+      const primerVisible = documentSnapshots.docs[0];
       const ultimoVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
@@ -71,6 +72,7 @@ const useTiposDeGastosLogic = () => {
       }));
 
       setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
       setTiposDeGastos(tipoDeGastoData);
     } else {
       console.log("no existen mas datos");

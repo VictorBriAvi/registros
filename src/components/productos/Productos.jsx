@@ -1,37 +1,68 @@
 import { Link } from "react-router-dom";
 
 //Importacion de iconos
-import {
-  AiFillDelete,
-  AiFillEdit,
-  AiFillFileAdd,
-  AiOutlineRollback,
-} from "react-icons/ai";
+import { AiFillFileAdd, AiOutlineRollback } from "react-icons/ai";
 
 import useProductoLogic from "../../Hooks/useProductoLogic";
 import { useThemeContext } from "../../context/ThemeContext";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
-import DataTable from "../components/dataTable";
+import DataTable from "../components/DataTable";
+import { useState } from "react";
+import { Button, Container } from "react-bootstrap";
+import Select from "react-select";
 
 const Productos = () => {
+  const [productoState, setProductoState] = useState({
+    codigoProducto: "",
+    nombreProducto: "", // Estado para almacenar la categoría seleccionada
+  });
+
   const {
     productos,
     deleteProducto,
     isLoading,
     paginaSiguiente,
     paginaAnterior,
+    buscarCategoria,
+    getProductos,
+    productosAll,
   } = useProductoLogic();
   const { contextTheme } = useThemeContext();
-
   const columnaServicio = [
     { key: "codigoProducto", label: "Codigo Producto" },
     { key: "nombreProducto", label: "Nombre Producto" },
     { key: "descripcionProducto", label: "Descripcion Producto" },
     { key: "precioProducto", label: "Precio Producto" },
+    { key: "stock", label: "Stock Producto" },
   ];
 
-  console.log(contextTheme);
+  const SelectProductos = productosAll
+    ? productosAll.map((tipoDeServicio) => ({
+        value: tipoDeServicio.id,
+        label: tipoDeServicio.codigoProducto,
+      }))
+    : [];
+  const handleChange = (selectOption, name) => {
+    setProductoState((prevServicio) => ({
+      ...prevServicio,
+      [name]: selectOption,
+    }));
+  };
+
+  const handleFiltraCategoria = (e) => {
+    e.preventDefault();
+
+    if (productoState.codigoProducto.label.trim() === "") {
+      getProductos();
+    } else {
+      buscarCategoria(productoState.codigoProducto);
+    }
+  };
+
+  console.log();
+
+  console.log(productoState);
   if (isLoading) {
     return <p>Cargando...</p>;
   }
@@ -56,15 +87,42 @@ const Productos = () => {
               </Link>
             </div>
           </div>
-          <div className="table-responsive">
-            <DataTable
-              columnaServicio={columnaServicio}
-              data={productos}
-              deleteData={deleteProducto}
-              paginaSiguiente={paginaSiguiente}
-              paginaAnterior={paginaAnterior}
-              editUrl="/registros/editar-producto"
-            />
+
+          <div>
+            <div className="row ">
+              <div className="my-5">
+                <Container>
+                  <h3>buscar por codigo</h3>
+                  <Select
+                    options={SelectProductos}
+                    menuPlacement="bottom"
+                    onChange={(selectOption) =>
+                      handleChange(selectOption, "codigoProducto")
+                    }
+                    value={productoState.codigoProducto}
+                  />
+                  <div className="col-md-6">
+                    {/* Establecer el ancho del botón */}
+                    <Button
+                      variant="primary"
+                      onClick={(e) => handleFiltraCategoria(e)}
+                    >
+                      Buscar por codigo
+                    </Button>
+                  </div>
+                </Container>
+              </div>
+            </div>
+            <div className="table-responsive">
+              <DataTable
+                columnaServicio={columnaServicio}
+                data={productos}
+                deleteData={deleteProducto}
+                paginaSiguiente={paginaSiguiente}
+                paginaAnterior={paginaAnterior}
+                editUrl="/registros/editar-producto"
+              />
+            </div>
           </div>
         </div>
       </div>

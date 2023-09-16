@@ -12,15 +12,18 @@ import {
   limit,
   startAfter,
   endBefore,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 
 const useProductoLogic = () => {
   const [productos, setProductos] = useState([]);
+  const [productosAll, setProductosAll] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const [ultimoDoc, setUltimoDoc] = useState(null);
-  const [primerDocVisible, setPrimerDocVisible] = useState([0]);
+  const [primerDocVisible, setPrimerDocVisible] = useState(0);
 
   const productosColletion = collection(db, "productos");
 
@@ -30,7 +33,7 @@ const useProductoLogic = () => {
     const primeraConsulta = query(
       collection(db, "productos"),
       orderBy("nombreProducto"),
-      limit(4)
+      limit(10)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -49,6 +52,47 @@ const useProductoLogic = () => {
     setProductos(productosData);
     setIsLoading(false);
   };
+  const getProductosAll = async () => {
+    /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
+
+    const primeraConsulta = query(
+      collection(db, "productos"),
+      orderBy("codigoProducto")
+    );
+    const documentSnapshots = await getDocs(primeraConsulta);
+
+    const productosData = documentSnapshots.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    setProductosAll(productosData);
+    setIsLoading(false);
+  };
+
+  /** buscarCategoria: Esta funcion se va a encarga de buscar y mostrar todo segun la categoria */
+
+  const buscarCategoria = async (servicio) => {
+    /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
+
+    console.log(servicio);
+
+    const primeraConsulta = query(
+      collection(db, "productos"),
+      servicio ? where("codigoProducto", "==", servicio.label) : null || " ",
+      orderBy("codigoProducto"),
+      limit(10)
+    );
+    const documentSnapshots = await getDocs(primeraConsulta);
+
+    const productosData = documentSnapshots.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    setProductos(productosData);
+    setIsLoading(false);
+  };
 
   /** paginaSiguiente : Esta funcion cuando le dan al boton Siguiente y avanzo a los 4 valores siguientes */
 
@@ -57,12 +101,13 @@ const useProductoLogic = () => {
       collection(db, "productos"),
       orderBy("nombreProducto"),
       startAfter(ultimoDoc),
-      limit(4)
+      limit(10)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
 
     if (documentSnapshots.docs.length > 0) {
+      const primerVisible = documentSnapshots.docs[0];
       const ultimoVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
@@ -72,6 +117,7 @@ const useProductoLogic = () => {
       }));
 
       setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
       setProductos(productosData);
     } else {
       console.log("no existen mas datos");
@@ -81,18 +127,19 @@ const useProductoLogic = () => {
   /** paginaAnterior : Esta funcion cuando le dan al boton Anterior retorna a los 4 valores anteriores */
 
   const paginaAnterior = async () => {
-    console.log(primerDocVisible);
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "productos"),
         orderBy("nombreProducto"),
         endBefore(primerDocVisible),
-        limit(4)
+        limit(10)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);
 
+      console.log(documentSnapshots.docs);
       if (documentSnapshots.docs.length > 0) {
+        console.log("en el  if");
         const primerVisible = documentSnapshots.docs[0];
         const ultimoVisible =
           documentSnapshots.docs[documentSnapshots.docs.length - 1];
@@ -102,9 +149,13 @@ const useProductoLogic = () => {
           id: doc.id,
         }));
 
-        setUltimoDoc(ultimoVisible);
+        console.log(primerDocVisible);
         setPrimerDocVisible(primerVisible);
+        setUltimoDoc(ultimoVisible);
+
         setProductos(productosData);
+      } else {
+        console.log("no existe mas datos");
       }
     } else {
       console.log("no existen mas datos");
@@ -148,6 +199,7 @@ const useProductoLogic = () => {
 
   useEffect(() => {
     getProductos();
+    getProductosAll();
   }, []);
 
   return {
@@ -159,6 +211,10 @@ const useProductoLogic = () => {
     updateProducto,
     paginaSiguiente,
     paginaAnterior,
+    getProductosAll,
+    getProductos,
+    buscarCategoria,
+    productosAll,
   };
 };
 
