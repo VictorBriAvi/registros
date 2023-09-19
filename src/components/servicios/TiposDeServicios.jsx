@@ -28,6 +28,7 @@ const TiposDeServicios = () => {
   const columnaServicio = [
     { key: "nombreServicio", label: "Tipo de servicio" },
     { key: "precioServicio", label: "Precio efectivo o transferencia" },
+    { key: "precioServicioAumento", label: "Precio efectivo o transferencia" },
     { key: "tipoDeTrabajo", label: "Categoria servicio" },
   ];
 

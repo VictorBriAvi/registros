@@ -20,7 +20,7 @@ const useClienteLogic = () => {
   const [clientes, setClientes] = useState([]);
   const [clientesAll, setClientesAll] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const pageSize = 10;
   const [ultimoDoc, setUltimoDoc] = useState([]);
   const [primerDocVisible, setPrimerDocVisible] = useState([null]);
 
@@ -29,7 +29,7 @@ const useClienteLogic = () => {
     const primeraConsulta = query(
       collection(db, "clientes"),
       orderBy("nombreCompletoCliente"),
-      limit(4)
+      limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -53,7 +53,7 @@ const useClienteLogic = () => {
     const primeraConsulta = query(
       collection(db, "clientes"),
       orderBy("nombreCompletoCliente"),
-      limit(4)
+      limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -73,7 +73,7 @@ const useClienteLogic = () => {
       collection(db, "clientes"),
       orderBy("nombreCompletoCliente"),
       startAfter(ultimoDoc),
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -103,7 +103,7 @@ const useClienteLogic = () => {
         collection(db, "clientes"),
         orderBy("nombreCompletoCliente"),
         endBefore(ultimoDoc),
-        limit(4)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);

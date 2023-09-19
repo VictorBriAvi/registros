@@ -14,6 +14,7 @@ import {
   endBefore,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
+import moment from "moment";
 
 const useGastosLogic = () => {
   const [gastos, setGastos] = useState([]);
@@ -23,13 +24,14 @@ const useGastosLogic = () => {
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const gastosCollection = collection(db, "gastos");
+  const pageSize = 10;
 
   const getGastos = async () => {
     const gastosDataArreglo = [];
     const primeraConsulta = query(
       collection(db, "gastos"),
       orderBy("nombreTipoDeGasto"),
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(primeraConsulta);
@@ -39,26 +41,39 @@ const useGastosLogic = () => {
 
     const primerVisible = documentSnapshots.docs[0];
 
-    for (const doc of documentSnapshots.docs) {
+    const promises = documentSnapshots.docs.map(async (doc) => {
       const gastoData = doc.data();
 
-      const gastoRef = gastoData.nombreTipoDeGasto;
-      const gastoSnapshot = await getDoc(gastoRef);
-      const gastoDataRef = gastoSnapshot.data();
+      const tipoDeGastoRef = gastoData.nombreTipoDeGasto;
+
+      const [tipoDeGastoSnapshot] = await Promise.all([getDoc(tipoDeGastoRef)]);
+
+      const tipoDeGastoData = tipoDeGastoSnapshot.data();
 
       const gasto = {
         ...gastoData,
         id: doc.id,
-        nombreTipoDeGasto: gastoDataRef.nombreTipoDeGasto,
+        nombreTipoDeGasto: tipoDeGastoData.nombreTipoDeGasto,
         descripcionGasto: doc.data().descripcionGasto,
         precioGasto: doc.data().precioGasto,
+        fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
       };
 
-      gastosDataArreglo.push(gasto);
-    }
+      return gasto;
+    });
+
+    // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+    const tiposDeGastosCompletos = await Promise.all(promises);
+
+    // Actualizar la caché con los nuevos datos
+    localStorage.setItem(
+      "cachedServicios",
+      JSON.stringify(tiposDeGastosCompletos)
+    );
+
     setUltimoDoc(ultimoVisible);
     setPrimerDocVisible(primerVisible);
-    setGastos(gastosDataArreglo);
+    setGastos(tiposDeGastosCompletos);
     setIsLoading(false);
   };
 
@@ -67,7 +82,7 @@ const useGastosLogic = () => {
       collection(db, "gastos"),
       orderBy("nombreTipoDeGasto"),
       startAfter(ultimoDoc),
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -97,7 +112,7 @@ const useGastosLogic = () => {
         collection(db, "gastos"),
         orderBy("nombreTipoDeGasto"),
         endBefore(primerDocVisible),
-        limit(4)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);

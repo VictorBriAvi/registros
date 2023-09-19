@@ -22,8 +22,6 @@ const Servicios = () => {
     deleteServicio,
     paginaSiguiente,
     paginaAnterior,
-    getServiciosForDate,
-    getServicios,
   } = useServicioLogic();
   const { contextTheme } = useThemeContext();
   const [fechaActual, setFechaActual] = useState("");
@@ -34,27 +32,15 @@ const Servicios = () => {
     { key: "nombreCompletoCliente", label: "Cliente" },
     { key: "nombreTipoDePago", label: "Tipo de pago" },
     { key: "nombreServicio", label: "Servicio" },
-    { key: "precioProducto", label: "Precio" },
+    { key: "precioProducto", label: "Precio Descuento" },
     { key: "fechaServicio", label: "Fecha" },
   ];
 
-  console.log(servicios);
-  /*
   const handleBuscarPorFecha = (e) => {
     e.preventDefault();
-    // Aquí puedes usar la variable 'fechaSeleccionada' para realizar la acción deseada
-    if (fechaSeleccionada) {
-      const fechaFormateada = moment(fechaSeleccionada).format("DD/MM/YYYY");
-
-      getServiciosForDate(fechaFormateada);
-      // Realiza aquí lo que necesites con la fecha seleccionada
-    } else {
-      // Maneja el caso donde no se ha seleccionado ninguna fecha
-      console.log("Ninguna fecha seleccionada");
-      getServicios();
-    }
+    console.log(moment(fechaSeleccionada).format("DD MMMM, YYYY"));
+    console.log("Buscar por fecha");
   };
-  */
 
   const handleDateChange = (date) => {
     setFechaSeleccionada(date);
@@ -62,7 +48,7 @@ const Servicios = () => {
 
   useEffect(() => {
     // Obtiene la fecha actual y la formatea
-    const fechaActualFormateada = moment().format("DD MMMM YYYY");
+    const fechaActualFormateada = moment().format("MMMM DD, YYYY");
     setFechaActual(fechaActualFormateada);
   }, []);
 
@@ -131,9 +117,9 @@ const Servicios = () => {
                   dateFormat="dd/MM/yyyy"
                   className="custom-datepicker" // Agrega una clase personalizada
                 />
-                {/**          <Button onClick={(e) => handleBuscarPorFecha(e)}>
+                <Button onClick={(e) => handleBuscarPorFecha(e)}>
                   Buscar fecha
-                </Button> */}
+                </Button>
               </h3>
             </div>
             <div>

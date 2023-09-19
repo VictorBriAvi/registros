@@ -25,12 +25,14 @@ const useTiposDePagoLogic = () => {
 
   const tiposDePagoCollection = collection(db, "tiposDePago");
 
+  const pageSize = 10;
+
   const getTiposDePago = useCallback(async () => {
     setIsLoading(true);
     const paginacionSiguiente = query(
       collection(db, "tiposDePago"),
       orderBy("nombreTipoDePago"),
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -82,7 +84,7 @@ const useTiposDePagoLogic = () => {
       collection(db, "tiposDePago"),
       orderBy("nombreTipoDePago"),
       startAfter(ultimoDoc),
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -111,7 +113,7 @@ const useTiposDePagoLogic = () => {
         collection(db, "tiposDePago"),
         orderBy("nombreTipoDePago"),
         endBefore(primerDocVisible),
-        limit(4)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);

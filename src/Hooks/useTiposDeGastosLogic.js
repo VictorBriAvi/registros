@@ -24,12 +24,14 @@ const useTiposDeGastosLogic = () => {
 
   const tiposDeGastosCollection = collection(db, "tiposDeGastos");
 
+  const pageSize = 10;
+
   /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
   const getTiposDeGasto = async () => {
     const primeraConsulta = query(
       collection(db, "tiposDeGastos"),
       orderBy("nombreTipoDeGasto"),
-      limit(4)
+      limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -56,7 +58,7 @@ const useTiposDeGastosLogic = () => {
       collection(db, "tiposDeGastos"),
       orderBy("nombreTipoDeGasto"),
       startAfter(ultimoDoc),
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -88,7 +90,7 @@ const useTiposDeGastosLogic = () => {
         collection(db, "tiposDeGastos"),
         orderBy("nombreTipoDeGasto"),
         endBefore(primerDocVisible),
-        limit(4)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);

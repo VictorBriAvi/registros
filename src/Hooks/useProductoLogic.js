@@ -26,6 +26,7 @@ const useProductoLogic = () => {
   const [primerDocVisible, setPrimerDocVisible] = useState(0);
 
   const productosColletion = collection(db, "productos");
+  const pageSize = 10;
 
   const getProductos = async () => {
     /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
@@ -33,7 +34,7 @@ const useProductoLogic = () => {
     const primeraConsulta = query(
       collection(db, "productos"),
       orderBy("nombreProducto"),
-      limit(10)
+      limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -81,7 +82,7 @@ const useProductoLogic = () => {
       collection(db, "productos"),
       servicio ? where("codigoProducto", "==", servicio.label) : null || " ",
       orderBy("codigoProducto"),
-      limit(10)
+      limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -101,7 +102,7 @@ const useProductoLogic = () => {
       collection(db, "productos"),
       orderBy("nombreProducto"),
       startAfter(ultimoDoc),
-      limit(10)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -132,7 +133,7 @@ const useProductoLogic = () => {
         collection(db, "productos"),
         orderBy("nombreProducto"),
         endBefore(primerDocVisible),
-        limit(10)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);

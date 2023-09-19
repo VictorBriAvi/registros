@@ -25,6 +25,7 @@ const useColaboradoresLogic = () => {
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const colaboradoresCollection = collection(db, "colaboradores");
+  const pageSize = 10;
 
   const getColaboradores = async () => {
     setIsLoading(true);
@@ -32,7 +33,7 @@ const useColaboradoresLogic = () => {
       collection(db, "colaboradores"),
       orderBy("nombreCompletoEmpleado"),
 
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -83,7 +84,7 @@ const useColaboradoresLogic = () => {
       collection(db, "colaboradores"),
       orderBy("nombreCompletoEmpleado"),
       startAfter(ultimoDoc),
-      limit(4)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -110,7 +111,7 @@ const useColaboradoresLogic = () => {
         collection(db, "colaboradores"),
         orderBy("nombreCompletoEmpleado"),
         endBefore(primerDocVisible),
-        limit(4)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);

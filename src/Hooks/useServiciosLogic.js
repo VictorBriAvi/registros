@@ -20,6 +20,7 @@ import moment from "moment";
 const useServicioLogic = () => {
   const [servicios, setServicios] = useState([]);
   const [serviciosPorFecha, setServiciosPorFecha] = useState([]);
+  const [cachedServicios, setCachedServicios] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [ultimoDoc, setUltimoDoc] = useState(null);
@@ -27,234 +28,164 @@ const useServicioLogic = () => {
   const fechaActual = moment().format("YYYY-MM-DD");
   const serviciosColletion = collection(db, "servicios");
 
+  const pageSize = 10;
+
+  useEffect(() => {
+    // Cuando el componente se monta, intenta recuperar datos en caché desde localStorage
+    const cachedData = localStorage.getItem("cachedServicios");
+    if (cachedData) {
+      setCachedServicios(JSON.parse(cachedData));
+    }
+  }, []);
+
   const getServicios = async () => {
     // Obtén la fecha actual en el formato que estás utilizando en tus documentos
+    try {
+      setIsLoading(true);
 
-    const serviciosDataArray = [];
-    const primeraConsulta = query(
-      collection(db, "servicios"),
-      orderBy("fechaServicio"),
-      limit(10)
-    );
+      const primeraConsulta = query(
+        collection(db, "servicios"),
+        orderBy("fechaServicio"),
+        limit(pageSize)
+      );
 
-    const documentSnapshots = await getDocs(primeraConsulta);
+      const documentSnapshots = await getDocs(primeraConsulta);
 
-    const ultimoVisible =
-      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
-    const primerVisible = documentSnapshots.docs[0];
+      const primerVisible = documentSnapshots.docs[0];
 
-    for (const doc of documentSnapshots.docs) {
-      const servicioData = doc.data();
+      // Crear un array de promesas para obtener datos relacionados en paralelo
+      const promises = documentSnapshots.docs.map(async (doc) => {
+        const servicioData = doc.data();
 
-      // Obtener el nombre del colaborador utilizando la referencia
-      const colaboradorRef = servicioData.nombreCompletoEmpleado;
-      const colaboradorSnapshot = await getDoc(colaboradorRef);
-      const colaboradorData = colaboradorSnapshot.data();
+        // Obtener referencias a datos relacionados
+        const colaboradorRef = servicioData.nombreCompletoEmpleado;
+        const clienteRef = servicioData.nombreCompletoCliente;
+        const tipoDePagoRef = servicioData.nombreTipoDePago;
+        const tipoDeServicioRef = servicioData.nombreServicio;
 
-      // Obtener el nombre del cliente utilizando la referencia
-      const clienteRef = servicioData.nombreCompletoCliente;
-      const clienteSnapshot = await getDoc(clienteRef);
-      const clienteData = clienteSnapshot.data();
+        // Usar Promise.all para obtener datos en paralelo
+        const [
+          colaboradorSnapshot,
+          clienteSnapshot,
+          tipoDePagoSnapshot,
+          tipoDeServicioSnapshot,
+        ] = await Promise.all([
+          getDoc(colaboradorRef),
+          getDoc(clienteRef),
+          getDoc(tipoDePagoRef),
+          getDoc(tipoDeServicioRef),
+        ]);
 
-      // Obtener el nombre del tipo de pago utilizando la referencia
-      const tipoDePagoRef = servicioData.nombreTipoDePago;
-      const tipoDePagoSnapshot = await getDoc(tipoDePagoRef);
-      const tipoDePagoData = tipoDePagoSnapshot.data();
+        const colaboradorData = colaboradorSnapshot.data();
+        const clienteData = clienteSnapshot.data();
+        const tipoDePagoData = tipoDePagoSnapshot.data();
+        const tipoDeServicioData = tipoDeServicioSnapshot.data();
+        // Crear el objeto del servicio con los datos relacionados
+        const servicio = {
+          ...servicioData,
+          id: doc.id,
+          nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado,
+          nombreCompletoCliente: clienteData.nombreCompletoCliente,
+          nombreServicio: tipoDeServicioData.nombreServicio,
+          nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
+          precioProducto: doc.data().precioProducto,
+          fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
+        };
+        return servicio;
+      });
 
-      // Obtener el nombre del tipo de servicio utilizando la referencia
-      const tipoDeServicioRef = servicioData.nombreServicio;
-      const tipoDeServicioSnapshot = await getDoc(tipoDeServicioRef);
-      const tipoDeServicioData = tipoDeServicioSnapshot.data();
+      // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+      const serviciosCompletos = await Promise.all(promises);
+      // Actualizar la caché con los nuevos datos
+      localStorage.setItem(
+        "cachedServicios",
+        JSON.stringify(serviciosCompletos)
+      );
 
-      // Agregar el nombre del colaborador al objeto del servicio
-      const servicio = {
-        ...servicioData,
-        id: doc.id,
-        nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado, // Nombre del colaborador
-        nombreCompletoCliente: clienteData.nombreCompletoCliente,
-        nombreServicio: tipoDeServicioData.nombreServicio,
-        nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
-        precioProducto: doc.data().precioProducto,
-        fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
-      };
-
-      serviciosDataArray.push(servicio);
+      // Resto de tu código para actualizar el estado y gestionar la carga
+      setCachedServicios(serviciosCompletos);
+      setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
+      setServicios(servicios);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error al obtener servicios:", error);
+      setIsLoading(false);
     }
-    setUltimoDoc(ultimoVisible);
-    setPrimerDocVisible(primerVisible);
-    setServicios(serviciosDataArray);
-    setIsLoading(false);
-  };
-  /*
-  const getServiciosForDate = async (fechaRecibida) => {
-    const serviciosDataArray = [];
-
-    console.log(fechaRecibida);
-
-    const consulta = query(
-      collection(db, "servicios"),
-      where("fechaServicio", "==", fechaRecibida), // Utiliza la fecha recibida como filtro
-      orderBy("fechaServicio"),
-      limit(10)
-    );
-
-    const documentSnapshots = await getDocs(consulta);
-
-    for (const doc of documentSnapshots.docs) {
-      const servicioData = doc.data();
-      const colaboradorRef = servicioData.nombreCompletoEmpleado;
-      const colaboradorSnapshot = await getDoc(colaboradorRef);
-      const colaboradorData = colaboradorSnapshot.data();
-
-      const clienteRef = servicioData.nombreCompletoCliente;
-      const clienteSnapshot = await getDoc(clienteRef);
-      const clienteData = clienteSnapshot.data();
-
-      const tipoDePagoRef = servicioData.nombreTipoDePago;
-      const tipoDePagoSnapshot = await getDoc(tipoDePagoRef);
-      const tipoDePagoData = tipoDePagoSnapshot.data();
-
-      const tipoDeServicioRef = servicioData.nombreServicio;
-      const tipoDeServicioSnapshot = await getDoc(tipoDeServicioRef);
-      const tipoDeServicioData = tipoDeServicioSnapshot.data();
-
-      const servicio = {
-        ...servicioData,
-        id: doc.id,
-        nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado,
-        nombreCompletoCliente: clienteData.nombreCompletoCliente,
-        nombreServicio: tipoDeServicioData.nombreServicio,
-        nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
-        precioProducto: doc.data().precioProducto,
-        fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
-      };
-
-      serviciosDataArray.push(servicio);
-    }
-
-    console.log(serviciosDataArray);
-    setServiciosPorFecha(serviciosDataArray);
-
-    setIsLoading(false);
-    // Obtén la fecha actual en el formato que estás utilizando en tus documentos
-  };
-  */
-
-  const getServiciosAll = async () => {
-    const serviciosDataArray = [];
-    const primeraConsulta = query(
-      collection(db, "servicios"),
-      orderBy("nombreCompletoCliente")
-    );
-
-    const documentSnapshots = await getDocs(primeraConsulta);
-
-    const ultimoVisible =
-      documentSnapshots.docs[documentSnapshots.docs.length - 1];
-
-    const primerVisible = documentSnapshots.docs[0];
-
-    for (const doc of documentSnapshots.docs) {
-      const servicioData = doc.data();
-
-      // Obtener el nombre del colaborador utilizando la referencia
-      const colaboradorRef = servicioData.nombreCompletoEmpleado;
-      const colaboradorSnapshot = await getDoc(colaboradorRef);
-      const colaboradorData = colaboradorSnapshot.data();
-
-      // Obtener el nombre del cliente utilizando la referencia
-      const clienteRef = servicioData.nombreCompletoCliente;
-      const clienteSnapshot = await getDoc(clienteRef);
-      const clienteData = clienteSnapshot.data();
-
-      // Obtener el nombre del tipo de pago utilizando la referencia
-      const tipoDePagoRef = servicioData.nombreTipoDePago;
-      const tipoDePagoSnapshot = await getDoc(tipoDePagoRef);
-      const tipoDePagoData = tipoDePagoSnapshot.data();
-
-      // Obtener el nombre del tipo de servicio utilizando la referencia
-      const tipoDeServicioRef = servicioData.nombreServicio;
-      const tipoDeServicioSnapshot = await getDoc(tipoDeServicioRef);
-      const tipoDeServicioData = tipoDeServicioSnapshot.data();
-
-      // Agregar el nombre del colaborador al objeto del servicio
-      const servicio = {
-        ...servicioData,
-        id: doc.id,
-        nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado, // Nombre del colaborador
-        nombreCompletoCliente: clienteData.nombreCompletoCliente,
-        nombreServicio: tipoDeServicioData.nombreServicio,
-        nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
-        precioProducto: doc.data().precioProducto,
-        fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
-      };
-
-      serviciosDataArray.push(servicio);
-    }
-    setUltimoDoc(ultimoVisible);
-    setPrimerDocVisible(primerVisible);
-    setServicios(serviciosDataArray);
-    setIsLoading(false);
   };
 
   const paginaSiguiente = async () => {
-    const serviciosDataArray = [];
     const paginacionSiguiente = query(
       collection(db, "servicios"),
       orderBy("fechaServicio"),
       startAfter(ultimoDoc),
-      limit(10)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
-
-    for (const doc of documentSnapshots.docs) {
-      const servicioData = doc.data();
-
-      // Obtener el nombre del colaborador utilizando la referencia
-      const colaboradorRef = servicioData.nombreCompletoEmpleado;
-      const colaboradorSnapshot = await getDoc(colaboradorRef);
-      const colaboradorData = colaboradorSnapshot.data();
-
-      // Obtener el nombre del cliente utilizando la referencia
-      const clienteRef = servicioData.nombreCompletoCliente;
-      const clienteSnapshot = await getDoc(clienteRef);
-      const clienteData = clienteSnapshot.data();
-
-      // Obtener el nombre del tipo de pago utilizando la referencia
-      const tipoDePagoRef = servicioData.nombreTipoDePago;
-      const tipoDePagoSnapshot = await getDoc(tipoDePagoRef);
-      const tipoDePagoData = tipoDePagoSnapshot.data();
-
-      // Obtener el nombre del tipo de servicio utilizando la referencia
-      const tipoDeServicioRef = servicioData.nombreServicio;
-      const tipoDeServicioSnapshot = await getDoc(tipoDeServicioRef);
-      const tipoDeServicioData = tipoDeServicioSnapshot.data();
-
-      // Agregar el nombre del colaborador al objeto del servicio
-      const servicio = {
-        ...servicioData,
-        id: doc.id,
-        nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado, // Nombre del colaborador
-        nombreCompletoCliente: clienteData.nombreCompletoCliente,
-        nombreServicio: tipoDeServicioData.nombreServicio,
-        nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
-        precioProducto: doc.data().precioProducto,
-        fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
-      };
-
-      serviciosDataArray.push(servicio);
-    }
 
     if (documentSnapshots.docs.length > 0) {
       const primerVisible = documentSnapshots.docs[0];
       const ultimoVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
+      // Crear un array de promesas para obtener datos relacionados en paralelo
+      const promises = documentSnapshots.docs.map(async (doc) => {
+        const servicioData = doc.data();
+
+        // Obtener referencias a datos relacionados
+        const colaboradorRef = servicioData.nombreCompletoEmpleado;
+        const clienteRef = servicioData.nombreCompletoCliente;
+        const tipoDePagoRef = servicioData.nombreTipoDePago;
+        const tipoDeServicioRef = servicioData.nombreServicio;
+
+        // Usar Promise.all para obtener datos en paralelo
+        const [
+          colaboradorSnapshot,
+          clienteSnapshot,
+          tipoDePagoSnapshot,
+          tipoDeServicioSnapshot,
+        ] = await Promise.all([
+          getDoc(colaboradorRef),
+          getDoc(clienteRef),
+          getDoc(tipoDePagoRef),
+          getDoc(tipoDeServicioRef),
+        ]);
+
+        const colaboradorData = colaboradorSnapshot.data();
+        const clienteData = clienteSnapshot.data();
+        const tipoDePagoData = tipoDePagoSnapshot.data();
+        const tipoDeServicioData = tipoDeServicioSnapshot.data();
+        // Crear el objeto del servicio con los datos relacionados
+        const servicio = {
+          ...servicioData,
+          id: doc.id,
+          nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado,
+          nombreCompletoCliente: clienteData.nombreCompletoCliente,
+          nombreServicio: tipoDeServicioData.nombreServicio,
+          nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
+          precioProducto: doc.data().precioProducto,
+          fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
+        };
+        return servicio;
+      });
+
+      // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+      const serviciosCompletos = await Promise.all(promises);
+      // Actualizar la caché con los nuevos datos
+      localStorage.setItem(
+        "cachedServicios",
+        JSON.stringify(serviciosCompletos)
+      );
+
+      // Resto de tu código para actualizar el estado y gestionar la carga
+      setCachedServicios(serviciosCompletos);
       setUltimoDoc(ultimoVisible);
       setPrimerDocVisible(primerVisible);
-      setServicios(serviciosDataArray);
+      setServicios(servicios);
     } else {
       console.log("no existen mas datos");
     }
@@ -268,57 +199,69 @@ const useServicioLogic = () => {
         collection(db, "servicios"),
         orderBy("fechaServicio"),
         endBefore(primerDocVisible),
-        limit(10)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);
-
-      for (const doc of documentSnapshots.docs) {
-        const servicioData = doc.data();
-
-        // Obtener el nombre del colaborador utilizando la referencia
-        const colaboradorRef = servicioData.nombreCompletoEmpleado;
-        const colaboradorSnapshot = await getDoc(colaboradorRef);
-        const colaboradorData = colaboradorSnapshot.data();
-
-        // Obtener el nombre del cliente utilizando la referencia
-        const clienteRef = servicioData.nombreCompletoCliente;
-        const clienteSnapshot = await getDoc(clienteRef);
-        const clienteData = clienteSnapshot.data();
-
-        // Obtener el nombre del tipo de pago utilizando la referencia
-        const tipoDePagoRef = servicioData.nombreTipoDePago;
-        const tipoDePagoSnapshot = await getDoc(tipoDePagoRef);
-        const tipoDePagoData = tipoDePagoSnapshot.data();
-
-        // Obtener el nombre del tipo de servicio utilizando la referencia
-        const tipoDeServicioRef = servicioData.nombreServicio;
-        const tipoDeServicioSnapshot = await getDoc(tipoDeServicioRef);
-        const tipoDeServicioData = tipoDeServicioSnapshot.data();
-
-        // Agregar el nombre del colaborador al objeto del servicio
-        const servicio = {
-          ...servicioData,
-          id: doc.id,
-          nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado, // Nombre del colaborador
-          nombreCompletoCliente: clienteData.nombreCompletoCliente,
-          nombreServicio: tipoDeServicioData.nombreServicio,
-          nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
-          precioProducto: doc.data().precioProducto,
-          fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
-        };
-
-        serviciosDataArray.push(servicio);
-      }
 
       if (documentSnapshots.docs.length > 0) {
         const primerVisible = serviciosDataArray[0];
         const ultimoVisible =
           documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
-        setPrimerDocVisible(primerVisible);
+        // Crear un array de promesas para obtener datos relacionados en paralelo
+        const promises = documentSnapshots.docs.map(async (doc) => {
+          const servicioData = doc.data();
+
+          // Obtener referencias a datos relacionados
+          const colaboradorRef = servicioData.nombreCompletoEmpleado;
+          const clienteRef = servicioData.nombreCompletoCliente;
+          const tipoDePagoRef = servicioData.nombreTipoDePago;
+          const tipoDeServicioRef = servicioData.nombreServicio;
+
+          // Usar Promise.all para obtener datos en paralelo
+          const [
+            colaboradorSnapshot,
+            clienteSnapshot,
+            tipoDePagoSnapshot,
+            tipoDeServicioSnapshot,
+          ] = await Promise.all([
+            getDoc(colaboradorRef),
+            getDoc(clienteRef),
+            getDoc(tipoDePagoRef),
+            getDoc(tipoDeServicioRef),
+          ]);
+
+          const colaboradorData = colaboradorSnapshot.data();
+          const clienteData = clienteSnapshot.data();
+          const tipoDePagoData = tipoDePagoSnapshot.data();
+          const tipoDeServicioData = tipoDeServicioSnapshot.data();
+          // Crear el objeto del servicio con los datos relacionados
+          const servicio = {
+            ...servicioData,
+            id: doc.id,
+            nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado,
+            nombreCompletoCliente: clienteData.nombreCompletoCliente,
+            nombreServicio: tipoDeServicioData.nombreServicio,
+            nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
+            precioProducto: doc.data().precioProducto,
+            fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
+          };
+          return servicio;
+        });
+
+        // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+        const serviciosCompletos = await Promise.all(promises);
+        // Actualizar la caché con los nuevos datos
+        localStorage.setItem(
+          "cachedServicios",
+          JSON.stringify(serviciosCompletos)
+        );
+
+        // Resto de tu código para actualizar el estado y gestionar la carga
+        setCachedServicios(serviciosCompletos);
         setUltimoDoc(ultimoVisible);
-        setServicios(serviciosDataArray);
+        setPrimerDocVisible(primerVisible);
       }
     } else {
       console.log("no existen mas datos");
@@ -328,33 +271,44 @@ const useServicioLogic = () => {
   const getServicioById = async (id) => {
     const servicioDoc = doc(db, "servicios", id);
     const servicioEncontrado = await getDoc(servicioDoc);
+
     if (servicioEncontrado.exists()) {
       const servicioData = servicioEncontrado.data();
-
       const clienteRef = servicioData.nombreCompletoCliente;
-      const clienteSnapshot = await getDoc(clienteRef);
-      const clienteData = clienteSnapshot.data();
-
       const colaboradorRef = servicioData.nombreCompletoEmpleado;
-      const colaboradorSnapshot = await getDoc(colaboradorRef);
-      const colaboradorData = colaboradorSnapshot.data();
-
       const servicioRef = servicioData.nombreServicio;
-      const servicioSnapshot = await getDoc(servicioRef);
-      const tipoDeServicioData = servicioSnapshot.data();
-
       const tipoDePagoRef = servicioData.nombreTipoDePago;
-      const tipoDePagoSnapshot = await getDoc(tipoDePagoRef);
-      const tipoDeDatoData = tipoDePagoSnapshot.data();
 
-      return {
-        id: servicioEncontrado.id,
-        nombreCompletoCliente: clienteData.nombreCompletoCliente,
-        nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado,
-        nombreServicio: tipoDeServicioData.nombreServicio,
-        nombreTipoDepago: tipoDeDatoData.nombreTipoDePago,
-        precioProducto: servicioData.precioProducto,
-      };
+      try {
+        const [
+          clienteSnapshot,
+          colaboradorSnapshot,
+          servicioSnapshot,
+          tipoDePagoSnapshot,
+        ] = await Promise.all([
+          getDoc(clienteRef),
+          getDoc(colaboradorRef),
+          getDoc(servicioRef),
+          getDoc(tipoDePagoRef),
+        ]);
+
+        const clienteData = clienteSnapshot.data();
+        const colaboradorData = colaboradorSnapshot.data();
+        const tipoDeServicioData = servicioSnapshot.data();
+        const tipoDeDatoData = tipoDePagoSnapshot.data();
+
+        return {
+          id: servicioEncontrado.id,
+          nombreCompletoCliente: clienteData.nombreCompletoCliente,
+          nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado,
+          nombreServicio: tipoDeServicioData.nombreServicio,
+          nombreTipoDepago: tipoDeDatoData.nombreTipoDePago,
+          precioProducto: servicioData.precioProducto,
+        };
+      } catch (error) {
+        console.error("Error al obtener datos relacionados:", error);
+        return null;
+      }
     } else {
       return null;
     }
@@ -433,7 +387,7 @@ const useServicioLogic = () => {
   }, []);
 
   return {
-    servicios,
+    servicios: cachedServicios,
     isLoading,
     addServicio,
     getServicioById,

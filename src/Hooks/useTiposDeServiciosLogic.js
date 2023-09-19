@@ -28,6 +28,7 @@ const useTiposDeServiciosLogic = () => {
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const tiposServiciosCollection = collection(db, "tiposDeServicios");
+  const pageSize = 10;
 
   /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
 
@@ -35,7 +36,7 @@ const useTiposDeServiciosLogic = () => {
     const primeraConsulta = query(
       collection(db, "tiposDeServicios"),
       orderBy("tipoDeTrabajo"),
-      limit(10)
+      limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -47,6 +48,7 @@ const useTiposDeServiciosLogic = () => {
     const tiposDeServiciosData = documentSnapshots.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
+      precioServicioAumento: doc.data().precioServicio * 1.2,
     }));
 
     setUltimoDoc(ultimoVisible);
@@ -78,7 +80,7 @@ const useTiposDeServiciosLogic = () => {
       collection(db, "tiposDeServicios"),
       orderBy("tipoDeTrabajo"),
       startAfter(ultimoDoc),
-      limit(10)
+      limit(pageSize)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -110,7 +112,7 @@ const useTiposDeServiciosLogic = () => {
         collection(db, "tiposDeServicios"),
         orderBy("tipoDeTrabajo"),
         endBefore(primerDocVisible),
-        limit(10)
+        limit(pageSize)
       );
 
       const documentSnapshots = await getDocs(paginacionAnterior);
