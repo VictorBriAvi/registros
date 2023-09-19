@@ -22,6 +22,8 @@ const Servicios = () => {
     deleteServicio,
     paginaSiguiente,
     paginaAnterior,
+
+    getServicios,
   } = useServicioLogic();
   const { contextTheme } = useThemeContext();
   const [fechaActual, setFechaActual] = useState("");
@@ -38,8 +40,8 @@ const Servicios = () => {
 
   const handleBuscarPorFecha = (e) => {
     e.preventDefault();
-    console.log(moment(fechaSeleccionada).format("DD MMMM, YYYY"));
-    console.log("Buscar por fecha");
+    const fecha = moment(fechaSeleccionada).format("YYYY-MM-DD");
+    getServicios(fecha);
   };
 
   const handleDateChange = (date) => {
@@ -48,7 +50,7 @@ const Servicios = () => {
 
   useEffect(() => {
     // Obtiene la fecha actual y la formatea
-    const fechaActualFormateada = moment().format("MMMM DD, YYYY");
+    const fechaActualFormateada = moment().format("DD MMMM, YYYY");
     setFechaActual(fechaActualFormateada);
   }, []);
 

@@ -38,13 +38,19 @@ const useServicioLogic = () => {
     }
   }, []);
 
-  const getServicios = async () => {
+  const getServicios = async (fecha) => {
     // Obtén la fecha actual en el formato que estás utilizando en tus documentos
+
+    const fechaHoy = moment().format("YYYY-MM-DD");
+
+    const fechaConsulta = fecha ? fecha : fechaHoy;
     try {
       setIsLoading(true);
 
+      console.log(fechaConsulta);
       const primeraConsulta = query(
         collection(db, "servicios"),
+        where("fechaServicio", "==", fechaConsulta),
         orderBy("fechaServicio"),
         limit(pageSize)
       );
@@ -99,6 +105,7 @@ const useServicioLogic = () => {
 
       // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
       const serviciosCompletos = await Promise.all(promises);
+
       // Actualizar la caché con los nuevos datos
       localStorage.setItem(
         "cachedServicios",
@@ -109,7 +116,7 @@ const useServicioLogic = () => {
       setCachedServicios(serviciosCompletos);
       setUltimoDoc(ultimoVisible);
       setPrimerDocVisible(primerVisible);
-      setServicios(servicios);
+      setServiciosPorFecha(serviciosCompletos);
       setIsLoading(false);
     } catch (error) {
       console.error("Error al obtener servicios:", error);
@@ -155,10 +162,10 @@ const useServicioLogic = () => {
           getDoc(tipoDeServicioRef),
         ]);
 
-        const colaboradorData = colaboradorSnapshot.data();
-        const clienteData = clienteSnapshot.data();
-        const tipoDePagoData = tipoDePagoSnapshot.data();
-        const tipoDeServicioData = tipoDeServicioSnapshot.data();
+        const colaboradorData = colaboradorSnapshot.data() || {};
+        const clienteData = clienteSnapshot.data() || {};
+        const tipoDePagoData = tipoDePagoSnapshot.data() || {};
+        const tipoDeServicioData = tipoDeServicioSnapshot.data() || {};
         // Crear el objeto del servicio con los datos relacionados
         const servicio = {
           ...servicioData,
@@ -232,10 +239,10 @@ const useServicioLogic = () => {
             getDoc(tipoDeServicioRef),
           ]);
 
-          const colaboradorData = colaboradorSnapshot.data();
-          const clienteData = clienteSnapshot.data();
-          const tipoDePagoData = tipoDePagoSnapshot.data();
-          const tipoDeServicioData = tipoDeServicioSnapshot.data();
+          const colaboradorData = colaboradorSnapshot.data() || {};
+          const clienteData = clienteSnapshot.data() || {};
+          const tipoDePagoData = tipoDePagoSnapshot.data() || {};
+          const tipoDeServicioData = tipoDeServicioSnapshot.data() || {};
           // Crear el objeto del servicio con los datos relacionados
           const servicio = {
             ...servicioData,

@@ -80,8 +80,8 @@ const useProductoLogic = () => {
 
     const primeraConsulta = query(
       collection(db, "productos"),
-      servicio ? where("codigoProducto", "==", servicio.label) : null || " ",
-      orderBy("codigoProducto"),
+      servicio ? where("nombreProducto", "==", servicio.label) : null || " ",
+      orderBy("nombreProducto"),
       limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);

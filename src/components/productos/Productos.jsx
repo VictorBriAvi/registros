@@ -40,7 +40,7 @@ const Productos = () => {
   const SelectProductos = productosAll
     ? productosAll.map((tipoDeServicio) => ({
         value: tipoDeServicio.id,
-        label: tipoDeServicio.codigoProducto,
+        label: tipoDeServicio.nombreProducto,
       }))
     : [];
   const handleChange = (selectOption, name) => {
@@ -53,10 +53,10 @@ const Productos = () => {
   const handleFiltraCategoria = (e) => {
     e.preventDefault();
 
-    if (productoState.codigoProducto.label.trim() === "") {
+    if (productoState.nombreProducto.label.trim() === "") {
       getProductos();
     } else {
-      buscarCategoria(productoState.codigoProducto);
+      buscarCategoria(productoState.nombreProducto);
     }
   };
 
