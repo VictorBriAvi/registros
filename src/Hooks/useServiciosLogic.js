@@ -79,10 +79,10 @@ const useServicioLogic = () => {
           getDoc(tipoDeServicioRef),
         ]);
 
-        const colaboradorData = colaboradorSnapshot.data();
-        const clienteData = clienteSnapshot.data();
-        const tipoDePagoData = tipoDePagoSnapshot.data();
-        const tipoDeServicioData = tipoDeServicioSnapshot.data();
+        const colaboradorData = colaboradorSnapshot.data() || {};
+        const clienteData = clienteSnapshot.data() || {};
+        const tipoDePagoData = tipoDePagoSnapshot.data() || {};
+        const tipoDeServicioData = tipoDeServicioSnapshot.data() || {};
         // Crear el objeto del servicio con los datos relacionados
         const servicio = {
           ...servicioData,
@@ -292,10 +292,10 @@ const useServicioLogic = () => {
           getDoc(tipoDePagoRef),
         ]);
 
-        const clienteData = clienteSnapshot.data();
-        const colaboradorData = colaboradorSnapshot.data();
-        const tipoDeServicioData = servicioSnapshot.data();
-        const tipoDeDatoData = tipoDePagoSnapshot.data();
+        const clienteData = clienteSnapshot.data() || {};
+        const colaboradorData = colaboradorSnapshot.data() || {};
+        const tipoDeServicioData = servicioSnapshot.data() || {};
+        const tipoDeDatoData = tipoDePagoSnapshot.data() || {};
 
         return {
           id: servicioEncontrado.id,
