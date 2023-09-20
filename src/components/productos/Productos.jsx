@@ -14,7 +14,6 @@ import Select from "react-select";
 
 const Productos = () => {
   const [productoState, setProductoState] = useState({
-    codigoProducto: "",
     nombreProducto: "", // Estado para almacenar la categoría seleccionada
   });
 
@@ -53,7 +52,7 @@ const Productos = () => {
   const handleFiltraCategoria = (e) => {
     e.preventDefault();
 
-    if (productoState.nombreProducto.label.trim() === "") {
+    if (productoState.nombreProducto.label === "") {
       getProductos();
     } else {
       buscarCategoria(productoState.nombreProducto);
@@ -97,7 +96,7 @@ const Productos = () => {
                     options={SelectProductos}
                     menuPlacement="bottom"
                     onChange={(selectOption) =>
-                      handleChange(selectOption, "codigoProducto")
+                      handleChange(selectOption, "nombreProducto")
                     }
                     value={productoState.codigoProducto}
                   />

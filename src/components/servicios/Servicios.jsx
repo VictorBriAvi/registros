@@ -110,19 +110,17 @@ const Servicios = () => {
             </div>
 
             <div style={{ display: "flex", alignItems: "center" }}>
-              <h3>
-                Filtra por fecha
-                <DatePicker
-                  selected={fechaSeleccionada}
-                  onChange={handleDateChange}
-                  placeholderText="¿ Que fecha buscamos?"
-                  dateFormat="dd/MM/yyyy"
-                  className="custom-datepicker" // Agrega una clase personalizada
-                />
-                <Button onClick={(e) => handleBuscarPorFecha(e)}>
-                  Buscar fecha
-                </Button>
-              </h3>
+              <h3>Filtra por fecha</h3>
+              <DatePicker
+                selected={fechaSeleccionada}
+                onChange={handleDateChange}
+                placeholderText="¿ Que fecha buscamos?"
+                dateFormat="dd/MM/yyyy"
+                className="custom-datepicker" // Agrega una clase personalizada
+              />
+              <Button onClick={(e) => handleBuscarPorFecha(e)}>
+                Buscar fecha
+              </Button>
             </div>
             <div>
               <h4>Fecha actual: {fechaActual}</h4>

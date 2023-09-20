@@ -7,7 +7,12 @@ import useGastosLogic from "../../Hooks/useGastosLogic";
 import { useThemeContext } from "../../context/ThemeContext";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
+import DatePicker from "react-datepicker";
 import DataTable from "../components/dataTable";
+import { Button } from "react-bootstrap";
+import moment from "moment";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Cierres = () => {
   const {
@@ -16,14 +21,34 @@ const Cierres = () => {
     deleteGasto,
     paginaSiguiente,
     paginaAnterior,
+    getGastos,
   } = useGastosLogic();
   const { contextTheme } = useThemeContext();
+  const [fechaActual, setFechaActual] = useState("");
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
   const columnaServicio = [
     { key: "nombreTipoDeGasto", label: "Tipo de gasto" },
     { key: "descripcionGasto", label: "Descripcion" },
     { key: "precioGasto", label: "Valor Gasto" },
+    { key: "fechaGasto", label: "Fecha del gasto" },
   ];
+
+  const handleBuscarPorFecha = (e) => {
+    e.preventDefault();
+    const fecha = moment(fechaSeleccionada).format("YYYY-MM-DD");
+    getGastos(fecha);
+  };
+
+  useEffect(() => {
+    // Obtiene la fecha actual y la formatea
+    const fechaActualFormateada = moment().format("DD MMMM, YYYY");
+    setFechaActual(fechaActualFormateada);
+  }, []);
+
+  const handleDateChange = (date) => {
+    setFechaSeleccionada(date);
+  };
 
   if (isLoadingGasto) {
     return <p>Cargando...</p>;
@@ -45,6 +70,7 @@ const Cierres = () => {
             </div>
 
             <hr />
+
             <div className="boton">
               <div className="container my-2">
                 <Link to={`/registros/crear-tipoDeGasto`}>
@@ -61,7 +87,22 @@ const Cierres = () => {
                 </Link>
               </div>
             </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <h3>Filtra por fecha</h3>
+              <DatePicker
+                selected={fechaSeleccionada}
+                onChange={handleDateChange}
+                placeholderText="¿ Que fecha buscamos?"
+                dateFormat="dd/MM/yyyy"
+                className="custom-datepicker" // Agrega una clase personalizada
+              />
+              <Button onClick={(e) => handleBuscarPorFecha(e)}>
+                Buscar fecha
+              </Button>
+            </div>
+
             <div className="table-responsive">
+              <h4>Fecha actual: {fechaActual}</h4>
               <DataTable
                 columnaServicio={columnaServicio}
                 data={gastos}

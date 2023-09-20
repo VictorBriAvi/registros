@@ -19,13 +19,14 @@ import moment from "moment";
 
 const useServicioLogic = () => {
   const [servicios, setServicios] = useState([]);
+  const [serviciosRangoFecha, setServiciosRangoFecha] = useState([]);
   const [serviciosPorFecha, setServiciosPorFecha] = useState([]);
   const [cachedServicios, setCachedServicios] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [ultimoDoc, setUltimoDoc] = useState(null);
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
-  const fechaActual = moment().format("YYYY-MM-DD");
+
   const serviciosColletion = collection(db, "servicios");
 
   const pageSize = 10;
@@ -47,7 +48,6 @@ const useServicioLogic = () => {
     try {
       setIsLoading(true);
 
-      console.log(fechaConsulta);
       const primeraConsulta = query(
         collection(db, "servicios"),
         where("fechaServicio", "==", fechaConsulta),
@@ -116,7 +116,92 @@ const useServicioLogic = () => {
       setCachedServicios(serviciosCompletos);
       setUltimoDoc(ultimoVisible);
       setPrimerDocVisible(primerVisible);
+      setServicios(serviciosCompletos);
       setServiciosPorFecha(serviciosCompletos);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error al obtener servicios:", error);
+      setIsLoading(false);
+    }
+  };
+
+  const getServiciosPorRangoDeFecha = async (fechaInicio, fechaFin) => {
+    console.log(fechaInicio);
+    console.log(fechaFin);
+    try {
+      setIsLoading(true);
+
+      const primeraConsulta = query(
+        collection(db, "servicios"),
+        where("fechaServicio", ">=", fechaInicio),
+        where("fechaServicio", "<=", fechaFin),
+        orderBy("fechaServicio")
+      );
+
+      const documentSnapshots = await getDocs(primeraConsulta);
+
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      const primerVisible = documentSnapshots.docs[0];
+
+      // Crear un array de promesas para obtener datos relacionados en paralelo
+      const promises = documentSnapshots.docs.map(async (doc) => {
+        const servicioData = doc.data();
+
+        // Obtener referencias a datos relacionados
+        const colaboradorRef = servicioData.nombreCompletoEmpleado;
+        const clienteRef = servicioData.nombreCompletoCliente;
+        const tipoDePagoRef = servicioData.nombreTipoDePago;
+        const tipoDeServicioRef = servicioData.nombreServicio;
+
+        // Usar Promise.all para obtener datos en paralelo
+        const [
+          colaboradorSnapshot,
+          clienteSnapshot,
+          tipoDePagoSnapshot,
+          tipoDeServicioSnapshot,
+        ] = await Promise.all([
+          getDoc(colaboradorRef),
+          getDoc(clienteRef),
+          getDoc(tipoDePagoRef),
+          getDoc(tipoDeServicioRef),
+        ]);
+
+        const colaboradorData = colaboradorSnapshot.data() || {};
+        const clienteData = clienteSnapshot.data() || {};
+        const tipoDePagoData = tipoDePagoSnapshot.data() || {};
+        const tipoDeServicioData = tipoDeServicioSnapshot.data() || {};
+        // Crear el objeto del servicio con los datos relacionados
+        const servicio = {
+          ...servicioData,
+          id: doc.id,
+          nombreCompletoEmpleado: colaboradorData.nombreCompletoEmpleado,
+          nombreCompletoCliente: clienteData.nombreCompletoCliente,
+          nombreServicio: tipoDeServicioData.nombreServicio,
+          nombreTipoDePago: tipoDePagoData.nombreTipoDePago,
+          precioProducto: doc.data().precioProducto,
+          fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
+        };
+        return servicio;
+      });
+
+      // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+      const serviciosCompletos = await Promise.all(promises);
+
+      // Actualizar la caché con los nuevos datos
+      localStorage.setItem(
+        "cachedServicios",
+        JSON.stringify(serviciosCompletos)
+      );
+
+      console.log(serviciosCompletos);
+
+      // Resto de tu código para actualizar el estado y gestionar la carga
+      setCachedServicios(serviciosCompletos);
+      setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
+      setServiciosRangoFecha(serviciosCompletos);
       setIsLoading(false);
     } catch (error) {
       console.error("Error al obtener servicios:", error);
@@ -404,6 +489,8 @@ const useServicioLogic = () => {
     paginaAnterior,
     getServicios,
     serviciosPorFecha,
+    getServiciosPorRangoDeFecha,
+    serviciosRangoFecha,
   };
 };
 

@@ -12,6 +12,7 @@ import {
   limit,
   startAfter,
   endBefore,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 import moment from "moment";
@@ -20,61 +21,133 @@ const useGastosLogic = () => {
   const [gastos, setGastos] = useState([]);
   const [isLoadingGasto, setIsLoading] = useState(true);
 
+  const [gastosRangoFecha, setGastosRangoFecha] = useState([]);
+
   const [ultimoDoc, setUltimoDoc] = useState(null);
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const gastosCollection = collection(db, "gastos");
   const pageSize = 10;
 
-  const getGastos = async () => {
-    const gastosDataArreglo = [];
-    const primeraConsulta = query(
-      collection(db, "gastos"),
-      orderBy("nombreTipoDeGasto"),
-      limit(pageSize)
-    );
+  const getGastos = async (fecha) => {
+    const fechaHoy = moment().format("YYYY-MM-DD");
 
-    const documentSnapshots = await getDocs(primeraConsulta);
+    const fechaConsulta = fecha ? fecha : fechaHoy;
 
-    const ultimoVisible =
-      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    try {
+      const primeraConsulta = query(
+        collection(db, "gastos"),
+        where("fechaGasto", "==", fechaConsulta),
+        orderBy("fechaGasto"),
+        limit(pageSize)
+      );
 
-    const primerVisible = documentSnapshots.docs[0];
+      const documentSnapshots = await getDocs(primeraConsulta);
 
-    const promises = documentSnapshots.docs.map(async (doc) => {
-      const gastoData = doc.data();
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
-      const tipoDeGastoRef = gastoData.nombreTipoDeGasto;
+      const primerVisible = documentSnapshots.docs[0];
 
-      const [tipoDeGastoSnapshot] = await Promise.all([getDoc(tipoDeGastoRef)]);
+      const promises = documentSnapshots.docs.map(async (doc) => {
+        const gastoData = doc.data();
 
-      const tipoDeGastoData = tipoDeGastoSnapshot.data();
+        const tipoDeGastoRef = gastoData.nombreTipoDeGasto;
 
-      const gasto = {
-        ...gastoData,
-        id: doc.id,
-        nombreTipoDeGasto: tipoDeGastoData.nombreTipoDeGasto,
-        descripcionGasto: doc.data().descripcionGasto,
-        precioGasto: doc.data().precioGasto,
-        fechaServicio: moment(doc.data().fechaServicio).format("MMMM DD"),
-      };
+        const [tipoDeGastoSnapshot] = await Promise.all([
+          getDoc(tipoDeGastoRef),
+        ]);
 
-      return gasto;
-    });
+        const tipoDeGastoData = tipoDeGastoSnapshot.data() || {};
 
-    // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
-    const tiposDeGastosCompletos = await Promise.all(promises);
+        const gasto = {
+          ...gastoData,
+          id: doc.id,
+          nombreTipoDeGasto: tipoDeGastoData.nombreTipoDeGasto,
+          descripcionGasto: doc.data().descripcionGasto,
+          precioGasto: doc.data().precioGasto,
+          fechaGasto: doc.data().fechaGasto,
+        };
 
-    // Actualizar la caché con los nuevos datos
-    localStorage.setItem(
-      "cachedServicios",
-      JSON.stringify(tiposDeGastosCompletos)
-    );
+        return gasto;
+      });
 
-    setUltimoDoc(ultimoVisible);
-    setPrimerDocVisible(primerVisible);
-    setGastos(tiposDeGastosCompletos);
-    setIsLoading(false);
+      // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+      const tiposDeGastosCompletos = await Promise.all(promises);
+
+      // Actualizar la caché con los nuevos datos
+      localStorage.setItem(
+        "cachedServicios",
+        JSON.stringify(tiposDeGastosCompletos)
+      );
+
+      setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
+      setGastos(tiposDeGastosCompletos);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error al obtener servicios:", error);
+      setIsLoading(false);
+    }
+  };
+
+  const getGastosPorRangoDeFecha = async (fechaInicio, fechaFin) => {
+    try {
+      const primeraConsulta = query(
+        collection(db, "gastos"),
+        where("fechaGasto", ">=", fechaInicio),
+        where("fechaGasto", "<=", fechaFin),
+        orderBy("fechaGasto"),
+        limit(pageSize)
+      );
+
+      const documentSnapshots = await getDocs(primeraConsulta);
+
+      const ultimoVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      const primerVisible = documentSnapshots.docs[0];
+
+      const promises = documentSnapshots.docs.map(async (doc) => {
+        const gastoData = doc.data();
+
+        const tipoDeGastoRef = gastoData.nombreTipoDeGasto;
+
+        const [tipoDeGastoSnapshot] = await Promise.all([
+          getDoc(tipoDeGastoRef),
+        ]);
+
+        const tipoDeGastoData = tipoDeGastoSnapshot.data() || {};
+
+        const gasto = {
+          ...gastoData,
+          id: doc.id,
+          nombreTipoDeGasto: tipoDeGastoData.nombreTipoDeGasto,
+          descripcionGasto: doc.data().descripcionGasto,
+          precioGasto: doc.data().precioGasto,
+          fechaGasto: doc.data().fechaGasto,
+        };
+
+        return gasto;
+      });
+
+      // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+      const tiposDeGastosCompletos = await Promise.all(promises);
+
+      // Actualizar la caché con los nuevos datos
+      localStorage.setItem(
+        "cachedServicios",
+        JSON.stringify(tiposDeGastosCompletos)
+      );
+
+      setUltimoDoc(ultimoVisible);
+      setPrimerDocVisible(primerVisible);
+      setGastosRangoFecha(tiposDeGastosCompletos);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error al obtener servicios:", error);
+      setIsLoading(false);
+    }
   };
 
   const paginaSiguiente = async () => {
@@ -92,14 +165,42 @@ const useGastosLogic = () => {
       const ultimoVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
-      const gastosData = documentSnapshots.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+      const promises = documentSnapshots.docs.map(async (doc) => {
+        const gastoData = doc.data();
+
+        const tipoDeGastoRef = gastoData.nombreTipoDeGasto;
+
+        const [tipoDeGastoSnapshot] = await Promise.all([
+          getDoc(tipoDeGastoRef),
+        ]);
+
+        const tipoDeGastoData = tipoDeGastoSnapshot.data() || {};
+
+        const gasto = {
+          ...gastoData,
+          id: doc.id,
+          nombreTipoDeGasto: tipoDeGastoData.nombreTipoDeGasto,
+          descripcionGasto: doc.data().descripcionGasto,
+          precioGasto: doc.data().precioGasto,
+          fechaGasto: doc.data().fechaGasto,
+        };
+
+        return gasto;
+      });
+
+      // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+      const tiposDeGastosCompletos = await Promise.all(promises);
+
+      // Actualizar la caché con los nuevos datos
+      localStorage.setItem(
+        "cachedServicios",
+        JSON.stringify(tiposDeGastosCompletos)
+      );
 
       setUltimoDoc(ultimoVisible);
       setPrimerDocVisible(primerVisible);
-      setGastos(gastosData);
+      setGastos(tiposDeGastosCompletos);
+      setIsLoading(false);
     } else {
       console.log("no existen mas datos");
     }
@@ -122,14 +223,41 @@ const useGastosLogic = () => {
         const ultimoVisible =
           documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
-        const gastosData = documentSnapshots.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
+        const promises = documentSnapshots.docs.map(async (doc) => {
+          const gastoData = doc.data();
+
+          const tipoDeGastoRef = gastoData.nombreTipoDeGasto;
+
+          const [tipoDeGastoSnapshot] = await Promise.all([
+            getDoc(tipoDeGastoRef),
+          ]);
+
+          const tipoDeGastoData = tipoDeGastoSnapshot.data() || {};
+
+          const gasto = {
+            ...gastoData,
+            id: doc.id,
+            nombreTipoDeGasto: tipoDeGastoData.nombreTipoDeGasto,
+            descripcionGasto: doc.data().descripcionGasto,
+            precioGasto: doc.data().precioGasto,
+            fechaGasto: doc.data().fechaGasto,
+          };
+
+          return gasto;
+        });
+        // Esperar a que se resuelvan todas las promesas y obtener los servicios completos
+        const tiposDeGastosCompletos = await Promise.all(promises);
+
+        // Actualizar la caché con los nuevos datos
+        localStorage.setItem(
+          "cachedServicios",
+          JSON.stringify(tiposDeGastosCompletos)
+        );
 
         setUltimoDoc(ultimoVisible);
         setPrimerDocVisible(primerVisible);
-        setGastos(gastosData);
+        setGastos(tiposDeGastosCompletos);
+        setIsLoading(false);
       }
     } else {
       console.log("no existen mas datos");
@@ -182,6 +310,7 @@ const useGastosLogic = () => {
         nombreTipoDeGasto: gastoRef,
         descripcionGasto: nuevoGasto.descripcionGasto,
         precioGasto: nuevoGasto.precioGasto,
+        fechaGasto: nuevoGasto.fechaGasto,
       };
 
       await addDoc(gastosCollection, gasto);
@@ -211,6 +340,9 @@ const useGastosLogic = () => {
     updateGasto,
     paginaAnterior,
     paginaSiguiente,
+    getGastos,
+    getGastosPorRangoDeFecha,
+    gastosRangoFecha,
   };
 };
 

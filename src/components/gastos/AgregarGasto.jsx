@@ -25,6 +25,7 @@ const AgregarGasto = () => {
     precioGasto: "",
     descripcionGasto: "",
     nombreTipoDeGasto: "",
+    fechaGasto: "",
   });
 
   const SelectTiposDeGastos = tiposDeGastos
@@ -75,10 +76,12 @@ const AgregarGasto = () => {
     }
 
     try {
+      const fechaActual = moment().format("YYYY-MM-DD");
       const response = await addGasto({
         nombreTipoDeGasto: `tiposDeGastos/${gasto.nombreTipoDeGasto.value}`,
         descripcionGasto: gasto.descripcionGasto,
         precioGasto: gasto.precioGasto,
+        fechaGasto: fechaActual,
       });
       console.log(response);
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");
