@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 
 import DataTable from "../components/dataTable";
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 
 const Colaboradores = () => {
   const {
@@ -27,30 +28,27 @@ const Colaboradores = () => {
 
   return (
     <Container>
-      <div className="container">
+      <div>
         <div className="row">
           <div className="col-md-12">
             <div>
-              <h1>Colaboradores</h1>
+              <h1 className="text-center ">Colaboradores</h1>
             </div>
 
             <hr />
-            <div className="boton">
-              <div className="container my-2">
-                <Link to={`/registros/crear-colaborador/`}>
-                  <button className="btn btn-primary font-weight-normal ">
-                    {<AiFillFileAdd />} Agregar
-                  </button>
-                </Link>
-              </div>
-              <div className="container my-2">
-                <Link to={"/registros/servicios"}>
-                  <button className="btn btn-info font-weight-normal text-white    ">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
-              </div>
-            </div>
+            <Container className="mb-3">
+              <Row>
+                <Col sm={6} className="my-2">
+                  <BotonesPrincipalesAgregar
+                    agregar={`/registros/crear-colaborador/`}
+                    regresar={`/registros/servicios`}
+                    tituloBoton={"Agregar nuevo colaborador"}
+                  />
+                </Col>
+
+                <Col sm={6}></Col>
+              </Row>
+            </Container>
             <div className="table-responsive">
               <DataTable
                 columnaServicio={columnaServicio}

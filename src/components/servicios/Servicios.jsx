@@ -10,7 +10,17 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Importa los estilos CSS
-import { Button, Container } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Dropdown,
+  DropdownButton,
+  Row,
+} from "react-bootstrap";
+import BotonesPrincipales from "../components/BotonesPrincipalesAgregar";
+import "../../style/Servicios.css";
+import { FcSearch } from "react-icons/fc";
 
 const Servicios = () => {
   const {
@@ -60,67 +70,60 @@ const Servicios = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="boton_servicios">
-              <h1>Ventas</h1>
+              <h1 className="text-center">Ventas</h1>
+
               <div>
-                <Link to={"/registros/colaboradores"}>
-                  <button className="btn btn-outline-primary me-3">
+                <DropdownButton id="dropdown-basic-button" title="Complementos">
+                  <Dropdown.Item as={Link} to="/registros/colaboradores">
                     Colaboradores
-                  </button>
-                </Link>
-
-                <Link to={"/registros/clientes"}>
-                  <button className="btn btn-outline-primary me-3">
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/registros/clientes">
                     Clientes
-                  </button>
-                </Link>
-
-                <Link to={"/registros/tiposDeServicios"}>
-                  <button className="btn btn-outline-primary me-3">
-                    Servicios
-                  </button>
-                </Link>
-
-                <Link to={"/registros/tiposDePago"}>
-                  <button className="btn btn-outline-primary me-3">
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/registros/tiposDeServicios">
+                    Tipos de servicios
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/registros/tiposDePago">
                     Tipos de pago
-                  </button>
-                </Link>
+                  </Dropdown.Item>
+                </DropdownButton>
               </div>
             </div>
 
             <hr />
-            <div>
-              <div className="container my-2">
-                <Link to={`/registros/crear-servicio/`}>
-                  <button className="btn btn-primary font-weight-normal ">
-                    {<AiFillFileAdd />} Agregar
-                  </button>
-                </Link>
-              </div>
-              <div className="container my-2">
-                <Link to={"/registros/"}>
-                  <button className="btn btn-info font-weight-normal text-white    ">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
-              </div>
-            </div>
 
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <h3>Filtra por fecha</h3>
-              <DatePicker
-                selected={fechaSeleccionada}
-                onChange={handleDateChange}
-                placeholderText="¿ Que fecha buscamos?"
-                dateFormat="dd/MM/yyyy"
-                className="custom-datepicker" // Agrega una clase personalizada
-              />
-              <Button onClick={(e) => handleBuscarPorFecha(e)}>
-                Buscar fecha
-              </Button>
-            </div>
+            <Row>
+              <Col sm={6} className="my-2">
+                <BotonesPrincipales
+                  agregar={`/registros/crear-servicio/`}
+                  regresar={`/registros/`}
+                  tituloBoton={"Agregar nueva venta"}
+                />
+              </Col>
+
+              <Col sm={6}>
+                <div className="contenedor_filtro_fechas">
+                  <h3>Buscar por fecha:</h3>
+                  <DatePicker
+                    selected={fechaSeleccionada}
+                    onChange={handleDateChange}
+                    placeholderText="¿ Que fecha buscamos?"
+                    dateFormat="dd/MM/yyyy"
+                    className="custom-datepicker mt-3" // Agrega una clase personalizada
+                  />
+                  <Button
+                    className="mt-3 boton_buscar"
+                    onClick={(e) => handleBuscarPorFecha(e)}
+                  >
+                    <FcSearch />
+                    Buscar fecha
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+
             <div>
-              <h4>Fecha actual: {fechaActual}</h4>
+              <h4 className="text-center my-4">Fecha actual: {fechaActual}</h4>
               {/* Aquí puedes renderizar tu DataTable con la fecha actual */}
               <div className="table-responsive">
                 <DataTable

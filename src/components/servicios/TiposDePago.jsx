@@ -5,6 +5,8 @@ import { AiOutlineRollback } from "react-icons/ai";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
 
 import DataTable from "../components/dataTable";
+import { Col, Container, Row } from "react-bootstrap";
+import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 
 const TiposDePago = () => {
   const {
@@ -21,31 +23,28 @@ const TiposDePago = () => {
     return <p>Cargando...</p>;
   }
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
+    <Container>
+      <div>
+        <div>
+          <div>
             <div>
-              <h1>Tipos de pago</h1>
+              <h1 className="text-center">Tipos de pago</h1>
             </div>
 
             <hr />
-            <div className="boton">
-              <div className="container my-2">
-                <Link to={`/registros/crear-tipoDePago/`}>
-                  <button className="btn btn-primary font-weight-normal ">
-                    {<AiFillFileAdd />} Agregar
-                  </button>
-                </Link>
-              </div>
-              <div className="container my-2">
-                <Link to={"/registros/servicios"}>
-                  <button className="btn btn-info font-weight-normal text-white    ">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
-              </div>
-            </div>
+            <Container className="mb-3">
+              <Row>
+                <Col sm={6} className="my-2">
+                  <BotonesPrincipalesAgregar
+                    agregar={`/registros/crear-tipoDePago/`}
+                    regresar={`/registros/servicios`}
+                    tituloBoton={"Agregar nuevo tipo de pago"}
+                  />
+                </Col>
+
+                <Col sm={6}></Col>
+              </Row>
+            </Container>
             <DataTable
               columnaServicio={columnaServicio}
               data={tiposDePago}
@@ -57,7 +56,7 @@ const TiposDePago = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

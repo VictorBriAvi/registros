@@ -63,7 +63,7 @@ const AgregarTipoDeGasto = () => {
       <div className="container">
         <div className="text-center">
           <h1>Agregar Tipos de gastos</h1>
-          <h5>Aca puedes agregar los tipos de gastos</h5>
+          <h5>Aca puedes agregar los nuevos tipos de gastos</h5>
           <hr />
         </div>
         <div className="row">

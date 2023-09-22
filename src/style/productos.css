@@ -57,6 +57,7 @@ ACA COMIENZA CODIGO DEL BUSCADO POR NOMBRE
 }
 
 .boton_buscar {
+
     height: 50px;
     margin: 5px 0 5px 0;
     border: none;
@@ -64,6 +65,10 @@ ACA COMIENZA CODIGO DEL BUSCADO POR NOMBRE
     border-radius: 10px;
     padding: 10px;
     background-color: #FCD3DE;
-    width: 300px;
+    width: 200px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.boton_buscar:hover {
+    background-color: gray;
 }

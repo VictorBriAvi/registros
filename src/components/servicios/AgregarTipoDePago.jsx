@@ -61,8 +61,8 @@ const AgregarTipoDePago = () => {
     <div>
       <div className="container">
         <div className="text-center">
-          <h1>Agregar Tipos de pago</h1>
-          <h5>Aca puedes agregar los tipos de pago</h5>
+          <h1>Agregarnuevo tipo de pago</h1>
+          <h5>Aca puedes agregar los nuevos tipos de pago</h5>
           <hr />
         </div>
         <div className="row">

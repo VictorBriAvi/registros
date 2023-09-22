@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import { Toast } from "../../Alert/Aler";
-
+import DatePicker from "react-datepicker";
 import { Container } from "react-bootstrap";
 
 const AgregarColaborador = () => {
@@ -95,7 +95,7 @@ const AgregarColaborador = () => {
       <div className="container">
         <div className="text-center">
           <h1>Agregar Colaborador</h1>
-          <h5>Aca puedes agregar los colaboradores</h5>
+          <h6>Aca puedes agregar los nuevos colaboradores</h6>
           <hr />
         </div>
         <div className="row">
@@ -157,7 +157,7 @@ const AgregarColaborador = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="boton">
+              <div className="boton mt-5">
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>

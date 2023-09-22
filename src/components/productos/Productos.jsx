@@ -10,8 +10,9 @@ import "../../style/Productos.css";
 
 import DataTable from "../components/DataTable";
 import { useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import Select from "react-select";
+import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 
 const Productos = () => {
   const [productoState, setProductoState] = useState({
@@ -69,25 +70,17 @@ const Productos = () => {
 
   return (
     <Container>
-      <h1 className="text-center ">Inventario de productos</h1>
-      <hr />
-      <div className="container">
+      <div>
+        <h1 className="text-center ">Inventario de productos</h1>
+        <hr />
+
         <Row>
           <Col sm={6}>
-            <div className="contenedor_botones_superiores">
-              <div className="container_boton ">
-                <Link to={`/registros/crear-producto/`}>
-                  <button className="fondo_boton agregar">
-                    {<FcAddDatabase />} Agregar nuevo producto
-                  </button>
-                </Link>
-                <Link to={"/registros/"}>
-                  <button className="fondo_boton regresar">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
-              </div>
-            </div>
+            <BotonesPrincipalesAgregar
+              agregar={`/registros/crear-producto/`}
+              regresar={"/registros/"}
+              tituloBoton={"Agregar nuevo producto"}
+            />
           </Col>
 
           <Col sm={6}>
@@ -115,6 +108,7 @@ const Productos = () => {
             </div>
           </Col>
         </Row>
+
         <div className="table-responsive">
           <DataTable
             columnaServicio={columnaServicio}
@@ -131,46 +125,3 @@ const Productos = () => {
 };
 
 export default Productos;
-
-{
-  /**
-            <table
-              className={`table table-${contextTheme} table-striped table-hover table-borderless `}
-            >
-              <thead>
-                <tr>
-                  <th>Codigo Producto</th>
-                  <th>Nombre Producto</th>
-                  <th>Descripcion Producto</th>
-                  <th>Precio Producto</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productos.map((producto) => (
-                  <tr key={producto.id}>
-                    <td>{producto.codigoProducto}</td>
-                    <td>{producto.nombreProducto}</td>
-                    <td>{producto.descripcionProducto}</td>
-                    <td>{producto.precioProducto}</td>
-
-                    <td>
-                      <Link to={`/registros/editar-producto/${producto.id}`}>
-                        <button className="btn btn-primary font-weight-normal ">
-                          {<AiFillEdit />}
-                        </button>
-                      </Link>
-
-                      <button
-                        onClick={() => deleteProducto(producto.id)}
-                        className="btn btn-danger font-weight-normal "
-                      >
-                        {<AiFillDelete />}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-*/
-}

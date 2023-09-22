@@ -87,8 +87,8 @@ const AgregarProducto = () => {
     <Container>
       <div className="container">
         <div className="text-center">
-          <h1>Agregar Producto</h1>
-          <h5>Aca puedes agregar los productos</h5>
+          <h1>Agregar nuevo producto</h1>
+          <h6>Aca puedes agregar los productos nuevos</h6>
           <hr />
         </div>
         <div className="row">

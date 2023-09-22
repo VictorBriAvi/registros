@@ -7,7 +7,9 @@ import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import { useState } from "react";
 
 import DataTable from "../components/dataTable";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import { FcSearch } from "react-icons/fc";
 
 const TiposDeServicios = () => {
   const [servicio, setServicio] = useState({
@@ -61,77 +63,79 @@ const TiposDeServicios = () => {
 
   return (
     <Container>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
+      <div>
+        <div>
+          <div>
             <div>
-              <h1>Precios de servicios</h1>
+              <h1 className="text-center">Tipos de servicios</h1>
             </div>
 
             <hr />
+            <Container className="mb-3">
+              <Row>
+                <Col sm={6} className="my-2">
+                  <BotonesPrincipalesAgregar
+                    agregar={`/registros/crear-tipoDeServicio`}
+                    regresar={`/registros/servicios`}
+                    tituloBoton={"Agregar nuevo tipo de servicio"}
+                  />
+                </Col>
 
-            <div className="boton">
-              <div className="container my-2">
-                <Link to={`/registros/crear-tipoDeServicio/`}>
-                  <button className="btn btn-primary font-weight-normal ">
-                    {<AiFillFileAdd />} Agregar
-                  </button>
-                </Link>
-              </div>
-              <div className="container my-2">
-                <Link to={"/registros/servicios"}>
-                  <button className="btn btn-info font-weight-normal text-white    ">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
-              </div>
-              <div className="container my-2">
-                <Link to={"/registros/servicios/porcentaje"}>
-                  <button className="btn btn-warning font-weight-normal text-white    ">
-                    Porcentaje
-                  </button>
-                </Link>
-              </div>
-            </div>
+                <Col sm={6}>
+                  <div>
+                    <div className="container my-2">
+                      <Link to={"/registros/servicios/porcentaje"}>
+                        <button className="btn btn-warning font-weight-normal text-white  mb-3  ">
+                          Sumar precios segun el porcentaje Porcentaje
+                        </button>
+                      </Link>
+
+                      <fieldset>
+                        <label className="mb-2" htmlFor="2">
+                          Buscar por la categoria del servicio
+                        </label>
+                        <div className="form-floating mb-3">
+                          <div className="row ">
+                            <div className="col-md-6">
+                              {/* Establecer el ancho del select */}
+                              <Form.Select
+                                aria-label="Default select example"
+                                id="2"
+                                name="tipoDeTrabajo"
+                                value={servicio.tipoDeTrabajo}
+                                onChange={handleSelectChange}
+                                className="h-100"
+                              >
+                                <option value="">Todas</option>
+                                {opcionesServicio.map((opcion, index) => (
+                                  <option key={index} value={opcion}>
+                                    {opcion}
+                                  </option>
+                                ))}
+                              </Form.Select>
+                            </div>
+                            <div className="col-md-6">
+                              {/* Establecer el ancho del botón */}
+                              <Button
+                                className="boton_buscar"
+                                onClick={(e) => handleFiltraCategoria(e)}
+                              >
+                                <FcSearch /> Buscar por categoria
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+
             <Container
               fluid
               className=" justify-content-center align-items-center "
-            >
-              <fieldset>
-                <label htmlFor="2">Buscar por categoría</label>
-                <div className="form-floating mb-3">
-                  <div className="row ">
-                    <div className="col-md-6">
-                      {/* Establecer el ancho del select */}
-                      <Form.Select
-                        aria-label="Default select example"
-                        id="2"
-                        name="tipoDeTrabajo"
-                        value={servicio.tipoDeTrabajo}
-                        onChange={handleSelectChange}
-                        className="h-100"
-                      >
-                        <option value="">Todas</option>
-                        {opcionesServicio.map((opcion, index) => (
-                          <option key={index} value={opcion}>
-                            {opcion}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </div>
-                    <div className="col-md-6">
-                      {/* Establecer el ancho del botón */}
-                      <Button
-                        variant="primary"
-                        onClick={(e) => handleFiltraCategoria(e)}
-                      >
-                        Mi Botón
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
-            </Container>
+            ></Container>
             {/** COMPONENTE DATATABLE : Esto carga los datos en una tabla para mostrarlos */}
             <DataTable
               columnaServicio={columnaServicio}

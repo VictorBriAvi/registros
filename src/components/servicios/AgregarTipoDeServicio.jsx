@@ -74,8 +74,8 @@ const AgregarTipoDeServicio = () => {
     <div>
       <div className="container">
         <div className="text-center">
-          <h1>Agregar nuevo servicio</h1>
-          <h5>Aca puedes agregar los nuevos servicios</h5>
+          <h1>Agregar nuevo tipo de servicio</h1>
+          <h6>Aca puedes agregar los nuevos tipos de servicios </h6>
           <hr />
         </div>
         <div className="row">

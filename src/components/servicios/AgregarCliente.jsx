@@ -78,7 +78,7 @@ const AgregarCliente = () => {
       <div className="container">
         <div className="text-center">
           <h1>Agregar Cliente</h1>
-          <h5>Aca puedes agregar al cliente</h5>
+          <h6>Aca puedes agregar nuevos clientes</h6>
           <hr />
         </div>
         <div className="row">
@@ -119,7 +119,7 @@ const AgregarCliente = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="boton">
+              <div className="boton mt-5">
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>

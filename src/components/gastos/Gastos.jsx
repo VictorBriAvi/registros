@@ -7,10 +7,12 @@ import useGastosLogic from "../../Hooks/useGastosLogic";
 
 import DatePicker from "react-datepicker";
 import DataTable from "../components/dataTable";
-import { Button } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import moment from "moment";
 import { useState } from "react";
 import { useEffect } from "react";
+import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import { FcSearch } from "react-icons/fc";
 
 const Cierres = () => {
   const {
@@ -53,13 +55,13 @@ const Cierres = () => {
   return (
     <div>
       <div>
-        <div className="row">
-          <div className="col-md-12">
+        <div>
+          <div>
             <div className="boton_servicios">
-              <h1>Gastos</h1>
+              <h1 className="text-center">Gastos</h1>
               <div>
                 <Link to={"/registros/gastos/TiposDeGastos"}>
-                  <button className="btn btn-outline-primary me-3">
+                  <button className="btn btn-outline-primary me-3 float-end">
                     Tipos de gastos
                   </button>
                 </Link>
@@ -68,38 +70,40 @@ const Cierres = () => {
 
             <hr />
 
-            <div className="boton">
-              <div className="container my-2">
-                <Link to={`/registros/crear-tipoDeGasto`}>
-                  <button className="btn btn-primary font-weight-normal ">
-                    {<AiFillFileAdd />} Agregar
-                  </button>
-                </Link>
-              </div>
-              <div className="container my-2">
-                <Link to={"/registros/"}>
-                  <button className="btn btn-info font-weight-normal text-white    ">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <h3>Filtra por fecha</h3>
-              <DatePicker
-                selected={fechaSeleccionada}
-                onChange={handleDateChange}
-                placeholderText="¿ Que fecha buscamos?"
-                dateFormat="dd/MM/yyyy"
-                className="custom-datepicker" // Agrega una clase personalizada
-              />
-              <Button onClick={(e) => handleBuscarPorFecha(e)}>
-                Buscar fecha
-              </Button>
-            </div>
+            <Container>
+              <Row>
+                <Col sm={6} className="my-2">
+                  <BotonesPrincipalesAgregar
+                    agregar={`/registros/crear-tipoDeGasto`}
+                    regresar={`/registros/`}
+                    tituloBoton={"Agregar nueva gasto"}
+                  />
+                </Col>
 
-            <div className="table-responsive">
-              <h4>Fecha actual: {fechaActual}</h4>
+                <Col sm={6}>
+                  <div className="contenedor_filtro_fechas">
+                    <h3>Buscar por fecha:</h3>
+                    <DatePicker
+                      selected={fechaSeleccionada}
+                      onChange={handleDateChange}
+                      placeholderText="¿ Que fecha buscamos?"
+                      dateFormat="dd/MM/yyyy"
+                      className="custom-datepicker" // Agrega una clase personalizada
+                    />
+
+                    <Button
+                      className="mt-3 boton_buscar"
+                      onClick={(e) => handleBuscarPorFecha(e)}
+                    >
+                      <FcSearch /> Buscar fecha
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+
+            <div className="table-responsive ">
+              <h4 className="text-center my-5">Fecha actual: {fechaActual}</h4>
               <DataTable
                 columnaServicio={columnaServicio}
                 data={gastos}

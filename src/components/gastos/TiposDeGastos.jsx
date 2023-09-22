@@ -5,6 +5,8 @@ import { AiOutlineRollback } from "react-icons/ai";
 
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 import DataTable from "../components/dataTable";
+import { Col, Container, Row } from "react-bootstrap";
+import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 const TiposDeGastos = () => {
   const {
     tiposDeGastos,
@@ -22,33 +24,28 @@ const TiposDeGastos = () => {
     return <p>Cargando...</p>;
   }
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
+    <Container>
+      <div>
+        <div>
+          <div>
             <div>
-              <h1>Tipos de pago</h1>
+              <h1 className="text-center">Tipos de pago</h1>
             </div>
 
             <hr />
-            <div className="boton">
-              <div className="container my-2">
-                <Link
-                  to={`/registros/gastos/TiposDeGastos/Agregar-TipoDeGasto`}
-                >
-                  <button className="btn btn-primary font-weight-normal ">
-                    {<AiFillFileAdd />} Agregar
-                  </button>
-                </Link>
-              </div>
-              <div className="container my-2">
-                <Link to={"/registros/gastos"}>
-                  <button className="btn btn-info font-weight-normal text-white    ">
-                    {<AiOutlineRollback />} Regresar
-                  </button>
-                </Link>
-              </div>
-            </div>
+            <Container className="mb-3">
+              <Row>
+                <Col sm={6}>
+                  <BotonesPrincipalesAgregar
+                    agregar={`/registros/gastos/TiposDeGastos/Agregar-TipoDeGasto`}
+                    regresar={"/registros/gastos"}
+                    tituloBoton={"Agregar nuevo tipo de gasto"}
+                  />
+                </Col>
+                <Col sm={6}></Col>
+              </Row>
+            </Container>
+
             <DataTable
               columnaServicio={columnaServicio}
               data={tiposDeGastos}
@@ -57,43 +54,10 @@ const TiposDeGastos = () => {
               paginaAnterior={paginaAnterior}
               editUrl="/registros/gastos/TiposDeGastos/editar-tipoDeGasto"
             />
-            {/**
- *             <table className="table">
-              <thead>
-                <tr>
-                  <th>Tipo de gasto</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tiposDeGastos.map((tipoDeGasto) => (
-                  <tr key={tipoDeGasto.id}>
-                    <td>{tipoDeGasto.nombreTipoDeGasto}</td>
-
-                    <td>
-                      <Link
-                        to={`/registros/gastos/TiposDeGastos/editar-tipoDeGasto/${tipoDeGasto.id}`}
-                      >
-                        <button className="btn btn-primary font-weight-normal me-3">
-                          {<AiFillEdit />}
-                        </button>
-                      </Link>
-
-                      <button
-                        onClick={() => deleteTipoDeGasto(tipoDeGasto.id)}
-                        className="btn btn-danger font-weight-normal "
-                      >
-                        {<AiFillDelete />}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
- */}
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

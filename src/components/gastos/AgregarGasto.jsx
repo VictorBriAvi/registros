@@ -97,32 +97,13 @@ const AgregarGasto = () => {
   return (
     <div className="container">
       <div className="text-center">
-        <h1>Crear nuevo Servicio</h1>
-        <h5>Aca puedes agregar nuevo servicios</h5>
+        <h1>Crear nuevo gasto</h1>
+        <h6>Aca puedes agregar nuevos gastos</h6>
         <hr />
       </div>
       <div className="row">
         <div className="col-sm-12">
           <form onSubmit={handleSubmit}>
-            <div>
-              <div className="my-2">
-                <label htmlFor="1">
-                  Ingrese el tipo de servicio
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
-              </div>
-              <div>
-                <Select
-                  options={SelectTiposDeGastos}
-                  menuPlacement="bottom"
-                  onChange={(selectOption) =>
-                    handleChange(selectOption, "nombreTipoDeGasto")
-                  }
-                  value={gasto.nombreTipoDeGasto}
-                />
-              </div>
-            </div>
-
             <div>
               <div className="my-2">
                 <label htmlFor="3">Ingresa la descripcion del producto </label>
@@ -142,6 +123,24 @@ const AgregarGasto = () => {
                   }
                 />
                 <label htmlFor="3">Descripcion del gasto</label>
+              </div>
+            </div>
+            <div>
+              <div className="my-2">
+                <label htmlFor="1">
+                  Ingrese el tipo de servicio
+                  <span className="text-danger  fw-bold">*</span>
+                </label>
+              </div>
+              <div>
+                <Select
+                  options={SelectTiposDeGastos}
+                  menuPlacement="bottom"
+                  onChange={(selectOption) =>
+                    handleChange(selectOption, "nombreTipoDeGasto")
+                  }
+                  value={gasto.nombreTipoDeGasto}
+                />
               </div>
             </div>
 

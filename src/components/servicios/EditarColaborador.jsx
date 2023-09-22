@@ -102,8 +102,8 @@ const EditarColaboradores = () => {
     <div>
       <div className="container ">
         <div className="row">
-          <div className="col-lg-6  centrar  contenedor-info mb-5">
-            <h1>Informacion del producto</h1>
+          <div className="  text-center mb-5">
+            <h1>Informacion del colaborar a editar</h1>
 
             <ul className="list-group">
               <li className="list-group-item d-flex justify-content-between align-items-start">

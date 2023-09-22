@@ -87,13 +87,13 @@ const EditarCliente = () => {
     <div>
       <div className="container">
         <div className="row">
-          <div className="col-lg-6  text-center mb-5  contenedor-info">
-            <h1>Informacion del cliente</h1>
+          <div className="text-center">
+            <h1 className="text-center">Informacion del cliente</h1>
 
             <ul className="list-group">
               <li className="list-group-item d-flex justify-content-between align-items-start">
                 <div className="ms-2 me-auto">
-                  <div className=" fw-bold">Nombre del cliente</div>
+                  <div className=" fw-bold ">Nombre del cliente</div>
                   <div className="text-center">
                     {clienteById.nombreCompletoCliente}
                   </div>
