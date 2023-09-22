@@ -10,8 +10,7 @@ import FichaInformacion from "../components/FichaInformacion";
 import { useEffect } from "react";
 
 import Swal from "sweetalert2";
-import "../../style/productos.css";
-import "../../style/botones.css";
+
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 import useGastosLogic from "../../Hooks/useGastosLogic";
 

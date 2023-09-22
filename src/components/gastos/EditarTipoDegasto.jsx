@@ -6,9 +6,6 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Toast } from "../../Alert/Aler";
 
-import "../../style/productos.css";
-import "../../style/botones.css";
-
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 
 const EditarTipoDegasto = () => {

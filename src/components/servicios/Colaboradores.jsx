@@ -2,8 +2,6 @@ import { AiFillFileAdd, AiOutlineRollback } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
-import "../../style/Inicio.css";
-import "../../style/botones.css";
 
 import DataTable from "../components/dataTable";
 import { Container } from "react-bootstrap";

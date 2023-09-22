@@ -6,8 +6,6 @@ import Swal from "sweetalert2";
 
 import { Toast } from "../../Alert/Aler";
 
-import "../../style/botones.css";
-
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 
 const AgregarTipoDeGasto = () => {

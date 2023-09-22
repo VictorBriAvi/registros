@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Toast } from "../../Alert/Aler";
 import useProductoLogic from "../../Hooks/useProductoLogic";
 
-import "../../style/botones.css";
 import { Container } from "react-bootstrap";
 
 const AgregarProducto = () => {

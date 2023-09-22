@@ -7,8 +7,6 @@ import moment from "moment";
 
 import useClienteLogic from "../../Hooks/useClienteLogic";
 import { Toast } from "../../Alert/Aler";
-import "../../style/Inicio.css";
-import "../../style/botones.css";
 
 const AgregarCliente = () => {
   const navigate = useNavigate();

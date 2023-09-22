@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Toast } from "../../Alert/Aler";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
-import "../../style/productos.css";
-import "../../style/botones.css";
 
 const EditarTipoDeServicio = () => {
   const params = useParams();

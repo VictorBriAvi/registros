@@ -7,9 +7,6 @@ import Swal from "sweetalert2";
 import { Toast } from "../../Alert/Aler";
 import useProductoLogic from "../../Hooks/useProductoLogic";
 
-import "../../style/productos.css";
-import "../../style/botones.css";
-
 const EditarProducto = () => {
   const params = useParams();
   const navigate = useNavigate();

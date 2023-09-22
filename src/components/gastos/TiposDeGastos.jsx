@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 
 import { AiOutlineRollback } from "react-icons/ai";
 
-import "../../style/productos.css";
-import "../../style/botones.css";
-
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 import DataTable from "../components/dataTable";
 const TiposDeGastos = () => {

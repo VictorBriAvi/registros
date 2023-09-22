@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 
 import useClienteLogic from "../../Hooks/useClienteLogic";
 
-import "../../style/Inicio.css";
-import "../../style/botones.css";
 import DataTable from "../components/dataTable";
 import { Container } from "react-bootstrap";
 

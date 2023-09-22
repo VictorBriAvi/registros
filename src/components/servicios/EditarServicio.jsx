@@ -14,8 +14,6 @@ import FichaInformacion from "../components/FichaInformacion";
 import { useEffect } from "react";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import Swal from "sweetalert2";
-import "../../style/productos.css";
-import "../../style/botones.css";
 
 const EditarServicio = () => {
   const params = useParams();

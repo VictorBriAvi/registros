@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import { Toast } from "../../Alert/Aler";
-import "../../style/botones.css";
+
 import { Container } from "react-bootstrap";
 
 const AgregarColaborador = () => {

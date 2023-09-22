@@ -7,8 +7,6 @@ import Swal from "sweetalert2";
 
 import useClienteLogic from "../../Hooks/useClienteLogic";
 import { Toast } from "../../Alert/Aler";
-import "../../style/productos.css";
-import "../../style/botones.css";
 
 const EditarCliente = () => {
   const params = useParams();

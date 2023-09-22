@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 
 import { AiOutlineRollback } from "react-icons/ai";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
-import "../../style/productos.css";
-import "../../style/botones.css";
 
 import DataTable from "../components/dataTable";
 

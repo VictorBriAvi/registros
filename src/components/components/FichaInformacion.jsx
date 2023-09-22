@@ -1,6 +1,3 @@
-import "../../style/productos.css";
-import "../../style/botones.css";
-
 const FichaInformacion = ({ servicioById }) => {
   return (
     <div className="col-lg-6   mb-5 contenedor-info ">

@@ -2,9 +2,15 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { AiFillDelete, AiFillEdit, AiFillFileAdd } from "react-icons/ai";
-import { Button, Container } from "react-bootstrap";
-
+import {
+  AiFillDelete,
+  AiFillEdit,
+  AiFillFileAdd,
+  AiOutlineArrowRight,
+  AiOutlineArrowLeft,
+} from "react-icons/ai";
+import { Button, Container, Table } from "react-bootstrap";
+import "../../style/DataTable.css";
 const DataTable = ({
   data,
   deleteData,
@@ -25,12 +31,27 @@ const DataTable = ({
   };
 
   return (
-    <div className="table-responsive">
+    <div>
       <Container>
-        <button onClick={(e) => paginaClickAnterior(e)}>Anterior</button>
-        <button onClick={(e) => paginaClickSiguiente(e)}>Siguiente</button>
+        <div className="contenedor_botones_datatable">
+          <button
+            className="botones_datatable"
+            onClick={(e) => paginaClickAnterior(e)}
+          >
+            <AiOutlineArrowLeft />
+            Anteriores
+          </button>
+          <button
+            className="botones_datatable"
+            onClick={(e) => paginaClickSiguiente(e)}
+          >
+            Siguiente
+            <AiOutlineArrowRight />
+          </button>
+        </div>
       </Container>
-      <table className={`table table-striped table-hover table-borderless `}>
+
+      <Table responsive="sm" striped="columns" hover>
         <thead>
           <tr>
             {columnaServicio.map((colum) => (
@@ -62,39 +83,27 @@ const DataTable = ({
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
       <Container>
-        <button onClick={(e) => paginaClickAnterior(e)}>Anterior</button>
-        <button onClick={(e) => paginaClickSiguiente(e)}>Siguiente</button>
+        <div className="contenedor_botones_datatable">
+          <button
+            className="botones_datatable"
+            onClick={(e) => paginaClickAnterior(e)}
+          >
+            <AiOutlineArrowLeft />
+            Anteriores
+          </button>
+          <button
+            className="botones_datatable"
+            onClick={(e) => paginaClickSiguiente(e)}
+          >
+            Siguiente
+            <AiOutlineArrowRight />
+          </button>
+        </div>
       </Container>
     </div>
   );
 };
-
-{
-  /**          {tiposServicios.map((tipoDeServicio) => (
-            <tr key={tipoDeServicio.id}>
-              <td>{tipoDeServicio.nombreServicio}</td>
-              <td>{tipoDeServicio.precioServicio}</td>
-              <td>{tipoDeServicio.precioServicio * 1.2}</td>
-              <td>{tipoDeServicio.tipoDeTrabajo}</td>
-              <td>
-                <Link
-                  to={`/registros/editar-tipoDeServicio/${tipoDeServicio.id}`}
-                >
-                  <button className="btn btn-primary font-weight-normal me-3">
-                    {<AiFillEdit />}
-                  </button>
-                </Link>
-                <button
-                  onClick={() => deleteTipoDeServicio(tipoDeServicio.id)}
-                  className="btn btn-danger font-weight-normal "
-                >
-                  {<AiFillDelete />}
-                </button>
-              </td>
-            </tr>
-          ))} */
-}
 
 export default DataTable;

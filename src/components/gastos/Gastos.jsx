@@ -5,8 +5,6 @@ import { AiFillDelete, AiFillEdit, AiFillFileAdd } from "react-icons/ai";
 import { AiOutlineRollback } from "react-icons/ai";
 import useGastosLogic from "../../Hooks/useGastosLogic";
 
-import "../../style/Inicio.css";
-import "../../style/botones.css";
 import DatePicker from "react-datepicker";
 import DataTable from "../components/dataTable";
 import { Button } from "react-bootstrap";

@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 
 import { Toast } from "../../Alert/Aler";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
-import "../../style/botones.css";
 
 const AgregarTipoDePago = () => {
   const navigate = useNavigate();

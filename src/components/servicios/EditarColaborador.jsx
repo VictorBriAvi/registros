@@ -7,8 +7,6 @@ import Swal from "sweetalert2";
 import moment from "moment";
 import { Toast } from "../../Alert/Aler";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
-import "../../style/productos.css";
-import "../../style/botones.css";
 
 const EditarColaboradores = () => {
   const params = useParams();

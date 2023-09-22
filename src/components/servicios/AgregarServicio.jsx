@@ -12,7 +12,6 @@ import { useState } from "react";
 import { Toast } from "../../Alert/Aler";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import Swal from "sweetalert2";
-import "../../style/botones.css";
 import moment from "moment";
 
 const AgregarServicio = () => {

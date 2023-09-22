@@ -7,8 +7,6 @@ import Swal from "sweetalert2";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import { Toast } from "../../Alert/Aler";
 
-import "../../style/botones.css";
-
 const AgregarTipoDeServicio = () => {
   const navigate = useNavigate();
   const { addTipoDeServicio, tiposServicios } = useTiposDeServiciosLogic();

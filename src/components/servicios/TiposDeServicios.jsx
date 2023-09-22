@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 
 import { AiOutlineRollback } from "react-icons/ai";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
-import "../../style/Inicio.css";
-import "../../style/botones.css";
 
 import { useState } from "react";
 
