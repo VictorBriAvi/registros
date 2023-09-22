@@ -1,20 +1,14 @@
-import {
-  AiFillDelete,
-  AiFillEdit,
-  AiFillFileAdd,
-  AiOutlineRollback,
-} from "react-icons/ai";
+import { AiFillFileAdd, AiOutlineRollback } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
-import moment from "moment";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import DataTable from "../components/dataTable";
+import { Container } from "react-bootstrap";
 
 const Colaboradores = () => {
-  const { contextTheme } = useThemeContext();
   const {
     colaboradores,
     isLoading,
@@ -34,7 +28,7 @@ const Colaboradores = () => {
   }
 
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <Container>
       <div className="container">
         <div className="row">
           <div className="col-md-12">
@@ -72,7 +66,7 @@ const Colaboradores = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

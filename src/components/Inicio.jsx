@@ -1,56 +1,103 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../style/Inicio.css";
-import ReactSwitch from "react-switch";
+
+import "../style/Inicio.css";
+import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
-import { useThemeContext } from "../context/ThemeContext";
-import "../style/Inicio.css";
 
 const Inicio = () => {
-  const [checked, setChecked] = useState(false);
-  const { contextTheme, setContextTheme } = useThemeContext();
+  const navigate = useNavigate();
 
-  const handleSwitch = (nextChecked) => {
-    setContextTheme((state) => (state === "light" ? "dark" : "light"));
-    setChecked(nextChecked);
-    console.log(nextChecked);
-    console.log(contextTheme);
+  const [mouseEncima, setMouseEncima] = useState(false);
+
+  const handleMouseEnter = () => {
+    setMouseEncima(true);
+  };
+
+  const handleMouseLeave = () => {
+    setMouseEncima(false);
+  };
+
+  const contenedor = (variable) => {
+    console.log(variable);
+
+    if (variable === "inventario") {
+      navigate("/registros/productos");
+    }
+    if (variable === "ventas") {
+      navigate("/registros/servicios");
+    }
+    if (variable === "gastos") {
+      navigate("/registros/gastos");
+    }
+    if (variable === "caja") {
+      navigate("/registros/arqueo-de-caja");
+    }
   };
   return (
-    <div className={`${contextTheme} contenedor`}>
-      <div className="container ">
-        <ReactSwitch
-          onChange={handleSwitch}
-          checked={checked}
-          onColor="#86d3ff"
-          onHandleColor="#2693e6"
-          handleDiameter={30}
-          uncheckedIcon={false}
-          checkedIcon={false}
-          boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-          activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-          height={20}
-          width={48}
-          className="react-switch"
-          id="material-switch"
-        />
+    <Container fluid className=" vh-100 contenedor_inicio">
+      <Row className="align-items-center">
+        <Col xs={12} className="text-center">
+          <h1 className="animacion-letras">Bienvenid@s</h1>
+        </Col>
 
-        <h1>Inicio de programa {contextTheme} </h1>
-        <hr />
-        <Link to={"/registros/productos"}>
-          <button className="btn btn-outline-primary">Stock</button>
-        </Link>
-        <Link to={"/registros/servicios"}>
-          <button className="btn btn-outline-primary">Servicios</button>
-        </Link>
+        <Col xs={12}>
+          <div className="contenedor_botones">
+            <div
+              className={`contenedor-boton ${
+                mouseEncima ? "encimaMouse" : "afueraMouse"
+              }`}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div
+                className="boton boton_inventario"
+                onClick={() => contenedor("inventario")}
+              >
+                <Link to={"/registros/productos"}>
+                  <button className=" boton_solito">Inventario</button>
+                </Link>
+              </div>
+            </div>
 
-        <Link to={"/registros/gastos"}>
-          <button className="btn btn-outline-primary">Gastos</button>
-        </Link>
-        <Link to={"/registros/arqueo-de-caja"}>
-          <button className="btn btn-outline-primary">Arqueo de caja</button>
-        </Link>
-      </div>
-    </div>
+            <div className="contenedor-boton">
+              <div
+                className="boton boton_registros_ventas "
+                onClick={() => contenedor("ventas")}
+              >
+                <Link to={"/registros/servicios"}>
+                  <button className="boton_solito">Servicios y Ventas</button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="contenedor-boton">
+              <div
+                className="boton boton_gastos"
+                onClick={() => contenedor("gastos")}
+              >
+                <Link to={"/registros/gastos"}>
+                  <button className="boton_solito">
+                    Gastos y Tipos de gasto
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="contenedor-boton">
+              <div
+                className="boton boton_caja"
+                onClick={() => contenedor("caja")}
+              >
+                <Link to={"/registros/arqueo-de-caja"}>
+                  <button className="boton_solito">Arqueo de caja</button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

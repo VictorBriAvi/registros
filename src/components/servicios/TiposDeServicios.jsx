@@ -5,15 +5,13 @@ import { AiOutlineRollback } from "react-icons/ai";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import { useState } from "react";
-import { useEffect } from "react";
+
 import DataTable from "../components/dataTable";
 import { Button, Container, Form } from "react-bootstrap";
 
 const TiposDeServicios = () => {
-  const { contextTheme } = useThemeContext();
-
   const [servicio, setServicio] = useState({
     tipoDeTrabajo: "", // Estado para almacenar la categoría seleccionada
   });
@@ -64,7 +62,7 @@ const TiposDeServicios = () => {
   }
 
   return (
-    <Container className={`${contextTheme} contenedor`}>
+    <Container>
       <div className="container">
         <div className="row">
           <div className="col-md-12">

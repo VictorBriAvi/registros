@@ -4,7 +4,7 @@ import { AiFillDelete, AiFillEdit, AiFillFileAdd } from "react-icons/ai";
 
 import { AiOutlineRollback } from "react-icons/ai";
 import useGastosLogic from "../../Hooks/useGastosLogic";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import "../../style/Inicio.css";
 import "../../style/botones.css";
 import DatePicker from "react-datepicker";
@@ -23,7 +23,6 @@ const Cierres = () => {
     paginaAnterior,
     getGastos,
   } = useGastosLogic();
-  const { contextTheme } = useThemeContext();
   const [fechaActual, setFechaActual] = useState("");
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
@@ -54,8 +53,8 @@ const Cierres = () => {
     return <p>Cargando...</p>;
   }
   return (
-    <div className={`${contextTheme} contenedor`}>
-      <div className="container" id={contextTheme}>
+    <div>
+      <div>
         <div className="row">
           <div className="col-md-12">
             <div className="boton_servicios">

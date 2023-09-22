@@ -7,13 +7,12 @@ import Swal from "sweetalert2";
 import { Toast } from "../../Alert/Aler";
 
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 
 const AgregarTipoDeGasto = () => {
   const navigate = useNavigate();
   const { addTipoDeGasto, tiposDeGastos } = useTiposDeGastosLogic();
-  const { contextTheme } = useThemeContext();
 
   const [tipoDeGasto, setTipoDeGasto] = useState({
     nombreTipoDeGasto: "",
@@ -62,7 +61,7 @@ const AgregarTipoDeGasto = () => {
     }
   };
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <div>
       <div className="container">
         <div className="text-center">
           <h1>Agregar Tipos de gastos</h1>

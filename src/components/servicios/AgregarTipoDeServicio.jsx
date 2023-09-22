@@ -6,11 +6,10 @@ import Swal from "sweetalert2";
 
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import { Toast } from "../../Alert/Aler";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import "../../style/botones.css";
 
 const AgregarTipoDeServicio = () => {
-  const { contextTheme } = useThemeContext();
   const navigate = useNavigate();
   const { addTipoDeServicio, tiposServicios } = useTiposDeServiciosLogic();
 
@@ -74,7 +73,7 @@ const AgregarTipoDeServicio = () => {
     }
   };
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <div>
       <div className="container">
         <div className="text-center">
           <h1>Agregar nuevo servicio</h1>

@@ -9,10 +9,8 @@ import useClienteLogic from "../../Hooks/useClienteLogic";
 import { Toast } from "../../Alert/Aler";
 import "../../style/Inicio.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
 
 const AgregarCliente = () => {
-  const { contextTheme } = useThemeContext();
   const navigate = useNavigate();
   const { clientes, isLoading, addCliente } = useClienteLogic();
   const [cliente, setCliente] = useState({
@@ -78,7 +76,7 @@ const AgregarCliente = () => {
   }
 
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <div>
       <div className="container">
         <div className="text-center">
           <h1>Agregar Cliente</h1>

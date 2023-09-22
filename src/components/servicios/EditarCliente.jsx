@@ -9,12 +9,11 @@ import useClienteLogic from "../../Hooks/useClienteLogic";
 import { Toast } from "../../Alert/Aler";
 import "../../style/productos.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
 
 const EditarCliente = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { contextTheme } = useThemeContext();
+
   const { clientes, getClienteById, updateCliente } = useClienteLogic();
   const [clienteById, setClienteById] = useState(null);
 
@@ -87,7 +86,7 @@ const EditarCliente = () => {
     return <p>Cargando producto...</p>;
   }
   return (
-    <div className={`${contextTheme}`}>
+    <div>
       <div className="container">
         <div className="row">
           <div className="col-lg-6  text-center mb-5  contenedor-info">

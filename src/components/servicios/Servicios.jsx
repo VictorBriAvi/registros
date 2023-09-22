@@ -4,16 +4,13 @@ import { AiFillFileAdd } from "react-icons/ai";
 
 import { AiOutlineRollback } from "react-icons/ai";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
-import { useThemeContext } from "../../context/ThemeContext";
-import "../../style/Inicio.css";
-import "../../style/botones.css";
+
 import DataTable from "../components/dataTable";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Importa los estilos CSS
-import { Button } from "react-bootstrap";
-import "../../style/Servicios.css";
+import { Button, Container } from "react-bootstrap";
 
 const Servicios = () => {
   const {
@@ -25,7 +22,7 @@ const Servicios = () => {
 
     getServicios,
   } = useServicioLogic();
-  const { contextTheme } = useThemeContext();
+
   const [fechaActual, setFechaActual] = useState("");
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
@@ -58,8 +55,8 @@ const Servicios = () => {
     return <p>Cargando...</p>;
   }
   return (
-    <div className={`${contextTheme} contenedor`}>
-      <div className="container" id={contextTheme}>
+    <Container>
+      <div>
         <div className="row">
           <div className="col-md-12">
             <div className="boton_servicios">
@@ -92,7 +89,7 @@ const Servicios = () => {
             </div>
 
             <hr />
-            <div className="boton">
+            <div>
               <div className="container my-2">
                 <Link to={`/registros/crear-servicio/`}>
                   <button className="btn btn-primary font-weight-normal ">
@@ -139,7 +136,7 @@ const Servicios = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

@@ -5,11 +5,10 @@ import { AiOutlineRollback } from "react-icons/ai";
 
 import "../../style/productos.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 import DataTable from "../components/dataTable";
 const TiposDeGastos = () => {
-  const { contextTheme } = useThemeContext();
   const {
     tiposDeGastos,
     isLoadingGasto,
@@ -26,7 +25,7 @@ const TiposDeGastos = () => {
     return <p>Cargando...</p>;
   }
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <div>
       <div className="container">
         <div className="row">
           <div className="col-md-12">

@@ -1,15 +1,14 @@
-import { AiFillDelete, AiFillEdit, AiFillFileAdd } from "react-icons/ai";
+import { AiFillFileAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 import { AiOutlineRollback } from "react-icons/ai";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
 import "../../style/productos.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import DataTable from "../components/dataTable";
 
 const TiposDePago = () => {
-  const { contextTheme } = useThemeContext();
   const {
     tiposDePago,
     isLoading,
@@ -24,7 +23,7 @@ const TiposDePago = () => {
     return <p>Cargando...</p>;
   }
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <div>
       <div className="container">
         <div className="row">
           <div className="col-md-12">

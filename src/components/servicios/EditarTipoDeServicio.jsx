@@ -8,10 +8,8 @@ import { Toast } from "../../Alert/Aler";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import "../../style/productos.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
 
 const EditarTipoDeServicio = () => {
-  const { contextTheme } = useThemeContext();
   const params = useParams();
   const navigate = useNavigate();
 
@@ -106,7 +104,7 @@ const EditarTipoDeServicio = () => {
     return <p>Cargando producto...</p>;
   }
   return (
-    <div className={`${contextTheme}`}>
+    <div>
       <div className="container ">
         <div className="row">
           <div className="col-lg-6  contenedor-info  ">

@@ -6,12 +6,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Toast } from "../../Alert/Aler";
 import useProductoLogic from "../../Hooks/useProductoLogic";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import "../../style/productos.css";
 import "../../style/botones.css";
 
 const EditarProducto = () => {
-  const { contextTheme } = useThemeContext();
   const params = useParams();
   const navigate = useNavigate();
 
@@ -104,7 +103,7 @@ const EditarProducto = () => {
   }
 
   return (
-    <div className={`${contextTheme}`}>
+    <div>
       <div className="container  ">
         <div className="row ">
           <div className="col-lg-6  text-center contenedor-info  ">

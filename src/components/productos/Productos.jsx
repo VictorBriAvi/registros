@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { AiFillFileAdd, AiOutlineRollback } from "react-icons/ai";
 
 import useProductoLogic from "../../Hooks/useProductoLogic";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import "../../style/Inicio.css";
 import "../../style/botones.css";
 import DataTable from "../components/DataTable";
@@ -27,7 +27,7 @@ const Productos = () => {
     getProductos,
     productosAll,
   } = useProductoLogic();
-  const { contextTheme } = useThemeContext();
+
   const columnaServicio = [
     { key: "codigoProducto", label: "Codigo Producto" },
     { key: "nombreProducto", label: "Nombre Producto" },
@@ -67,8 +67,8 @@ const Productos = () => {
   }
 
   return (
-    <div className={`${contextTheme} contenedor`}>
-      <h1 className="text-center ">Stock</h1>
+    <Container>
+      <h1 className="text-center ">Inventario de productos</h1>
       <hr />
       <div className="container">
         <div>
@@ -106,7 +106,7 @@ const Productos = () => {
                       variant="primary"
                       onClick={(e) => handleFiltraCategoria(e)}
                     >
-                      Buscar por codigo
+                      Buscar
                     </Button>
                   </div>
                 </Container>
@@ -125,7 +125,7 @@ const Productos = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

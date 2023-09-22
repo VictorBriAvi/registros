@@ -1,19 +1,14 @@
-import {
-  AiFillDelete,
-  AiFillEdit,
-  AiFillFileAdd,
-  AiOutlineRollback,
-} from "react-icons/ai";
+import { AiFillFileAdd, AiOutlineRollback } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 import useClienteLogic from "../../Hooks/useClienteLogic";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import "../../style/Inicio.css";
 import "../../style/botones.css";
 import DataTable from "../components/dataTable";
+import { Container } from "react-bootstrap";
 
 const Clientes = () => {
-  const { contextTheme } = useThemeContext();
   const {
     clientes,
     isLoading,
@@ -31,7 +26,7 @@ const Clientes = () => {
     return <p>Cargando...</p>;
   }
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <Container>
       <div className="container">
         <div className="row">
           <div className="col-md-12">
@@ -69,7 +64,7 @@ const Clientes = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

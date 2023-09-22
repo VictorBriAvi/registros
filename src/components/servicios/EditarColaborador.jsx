@@ -9,10 +9,8 @@ import { Toast } from "../../Alert/Aler";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import "../../style/productos.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
 
 const EditarColaboradores = () => {
-  const { contextTheme } = useThemeContext();
   const params = useParams();
   const navigate = useNavigate();
   const { colaboradores, getColaboradorById, updateColaborador } =
@@ -103,7 +101,7 @@ const EditarColaboradores = () => {
     return <p>Cargando producto...</p>;
   }
   return (
-    <div className={`${contextTheme}`}>
+    <div>
       <div className="container ">
         <div className="row">
           <div className="col-lg-6  centrar  contenedor-info mb-5">

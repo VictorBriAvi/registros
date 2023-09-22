@@ -7,12 +7,10 @@ import Swal from "sweetalert2";
 import { Toast } from "../../Alert/Aler";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
 
 const AgregarTipoDePago = () => {
   const navigate = useNavigate();
   const { addTipoDePago, tiposDePago } = useTiposDePagoLogic();
-  const { contextTheme } = useThemeContext();
 
   const [tipoDePago, setTipoDePago] = useState({
     nombreTipoDePago: "",
@@ -61,7 +59,7 @@ const AgregarTipoDePago = () => {
     }
   };
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <div>
       <div className="container">
         <div className="text-center">
           <h1>Agregar Tipos de pago</h1>

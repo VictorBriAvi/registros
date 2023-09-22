@@ -6,10 +6,9 @@ import moment from "moment";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import { Toast } from "../../Alert/Aler";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
+import { Container } from "react-bootstrap";
 
 const AgregarColaborador = () => {
-  const { contextTheme } = useThemeContext();
   const navigate = useNavigate();
   const { colaboradores, isLoading, addColaborador } = useColaboradoresLogic();
   const [colaborador, setColaborador] = useState({
@@ -92,7 +91,7 @@ const AgregarColaborador = () => {
   }
 
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <Container>
       <div className="container">
         <div className="text-center">
           <h1>Agregar Colaborador</h1>
@@ -172,7 +171,7 @@ const AgregarColaborador = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

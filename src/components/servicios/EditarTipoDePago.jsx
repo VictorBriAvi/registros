@@ -8,10 +8,8 @@ import { Toast } from "../../Alert/Aler";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
 import "../../style/productos.css";
 import "../../style/botones.css";
-import { useThemeContext } from "../../context/ThemeContext";
 
 const EditarTipoDePago = () => {
-  const { contextTheme } = useThemeContext();
   const params = useParams();
   const navigate = useNavigate();
 
@@ -83,7 +81,7 @@ const EditarTipoDePago = () => {
     return <p>Cargando producto...</p>;
   }
   return (
-    <div className={`${contextTheme}`}>
+    <div>
       <div className="container ">
         <div className="row">
           <div className="col-lg-6  contenedor-info  ">

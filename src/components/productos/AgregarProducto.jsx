@@ -3,12 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Toast } from "../../Alert/Aler";
 import useProductoLogic from "../../Hooks/useProductoLogic";
-import { useThemeContext } from "../../context/ThemeContext";
+
 import "../../style/botones.css";
+import { Container } from "react-bootstrap";
 
 const AgregarProducto = () => {
   const { addProducto, productos } = useProductoLogic();
-  const { contextTheme } = useThemeContext();
+
   const navigate = useNavigate();
 
   const [producto, setProducto] = useState({
@@ -84,7 +85,7 @@ const AgregarProducto = () => {
   };
 
   return (
-    <div className={`${contextTheme} contenedor`}>
+    <Container>
       <div className="container">
         <div className="text-center">
           <h1>Agregar Producto</h1>
@@ -219,7 +220,7 @@ const AgregarProducto = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
