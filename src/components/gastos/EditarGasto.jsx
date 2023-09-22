@@ -98,32 +98,13 @@ const EditarGasto = () => {
   return (
     <div className="container">
       <div className="text-center">
-        <h1>Crear nuevo Servicio</h1>
-        <h5>Aca puedes agregar nuevo servicios</h5>
+        <h1>Editar tipo de gasto</h1>
+        <h5>Aca puedes editar el tipo de gasto seleccionado</h5>
         <hr />
       </div>
       <div className="row">
         <div className="col-sm-12 ">
           <form onSubmit={handleSubmit}>
-            <div>
-              <div className="my-2">
-                <label htmlFor="1">
-                  Ingrese el cliente atendido
-                  <span className="text-danger  fw-bold">*</span>
-                </label>
-              </div>
-              <div>
-                <Select
-                  options={SelectGasto}
-                  menuPlacement="bottom"
-                  onChange={(selectOption) =>
-                    handleChange(selectOption, "nombreTipoDeGasto")
-                  }
-                  value={gastoEdit.nombreTipoDeGasto}
-                />
-              </div>
-            </div>
-
             <div>
               <div className="my-2">
                 <label htmlFor="3">Ingresa la descripcion del producto </label>
@@ -143,6 +124,25 @@ const EditarGasto = () => {
                   }
                 />
                 <label htmlFor="3">Descripcion del gasto</label>
+              </div>
+            </div>
+
+            <div>
+              <div className="my-2">
+                <label htmlFor="1">
+                  Ingrese el cliente atendido
+                  <span className="text-danger  fw-bold">*</span>
+                </label>
+              </div>
+              <div>
+                <Select
+                  options={SelectGasto}
+                  menuPlacement="bottom"
+                  onChange={(selectOption) =>
+                    handleChange(selectOption, "nombreTipoDeGasto")
+                  }
+                  value={gastoEdit.nombreTipoDeGasto}
+                />
               </div>
             </div>
 

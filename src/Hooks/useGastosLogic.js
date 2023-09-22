@@ -271,15 +271,25 @@ const useGastosLogic = () => {
       const gastoData = gastoEncontrado.data();
 
       const tipoDeGastoRef = gastoData.nombreTipoDeGasto;
-      const tipoDeGastoSnapshot = await getDoc(tipoDeGastoRef);
-      const tipoDeGatosData = tipoDeGastoSnapshot.data();
 
-      return {
-        id: gastoEncontrado.id,
-        nombreTipoDeGasto: tipoDeGatosData.nombreTipoDeGasto,
-        descripcionGasto: gastoData.descripcionGasto,
-        precioGasto: gastoData.precioGasto,
-      };
+      try {
+        const [tipoDeGastoSnapshot] = await Promise.all([
+          getDoc(tipoDeGastoRef),
+        ]);
+
+        const tipoDeGastoData = tipoDeGastoSnapshot.data() || {};
+
+        return {
+          id: gastoEncontrado.id,
+          nombreTipoDeGasto: tipoDeGastoData.nombreTipoDeGasto,
+          descripcionGasto: gastoData.descripcionGasto,
+          precioGasto: gastoData.precioGasto,
+          fechaGasto: gastoData.fechaGasto,
+        };
+      } catch (error) {
+        console.error("Error al obtener datos relacionados:", error);
+        return null;
+      }
     } else {
       return null;
     }

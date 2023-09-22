@@ -112,41 +112,6 @@ const Cierres = () => {
                 paginaAnterior={paginaAnterior}
                 editUrl="/registros/gastos/editar-gasto"
               />
-              {/**
-              <table className="table table-striped table-hover table-borderless ">
-                <thead>
-                  <tr>
-                    <th>Tipo de gasto</th>
-                    <th>Descripcion </th>
-                    <th>Valor Gasto</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {gastos.map((gasto) => (
-                    <tr key={gasto.id}>
-                      <td>{gasto.nombreTipoDeGasto}</td>
-                      <td>{gasto.descripcionGasto}</td>
-                      <td>{gasto.precioGasto}</td>
-
-                      <td>
-                        <Link to={`/registros/gastos/editar-gasto/${gasto.id}`}>
-                          <button className="btn btn-primary font-weight-normal me-3">
-                            {<AiFillEdit />}
-                          </button>
-                        </Link>
-
-                        <button
-                          onClick={() => deleteGasto(gasto.id)}
-                          className="btn btn-danger font-weight-normal "
-                        >
-                          {<AiFillDelete />}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-               */}
             </div>
           </div>
         </div>
