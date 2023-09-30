@@ -29,6 +29,9 @@ import EditarTipoDegasto from "./components/gastos/EditarTipoDegasto";
 import EditarGasto from "./components/gastos/EditarGasto";
 import ArqueoDeCaja from "./components/arqueo-de-caja/ArqueoDeCaja";
 import CalculosPorcentaje from "./components/servicios/CalculosPorcentaje";
+import CategoriaServicios from "./components/servicios/CategoriaServicios";
+import AgregarCategoriaServicio from "./components/servicios/AgregarCategoriaServicio";
+import EditarCategoriaServicio from "./components/servicios/EditarCategoriaServicio";
 
 function App() {
   return (
@@ -44,7 +47,6 @@ function App() {
         path="/registros/editar-producto/:id"
         element={<EditarProducto />}
       ></Route>
-
       {/** Aca comienza el route de servicios */}
       <Route path="/registros/servicios" element={<Servicios />}></Route>
       <Route
@@ -55,7 +57,6 @@ function App() {
         path="/registros/editar-servicio/:id"
         element={<EditarServicio />}
       ></Route>
-
       {/** Aca comienza el route de colaboradores */}
       <Route
         path="/registros/colaboradores"
@@ -79,18 +80,17 @@ function App() {
         path="/registros/editar-cliente/:id"
         element={<EditarCliente />}
       ></Route>
-
       {/** Aca comienza el route de tipos de servicios */}
       <Route
-        path="/registros/tiposDeServicios"
+        path="/registros/servicios/tiposDeServicios"
         element={<TiposDeServicios />}
       ></Route>
       <Route
-        path="/registros/crear-tipoDeServicio"
+        path="/registros/servicios/tiposDeServicios/crear-tipoDeServicio"
         element={<AgregarTipoDeServicio />}
       ></Route>
       <Route
-        path="/registros/editar-tipoDeServicio/:id"
+        path="/registros/servicios/tiposDeServicios/editar-tipoDeServicio/:id"
         element={<EditarTipoDeServicio />}
       />
 
@@ -98,7 +98,6 @@ function App() {
         path="/registros/servicios/porcentaje"
         element={<CalculosPorcentaje />}
       />
-
       {/** Aca comienza el route de tipos de pago */}
       <Route path="/registros/tiposDePago" element={<TiposDePago />}></Route>
       <Route
@@ -119,7 +118,6 @@ function App() {
         path="/registros/crear-tipoDeGasto"
         element={<AgregarGasto />}
       ></Route>
-
       {/** Aca comienza el route de tipos de gastos*/}
       <Route
         path="/registros/gastos/TiposDeGastos"
@@ -133,12 +131,24 @@ function App() {
         path="/registros/gastos/TiposDeGastos/editar-tipoDeGasto/:id"
         element={<EditarTipoDegasto />}
       ></Route>
-
       {/** Aca comienza el arqueo de caja*/}
       <Route
         path="/registros/arqueo-de-caja"
         element={<ArqueoDeCaja />}
       ></Route>
+      {/**Aca comienza categoria servicios */}
+      <Route
+        path="/registros/servicios/tiposDeServicios/categoriaServicio"
+        element={<CategoriaServicios />}
+      />
+      <Route
+        path="/registros/servicios/tiposDeServicios/categoriaServicio/agregar-categoria-servicio"
+        element={<AgregarCategoriaServicio />}
+      />
+      <Route
+        path="/registros/servicios/tiposDeServicios/categoriaServicio/editar-categoria-servicio/:id"
+        element={<EditarCategoriaServicio />}
+      />
     </Routes>
   );
 }

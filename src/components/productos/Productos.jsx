@@ -16,7 +16,7 @@ import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 
 const Productos = () => {
   const [productoState, setProductoState] = useState({
-    nombreProducto: "", // Estado para almacenar la categoría seleccionada
+    nombreProducto: "", // Estado para almacenar la categoría seleccionada en el select
   });
 
   const {

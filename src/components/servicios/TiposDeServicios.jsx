@@ -68,6 +68,11 @@ const TiposDeServicios = () => {
           <div>
             <div>
               <h1 className="text-center">Tipos de servicios</h1>
+              <Link
+                to={`/registros/servicios/tiposDeServicios/categoriaServicio`}
+              >
+                <button>Categoria servicio</button>
+              </Link>
             </div>
 
             <hr />
@@ -75,7 +80,7 @@ const TiposDeServicios = () => {
               <Row>
                 <Col sm={6} className="my-2">
                   <BotonesPrincipalesAgregar
-                    agregar={`/registros/crear-tipoDeServicio`}
+                    agregar={`/registros/servicios/tiposDeServicios/crear-tipoDeServicio`}
                     regresar={`/registros/servicios`}
                     tituloBoton={"Agregar nuevo tipo de servicio"}
                   />
@@ -131,7 +136,6 @@ const TiposDeServicios = () => {
                 </Col>
               </Row>
             </Container>
-
             <Container
               fluid
               className=" justify-content-center align-items-center "
@@ -143,7 +147,7 @@ const TiposDeServicios = () => {
               deleteData={deleteTipoDeServicio}
               paginaSiguiente={paginaSiguiente}
               paginaAnterior={paginaAnterior}
-              editUrl="/registros/editar-tipoDeServicio"
+              editUrl="/registros/servicios/tiposDeServicios/editar-tipoDeServicio"
             />
           </div>
         </div>

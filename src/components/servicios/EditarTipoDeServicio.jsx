@@ -193,7 +193,7 @@ const EditarTipoDeServicio = () => {
                     {<AiOutlineSave />} Agregar
                   </button>
 
-                  <Link to={"/registros/tiposDeServicios"}>
+                  <Link to={"/registros/servicios/tiposDeServicios"}>
                     <button className="btn btn-info font-weight-normal">
                       {<AiOutlineRollback />} Regresar
                     </button>

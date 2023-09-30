@@ -144,7 +144,7 @@ const AgregarTipoDeServicio = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/registros/tiposDeServicios"}>
+                <Link to={"/registros/servicios/tiposDeServicios"}>
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

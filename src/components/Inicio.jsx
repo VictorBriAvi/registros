@@ -4,8 +4,7 @@ import "../style/Inicio.css";
 import "../style/Inicio.css";
 import { Button, Col, Container, Modal, Row } from "react-bootstrap";
 import { useState } from "react";
-import { useEffect } from "react";
-import Swal from "sweetalert2";
+
 import { FcInfo, FcAbout } from "react-icons/fc";
 import "animate.css";
 

@@ -80,7 +80,10 @@ const Servicios = () => {
                   <Dropdown.Item as={Link} to="/registros/clientes">
                     Clientes
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/registros/tiposDeServicios">
+                  <Dropdown.Item
+                    as={Link}
+                    to="/registros/servicios/tiposDeServicios"
+                  >
                     Tipos de servicios
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/registros/tiposDePago">

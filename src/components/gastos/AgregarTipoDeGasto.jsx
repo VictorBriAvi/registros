@@ -25,6 +25,7 @@ const AgregarTipoDeGasto = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(tipoDeGasto);
+
     if (tipoDeGasto.nombreTipoDeGasto.trim() === "") {
       Toast.fire({
         icon: "error",
