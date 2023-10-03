@@ -35,7 +35,7 @@ const Login = () => {
   return (
     <Container
       fluid
-      className=" d-flex justify-content-center align-items-center vh-100 w-50 bg-light"
+      className=" d-flex justify-content-center align-items-center vh-100 w-75  "
     >
       <Container className=" py-5 ">
         <h2 className="my-4  text-center">Iniciar sesion</h2>

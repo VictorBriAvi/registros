@@ -32,7 +32,7 @@ const Register = () => {
   return (
     <Container
       fluid
-      className=" d-flex justify-content-center align-items-center vh-100 w-50 "
+      className=" d-flex justify-content-center align-items-center vh-100 w-75 "
     >
       <Container className=" py-5  bg-light">
         <h2 className="my-4  text-center">Registrar usuario</h2>
