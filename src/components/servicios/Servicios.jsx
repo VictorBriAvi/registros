@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
 
-import { AiFillFileAdd } from "react-icons/ai";
-
-import { AiOutlineRollback } from "react-icons/ai";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 
 import DataTable from "../components/dataTable";

@@ -7,10 +7,12 @@ import { useState } from "react";
 
 import { FcInfo, FcAbout } from "react-icons/fc";
 import "animate.css";
+import { useAuth } from "./context/authContext";
 
 const Inicio = () => {
   const [show, setShow] = useState(false);
 
+  const { logOut, loading } = useAuth();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -43,9 +45,25 @@ const Inicio = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  if (loading) {
+    return <h1>Loading ...</h1>;
+  }
   return (
     <Container fluid className=" vh-100 contenedor_inicio">
       <Row className="align-items-center">
+        <button
+          className="bg-slate-200 hover:bg-slate-300 rounded py-2 px-4"
+          onClick={handleLogout}
+        >
+          LogOut
+        </button>
         <Col xs={12} className="text-center">
           <div>
             <FcInfo className="icono-info" onClick={handleShow} />

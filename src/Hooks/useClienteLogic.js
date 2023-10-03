@@ -25,6 +25,7 @@ const useClienteLogic = () => {
   const [primerDocVisible, setPrimerDocVisible] = useState([null]);
 
   const clientesCollection = collection(db, "clientes");
+  
   const getClientes = useCallback(async () => {
     const primeraConsulta = query(
       collection(db, "clientes"),

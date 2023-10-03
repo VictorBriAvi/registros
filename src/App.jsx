@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 
-import { Routes, Route, HashRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AgregarProducto from "./components/productos/AgregarProducto";
 import Inicio from "./components/Inicio";
 import EditarProducto from "./components/productos/EditarProducto";
@@ -32,124 +32,265 @@ import CalculosPorcentaje from "./components/servicios/CalculosPorcentaje";
 import CategoriaServicios from "./components/servicios/CategoriaServicios";
 import AgregarCategoriaServicio from "./components/servicios/AgregarCategoriaServicio";
 import EditarCategoriaServicio from "./components/servicios/EditarCategoriaServicio";
+import { AuthProvider } from "./components/context/authContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./Login";
+import Register from "./components/Register";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/registros/" element={<Inicio />}></Route>
-      {/** Aca comienza el route de productos */}
-      <Route path="/registros/productos" element={<Productos />}></Route>
-      <Route
-        path="/registros/crear-producto"
-        element={<AgregarProducto />}
-      ></Route>
-      <Route
-        path="/registros/editar-producto/:id"
-        element={<EditarProducto />}
-      ></Route>
-      {/** Aca comienza el route de servicios */}
-      <Route path="/registros/servicios" element={<Servicios />}></Route>
-      <Route
-        path="/registros/crear-servicio/"
-        element={<AgregarServicio />}
-      ></Route>
-      <Route
-        path="/registros/editar-servicio/:id"
-        element={<EditarServicio />}
-      ></Route>
-      {/** Aca comienza el route de colaboradores */}
-      <Route
-        path="/registros/colaboradores"
-        element={<Colaboradores />}
-      ></Route>
-      <Route
-        path="/registros/crear-colaborador"
-        element={<AgregarColaborador />}
-      ></Route>
-      <Route
-        path="/registros/editar-colaboradores/:id"
-        element={<EditarColaborador />}
-      />
-      {/** Aca comienza el route de clientes */}
-      <Route path="/registros/clientes" element={<Clientes />}></Route>
-      <Route
-        path="/registros/crear-cliente"
-        element={<AgregarCliente />}
-      ></Route>
-      <Route
-        path="/registros/editar-cliente/:id"
-        element={<EditarCliente />}
-      ></Route>
-      {/** Aca comienza el route de tipos de servicios */}
-      <Route
-        path="/registros/servicios/tiposDeServicios"
-        element={<TiposDeServicios />}
-      ></Route>
-      <Route
-        path="/registros/servicios/tiposDeServicios/crear-tipoDeServicio"
-        element={<AgregarTipoDeServicio />}
-      ></Route>
-      <Route
-        path="/registros/servicios/tiposDeServicios/editar-tipoDeServicio/:id"
-        element={<EditarTipoDeServicio />}
-      />
+    <AuthProvider>
+      <Routes>
+        <Route
+          path="/registros/"
+          element={
+            <ProtectedRoute>
+              <Inicio />
+            </ProtectedRoute>
+          }
+        ></Route>
 
-      <Route
-        path="/registros/servicios/porcentaje"
-        element={<CalculosPorcentaje />}
-      />
-      {/** Aca comienza el route de tipos de pago */}
-      <Route path="/registros/tiposDePago" element={<TiposDePago />}></Route>
-      <Route
-        path="/registros/crear-tipoDePago"
-        element={<AgregarTipoDePago />}
-      ></Route>
-      <Route
-        path="/registros/editar-tipoDePago/:id"
-        element={<EditarTipoDePago />}
-      ></Route>
-      {/** Aca comienza el route de cierres de venta */}
-      <Route path="/registros/gastos" element={<Gastos />}></Route>
-      <Route
-        path="/registros/gastos/editar-gasto/:id"
-        element={<EditarGasto />}
-      ></Route>
-      <Route
-        path="/registros/crear-tipoDeGasto"
-        element={<AgregarGasto />}
-      ></Route>
-      {/** Aca comienza el route de tipos de gastos*/}
-      <Route
-        path="/registros/gastos/TiposDeGastos"
-        element={<TiposDeGastos />}
-      ></Route>
-      <Route
-        path="/registros/gastos/TiposDeGastos/Agregar-TipoDeGasto"
-        element={<AgregarTipoDeGasto />}
-      ></Route>
-      <Route
-        path="/registros/gastos/TiposDeGastos/editar-tipoDeGasto/:id"
-        element={<EditarTipoDegasto />}
-      ></Route>
-      {/** Aca comienza el arqueo de caja*/}
-      <Route
-        path="/registros/arqueo-de-caja"
-        element={<ArqueoDeCaja />}
-      ></Route>
-      {/**Aca comienza categoria servicios */}
-      <Route
-        path="/registros/servicios/tiposDeServicios/categoriaServicio"
-        element={<CategoriaServicios />}
-      />
-      <Route
-        path="/registros/servicios/tiposDeServicios/categoriaServicio/agregar-categoria-servicio"
-        element={<AgregarCategoriaServicio />}
-      />
-      <Route
-        path="/registros/servicios/tiposDeServicios/categoriaServicio/editar-categoria-servicio/:id"
-        element={<EditarCategoriaServicio />}
-      />
-    </Routes>
+        {/** Aca comienza el route de productos          <Route path="/registros/" element={<Inicio />}></Route>*/}
+        <Route path="/registros/productos" element={<Productos />}></Route>
+        <Route
+          path="/registros/crear-producto"
+          element={
+            <ProtectedRoute>
+              <AgregarProducto />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/editar-producto/:id"
+          element={
+            <ProtectedRoute>
+              <EditarProducto />
+            </ProtectedRoute>
+          }
+        ></Route>
+        {/** Aca comienza el route de servicios */}
+        <Route
+          path="/registros/servicios"
+          element={
+            <ProtectedRoute>
+              <Servicios />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/crear-servicio/"
+          element={
+            <ProtectedRoute>
+              <AgregarServicio />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/editar-servicio/:id"
+          element={
+            <ProtectedRoute>
+              <EditarServicio />
+            </ProtectedRoute>
+          }
+        ></Route>
+        {/** Aca comienza el route de colaboradores */}
+        <Route
+          path="/registros/colaboradores"
+          element={
+            <ProtectedRoute>
+              <Colaboradores />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/crear-colaborador"
+          element={
+            <ProtectedRoute>
+              <AgregarColaborador />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/editar-colaboradores/:id"
+          element={
+            <ProtectedRoute>
+              <EditarColaborador />
+            </ProtectedRoute>
+          }
+        />
+        {/** Aca comienza el route de clientes */}
+        <Route
+          path="/registros/clientes"
+          element={
+            <ProtectedRoute>
+              <Clientes />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/crear-cliente"
+          element={
+            <ProtectedRoute>
+              <AgregarCliente />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/editar-cliente/:id"
+          element={
+            <ProtectedRoute>
+              <EditarCliente />
+            </ProtectedRoute>
+          }
+        ></Route>
+        {/** Aca comienza el route de tipos de servicios */}
+        <Route
+          path="/registros/servicios/tiposDeServicios"
+          element={
+            <ProtectedRoute>
+              <TiposDeServicios />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/servicios/tiposDeServicios/crear-tipoDeServicio"
+          element={
+            <ProtectedRoute>
+              <AgregarTipoDeServicio />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/servicios/tiposDeServicios/editar-tipoDeServicio/:id"
+          element={
+            <ProtectedRoute>
+              <EditarTipoDeServicio />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/registros/servicios/porcentaje"
+          element={
+            <ProtectedRoute>
+              <CalculosPorcentaje />
+            </ProtectedRoute>
+          }
+        />
+        {/** Aca comienza el route de tipos de pago */}
+        <Route
+          path="/registros/tiposDePago"
+          element={
+            <ProtectedRoute>
+              <TiposDePago />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/crear-tipoDePago"
+          element={
+            <ProtectedRoute>
+              <AgregarTipoDePago />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/editar-tipoDePago/:id"
+          element={
+            <ProtectedRoute>
+              <EditarTipoDePago />
+            </ProtectedRoute>
+          }
+        ></Route>
+        {/** Aca comienza el route de cierres de venta */}
+        <Route
+          path="/registros/gastos"
+          element={
+            <ProtectedRoute>
+              <Gastos />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/gastos/editar-gasto/:id"
+          element={
+            <ProtectedRoute>
+              <EditarGasto />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/crear-tipoDeGasto"
+          element={
+            <ProtectedRoute>
+              <AgregarGasto />
+            </ProtectedRoute>
+          }
+        ></Route>
+        {/** Aca comienza el route de tipos de gastos*/}
+        <Route
+          path="/registros/gastos/TiposDeGastos"
+          element={
+            <ProtectedRoute>
+              <TiposDeGastos />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/gastos/TiposDeGastos/Agregar-TipoDeGasto"
+          element={
+            <ProtectedRoute>
+              <AgregarTipoDeGasto />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/registros/gastos/TiposDeGastos/editar-tipoDeGasto/:id"
+          element={
+            <ProtectedRoute>
+              <EditarTipoDegasto />
+            </ProtectedRoute>
+          }
+        ></Route>
+        {/** Aca comienza el arqueo de caja*/}
+        <Route
+          path="/registros/arqueo-de-caja"
+          element={
+            <ProtectedRoute>
+              <ArqueoDeCaja />
+            </ProtectedRoute>
+          }
+        ></Route>
+        {/**Aca comienza categoria servicios */}
+        <Route
+          path="/registros/servicios/tiposDeServicios/categoriaServicio"
+          element={
+            <ProtectedRoute>
+              <CategoriaServicios />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registros/servicios/tiposDeServicios/categoriaServicio/agregar-categoria-servicio"
+          element={
+            <ProtectedRoute>
+              <AgregarCategoriaServicio />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registros/servicios/tiposDeServicios/categoriaServicio/editar-categoria-servicio/:id"
+          element={
+            <ProtectedRoute>
+              <EditarCategoriaServicio />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/registros/login" element={<Login />} />
+        <Route path="/registros/registrar" element={<Register />} />
+      </Routes>
+    </AuthProvider>
   );
 }
 

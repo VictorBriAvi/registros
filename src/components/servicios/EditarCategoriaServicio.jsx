@@ -110,7 +110,9 @@ const EditarCategoriaServicio = () => {
               <form onSubmit={handleSubmit}>
                 <div>
                   <div className="my-2">
-                    <label htmlFor="1">Ingrese el tipo de gasto</label>
+                    <label htmlFor="1">
+                      Edite el tipo de nombre que va a editar
+                    </label>
                   </div>
 
                   <div className="form-floating mb-3">
@@ -123,7 +125,9 @@ const EditarCategoriaServicio = () => {
                       value={categoriaServicioEdit.nombreCategoriaServicio}
                       onChange={handleChange}
                     />
-                    <label htmlFor="1">Tipo de gasto</label>
+                    <label htmlFor="1">
+                      Edite el tipo de nombre que va a editar
+                    </label>
                   </div>
                 </div>
 
