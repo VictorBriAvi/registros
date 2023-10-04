@@ -73,7 +73,7 @@ const Inicio = () => {
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>
-              {<FcAbout />} Informacion de como realice este proyecto{" "}
+              {<FcAbout />} Informacion de como realice este proyecto
               {<FcAbout />}
             </Modal.Title>
           </Modal.Header>
