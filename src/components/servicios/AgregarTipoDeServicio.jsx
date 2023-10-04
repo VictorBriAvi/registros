@@ -6,11 +6,12 @@ import Swal from "sweetalert2";
 
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import { Toast } from "../../Alert/Aler";
+import { useAuth } from "../context/authContext";
 
 const AgregarTipoDeServicio = () => {
   const navigate = useNavigate();
   const { addTipoDeServicio, tiposServicios } = useTiposDeServiciosLogic();
-
+  const { user } = useAuth();
   const opcionesServicio = [
     "Manicura",
     "Peluquería",
@@ -62,9 +63,13 @@ const AgregarTipoDeServicio = () => {
     }
 
     try {
-      const response = await addTipoDeServicio(servicio);
+      console.log(servicio);
+      const response = await addTipoDeServicio({
+        ...servicio,
+        usuarioId: user.uid,
+      });
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");
-      navigate("/registros/tiposDeServicios");
+      navigate("/registros/servicios/tiposDeServicios");
       console.log(response);
     } catch (error) {
       console.log(error);

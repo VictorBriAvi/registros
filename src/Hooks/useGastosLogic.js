@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 import moment from "moment";
+import { useAuth } from "../components/context/authContext";
 
 const useGastosLogic = () => {
   const [gastos, setGastos] = useState([]);
@@ -29,6 +30,9 @@ const useGastosLogic = () => {
   const gastosCollection = collection(db, "gastos");
   const pageSize = 10;
 
+  const { user } = useAuth();
+  const usuario = user.uid;
+
   const getGastos = async (fecha) => {
     const fechaHoy = moment().format("YYYY-MM-DD");
 
@@ -37,8 +41,8 @@ const useGastosLogic = () => {
     try {
       const primeraConsulta = query(
         collection(db, "gastos"),
+        where("usuarioId", "==", usuario),
         where("fechaGasto", "==", fechaConsulta),
-        orderBy("fechaGasto"),
         limit(pageSize)
       );
 
@@ -97,7 +101,8 @@ const useGastosLogic = () => {
         collection(db, "gastos"),
         where("fechaGasto", ">=", fechaInicio),
         where("fechaGasto", "<=", fechaFin),
-        orderBy("fechaGasto"),
+        where("usuarioId", "==", usuario),
+
         limit(pageSize)
       );
 
@@ -153,7 +158,8 @@ const useGastosLogic = () => {
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "gastos"),
-      orderBy("nombreTipoDeGasto"),
+      where("usuarioId", "==", usuario),
+      orderBy("usuarioId"),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -211,7 +217,8 @@ const useGastosLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "gastos"),
-        orderBy("nombreTipoDeGasto"),
+        where("usuarioId", "==", usuario),
+        orderBy("usuarioId"),
         endBefore(primerDocVisible),
         limit(pageSize)
       );
@@ -321,6 +328,7 @@ const useGastosLogic = () => {
         descripcionGasto: nuevoGasto.descripcionGasto,
         precioGasto: nuevoGasto.precioGasto,
         fechaGasto: nuevoGasto.fechaGasto,
+        usuarioId: nuevoGasto.usuarioId,
       };
 
       await addDoc(gastosCollection, gasto);

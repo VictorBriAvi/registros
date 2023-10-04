@@ -7,10 +7,12 @@ import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import { Toast } from "../../Alert/Aler";
 import DatePicker from "react-datepicker";
 import { Container } from "react-bootstrap";
+import { useAuth } from "../context/authContext";
 
 const AgregarColaborador = () => {
   const navigate = useNavigate();
   const { colaboradores, isLoading, addColaborador } = useColaboradoresLogic();
+  const { user } = useAuth();
   const [colaborador, setColaborador] = useState({
     nombreCompletoEmpleado: "",
     documentoNacional: "",
@@ -78,7 +80,10 @@ const AgregarColaborador = () => {
     console.log(colaborador);
 
     try {
-      const respuesta = await addColaborador(colaborador);
+      const respuesta = await addColaborador({
+        ...colaborador,
+        usuarioId: user.uid,
+      });
       console.log(respuesta);
       navigate("/registros/colaboradores");
     } catch (error) {

@@ -5,10 +5,11 @@ import { Toast } from "../../Alert/Aler";
 import useProductoLogic from "../../Hooks/useProductoLogic";
 
 import { Container } from "react-bootstrap";
+import { useAuth } from "../context/authContext";
 
 const AgregarProducto = () => {
   const { addProducto, productos } = useProductoLogic();
-
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [producto, setProducto] = useState({
@@ -75,7 +76,7 @@ const AgregarProducto = () => {
     }
 
     try {
-      const respuesta = await addProducto(producto);
+      const respuesta = await addProducto({ ...producto, usuarioId: user.uid });
       console.log(respuesta);
       navigate("/registros/productos");
     } catch (error) {

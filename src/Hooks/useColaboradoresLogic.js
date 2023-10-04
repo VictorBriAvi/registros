@@ -12,26 +12,31 @@ import {
   limit,
   query,
   endBefore,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 import moment from "moment";
+import { useAuth } from "../components/context/authContext";
 
 const useColaboradoresLogic = () => {
   const [colaboradores, setColaboradores] = useState([]);
   const [colaboradoresAll, setColaboradoresAll] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const { user } = useAuth();
   const [ultimoDoc, setUltimoDoc] = useState(null);
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const colaboradoresCollection = collection(db, "colaboradores");
   const pageSize = 10;
 
+  const usuario = user.uid;
+
   const getColaboradores = async () => {
     setIsLoading(true);
     const paginacionSiguiente = query(
       collection(db, "colaboradores"),
-      orderBy("nombreCompletoEmpleado"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
 
       limit(pageSize)
     );
@@ -61,7 +66,8 @@ const useColaboradoresLogic = () => {
     setIsLoading(true);
     const paginacionSiguiente = query(
       collection(db, "colaboradores"),
-      orderBy("nombreCompletoEmpleado")
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -82,7 +88,8 @@ const useColaboradoresLogic = () => {
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "colaboradores"),
-      orderBy("nombreCompletoEmpleado"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -109,7 +116,8 @@ const useColaboradoresLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "colaboradores"),
-        orderBy("nombreCompletoEmpleado"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario),
         endBefore(primerDocVisible),
         limit(pageSize)
       );
@@ -146,6 +154,7 @@ const useColaboradoresLogic = () => {
   };
 
   const addColaborador = async (nuevoColaborador) => {
+    console.log(nuevoColaborador);
     try {
       const { fechaNacimiento, ...restosDatos } = nuevoColaborador;
       const fechaNacimientoMoment = moment(fechaNacimiento, "YYYY-MM-DD");

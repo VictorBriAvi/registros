@@ -6,17 +6,18 @@ import Select from "react-select";
 
 import { useState } from "react";
 import { Toast } from "../../Alert/Aler";
-import useServicioLogic from "../../Hooks/useServiciosLogic";
+
 import Swal from "sweetalert2";
 
 import moment from "moment";
-import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
+
 import useGastosLogic from "../../Hooks/useGastosLogic";
 import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
+import { useAuth } from "../context/authContext";
 
 const AgregarGasto = () => {
   const navigate = useNavigate();
-
+  const { user } = useAuth();
   const { tiposDeGastos, isLoading } = useTiposDeGastosLogic();
 
   const { addGasto } = useGastosLogic();
@@ -82,6 +83,7 @@ const AgregarGasto = () => {
         descripcionGasto: gasto.descripcionGasto,
         precioGasto: gasto.precioGasto,
         fechaGasto: fechaActual,
+        usuarioId: user.uid,
       });
       console.log(response);
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");

@@ -18,6 +18,7 @@ import { useState } from "react";
 import { db } from "../firebaseConfig/firebase";
 
 import { useEffect } from "react";
+import { useAuth } from "../components/context/authContext";
 
 const useTiposDeServiciosLogic = () => {
   const [tiposServicios, setTiposServicios] = useState([]);
@@ -30,12 +31,16 @@ const useTiposDeServiciosLogic = () => {
   const tiposServiciosCollection = collection(db, "tiposDeServicios");
   const pageSize = 10;
 
+  const { user } = useAuth();
+  const usuario = user.uid;
+
   /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
 
   const getTiposDeServicios = async () => {
     const primeraConsulta = query(
       collection(db, "tiposDeServicios"),
-      orderBy("tipoDeTrabajo"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
@@ -60,7 +65,8 @@ const useTiposDeServiciosLogic = () => {
   const getTiposDeServiciosAll = async () => {
     const primeraConsulta = query(
       collection(db, "tiposDeServicios"),
-      orderBy("tipoDeTrabajo")
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -78,7 +84,8 @@ const useTiposDeServiciosLogic = () => {
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "tiposDeServicios"),
-      orderBy("tipoDeTrabajo"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -110,7 +117,8 @@ const useTiposDeServiciosLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "tiposDeServicios"),
-        orderBy("tipoDeTrabajo"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario),
         endBefore(primerDocVisible),
         limit(pageSize)
       );
@@ -148,7 +156,7 @@ const useTiposDeServiciosLogic = () => {
       servicio
         ? where("tipoDeTrabajo", "==", servicio.tipoDeTrabajo)
         : null || " ",
-      orderBy("tipoDeTrabajo"),
+      where("usuarioId", "==", usuario),
       limit(4)
     );
     const documentSnapshots = await getDocs(primeraConsulta);

@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 import moment from "moment";
+import { useAuth } from "../components/context/authContext";
 
 const useServicioLogic = () => {
   const [servicios, setServicios] = useState([]);
@@ -28,7 +29,8 @@ const useServicioLogic = () => {
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
   const serviciosColletion = collection(db, "servicios");
-
+  const { user } = useAuth();
+  const usuario = user.uid;
   const pageSize = 10;
 
   useEffect(() => {
@@ -51,7 +53,7 @@ const useServicioLogic = () => {
       const primeraConsulta = query(
         collection(db, "servicios"),
         where("fechaServicio", "==", fechaConsulta),
-        orderBy("fechaServicio"),
+        where("usuarioId", "==", usuario),
         limit(pageSize)
       );
 
@@ -135,7 +137,7 @@ const useServicioLogic = () => {
         collection(db, "servicios"),
         where("fechaServicio", ">=", fechaInicio),
         where("fechaServicio", "<=", fechaFin),
-        orderBy("fechaServicio")
+        where("usuarioId", "==", usuario)
       );
 
       const documentSnapshots = await getDocs(primeraConsulta);
@@ -212,7 +214,8 @@ const useServicioLogic = () => {
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "servicios"),
-      orderBy("fechaServicio"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -289,7 +292,8 @@ const useServicioLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "servicios"),
-        orderBy("fechaServicio"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario),
         endBefore(primerDocVisible),
         limit(pageSize)
       );
@@ -427,6 +431,7 @@ const useServicioLogic = () => {
         nombreTipoDePago: tipoDePagoRef,
         fechaServicio: fechaActual,
         precioProducto: nuevoServicio.precioProducto,
+        usuarioId: nuevoServicio.usuarioId,
       };
 
       // Agregar el nuevo servicio a Firestore

@@ -13,11 +13,13 @@ import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Select from "react-select";
 import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import { useAuth } from "../context/authContext";
 
 const Productos = () => {
   const [productoState, setProductoState] = useState({
     nombreProducto: "", // Estado para almacenar la categoría seleccionada en el select
   });
+  const { user } = useAuth();
 
   const {
     productos,
@@ -61,9 +63,6 @@ const Productos = () => {
     }
   };
 
-  console.log();
-
-  console.log(productoState);
   if (isLoading) {
     return <p>Cargando...</p>;
   }

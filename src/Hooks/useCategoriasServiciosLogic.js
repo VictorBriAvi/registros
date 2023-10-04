@@ -8,23 +8,27 @@ import {
   orderBy,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebaseConfig/firebase";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import { useAuth } from "../components/context/authContext";
 
 const useCategoriasServiciosLogic = () => {
   const [categoriasServicios, setCategoriasServicios] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const { user } = useAuth();
   const categoriaServicioCollection = collection(db, "categoriasServicios");
 
+  const usuario = user.uid;
   const getCategoriasServicios = useCallback(async () => {
     setIsLoading(true);
     const primeraConsulta = query(
       collection(db, "categoriasServicios"),
-      orderBy("nombreCategoriaServicio")
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario)
     );
 
     const documentSnapshots = await getDocs(primeraConsulta);

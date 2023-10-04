@@ -12,8 +12,10 @@ import {
   limit,
   startAfter,
   endBefore,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
+import { useAuth } from "../components/context/authContext";
 
 const useTiposDeGastosLogic = () => {
   const [tiposDeGastos, setTiposDeGastos] = useState([]);
@@ -26,11 +28,15 @@ const useTiposDeGastosLogic = () => {
 
   const pageSize = 10;
 
+  const { user } = useAuth();
+  const usuario = user.uid;
+
   /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
   const getTiposDeGasto = async () => {
     const primeraConsulta = query(
       collection(db, "tiposDeGastos"),
-      orderBy("nombreTipoDeGasto"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
@@ -56,7 +62,8 @@ const useTiposDeGastosLogic = () => {
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "tiposDeGastos"),
-      orderBy("nombreTipoDeGasto"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -88,7 +95,8 @@ const useTiposDeGastosLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "tiposDeGastos"),
-        orderBy("nombreTipoDeGasto"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario),
         endBefore(primerDocVisible),
         limit(pageSize)
       );

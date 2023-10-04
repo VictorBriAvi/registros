@@ -6,11 +6,12 @@ import Swal from "sweetalert2";
 
 import { Toast } from "../../Alert/Aler";
 import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
+import { useAuth } from "../context/authContext";
 
 const AgregarTipoDePago = () => {
   const navigate = useNavigate();
   const { addTipoDePago, tiposDePago } = useTiposDePagoLogic();
-
+  const { user } = useAuth();
   const [tipoDePago, setTipoDePago] = useState({
     nombreTipoDePago: "",
   });
@@ -45,7 +46,10 @@ const AgregarTipoDePago = () => {
     }
 
     try {
-      const response = await addTipoDePago(tipoDePago);
+      const response = await addTipoDePago({
+        ...tipoDePago,
+        usuarioId: user.uid,
+      });
       Swal.fire(
         "Buen Trabajo!",
         "has agregado un nuevo tipo de pago!",

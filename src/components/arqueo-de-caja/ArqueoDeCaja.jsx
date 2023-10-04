@@ -110,7 +110,7 @@ const ArqueoDeCaja = () => {
 
   return (
     <Container>
-      <Link to={"/registros/"}>
+      <Link to={"/registros/servicios/tiposDeServicios"}>
         <button className="btn btn-info font-weight-normal text-white    ">
           {<AiOutlineRollback />} Regresar
         </button>

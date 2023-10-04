@@ -12,9 +12,11 @@ import {
   limit,
   startAfter,
   endBefore,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 import moment from "moment";
+import { useAuth } from "../components/context/authContext";
 
 const useClienteLogic = () => {
   const [clientes, setClientes] = useState([]);
@@ -25,11 +27,14 @@ const useClienteLogic = () => {
   const [primerDocVisible, setPrimerDocVisible] = useState([null]);
 
   const clientesCollection = collection(db, "clientes");
-  
+  const { user } = useAuth();
+  const usuario = user.uid;
+
   const getClientes = useCallback(async () => {
     const primeraConsulta = query(
       collection(db, "clientes"),
-      orderBy("nombreCompletoCliente"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
@@ -53,8 +58,8 @@ const useClienteLogic = () => {
   const getClientesAll = useCallback(async () => {
     const primeraConsulta = query(
       collection(db, "clientes"),
-      orderBy("nombreCompletoCliente"),
-      limit(pageSize)
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -65,14 +70,15 @@ const useClienteLogic = () => {
 
     setClientesAll(clientesData);
     setIsLoading(false);
-  }, [clientesCollection]);
+  }, [clientesCollection, user]);
 
   /** paginaSiguiente : Esta funcion cuando le dan al boton Siguiente y avanzo a los 4 valores siguientes */
 
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "clientes"),
-      orderBy("nombreCompletoCliente"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -102,7 +108,8 @@ const useClienteLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "clientes"),
-        orderBy("nombreCompletoCliente"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario),
         endBefore(ultimoDoc),
         limit(pageSize)
       );

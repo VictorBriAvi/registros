@@ -15,6 +15,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
+import { useAuth } from "../components/context/authContext";
 
 const useProductoLogic = () => {
   const [productos, setProductos] = useState([]);
@@ -28,12 +29,16 @@ const useProductoLogic = () => {
   const productosColletion = collection(db, "productos");
   const pageSize = 10;
 
+  const { user } = useAuth();
+  const usuario = user.uid;
+
   const getProductos = async () => {
     /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
 
     const primeraConsulta = query(
       collection(db, "productos"),
-      orderBy("nombreProducto"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
@@ -58,7 +63,8 @@ const useProductoLogic = () => {
 
     const primeraConsulta = query(
       collection(db, "productos"),
-      orderBy("codigoProducto")
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
 
@@ -80,8 +86,8 @@ const useProductoLogic = () => {
 
     const primeraConsulta = query(
       collection(db, "productos"),
+      where("usuarioId", "==", usuario),
       servicio ? where("nombreProducto", "==", servicio.label) : null || " ",
-      orderBy("nombreProducto"),
       limit(pageSize)
     );
     const documentSnapshots = await getDocs(primeraConsulta);
@@ -100,7 +106,8 @@ const useProductoLogic = () => {
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "productos"),
-      orderBy("nombreProducto"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -131,7 +138,8 @@ const useProductoLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "productos"),
-        orderBy("nombreProducto"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario),
         endBefore(primerDocVisible),
         limit(pageSize)
       );

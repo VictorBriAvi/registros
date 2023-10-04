@@ -62,7 +62,7 @@ const CalculosPorcentaje = () => {
         try {
           // Llamar a la función de actualización para cada servicio
           await updateTipoDeServicio(idServicio, servicioActualizado);
-          navigate("/registros/tiposDeServicios");
+          navigate("/registros/servicios/tiposDeServicios");
         } catch (error) {
           console.log(
             `Error al actualizar el servicio con ID ${idServicio}:`,
@@ -132,7 +132,7 @@ const CalculosPorcentaje = () => {
         </form>
       </Container>
 
-      <Link to={`/registros/tiposDeServicios`}>
+      <Link to={`/registros/servicios/tiposDeServicios`}>
         <Button className="mt-5">Regresar</Button>
       </Link>
     </Container>

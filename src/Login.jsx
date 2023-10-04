@@ -3,11 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "./components/context/authContext";
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
+import { AlertaInputs } from "./Alert/Aler";
 
 const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState();
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -16,6 +17,17 @@ const Login = () => {
   const handleChange = ({ target: { name, value } }) => {
     setUser({ ...user, [name]: value });
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await loginWithGoogle();
+      navigate("/registros/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(error);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +40,7 @@ const Login = () => {
       navigate("/registros/");
       console.log("arriba del navigate");
     } catch (error) {
-      console.log(error);
+      setError("hola");
     }
   };
 
@@ -37,8 +49,10 @@ const Login = () => {
       fluid
       className=" d-flex justify-content-center align-items-center vh-100 w-75  "
     >
+      <h1>{error}</h1>
       <Container className=" py-5 ">
         <h2 className="my-4  text-center">Iniciar sesion</h2>
+        {error && <AlertaInputs message={error} />}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label htmlFor="email">Correo Electronico</Form.Label>
@@ -60,16 +74,27 @@ const Login = () => {
               onChange={handleChange}
             />
           </Form.Group>
-
           <Button variant="primary" type="submit" className="w-100">
             Login
           </Button>
-        </Form>
-        <p className="text-center mt-3">
-          No tienes cuenta ? <Link to="/registros/registrar">Registrate</Link>
-        </p>
+          <div className="d-flex justify-content-between text-center my-3">
+            <p className="text-center ">
+              No tienes cuenta ?
+              <Link to="/registros/registrar">Registrate</Link>
+            </p>
 
-        <Button variant="outline-dark" className="w-100 ">
+            <p>
+              Se te olvido la contraseña ?
+              <Link to={"/registros/reset-password"}>Recuperala</Link>
+            </p>
+          </div>
+        </Form>
+
+        <Button
+          onClick={handleGoogleSignIn}
+          variant="outline-dark"
+          className="w-100 "
+        >
           <FcGoogle className="h5 mx-1" />
           <strong> Iniciar sesion</strong>
         </Button>

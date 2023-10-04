@@ -12,7 +12,7 @@ import { useAuth } from "./context/authContext";
 const Inicio = () => {
   const [show, setShow] = useState(false);
 
-  const { logOut, loading } = useAuth();
+  const { logOut, loading, user } = useAuth();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -20,6 +20,7 @@ const Inicio = () => {
 
   const [mouseEncima, setMouseEncima] = useState(false);
 
+  console.log(user.uid);
   const handleMouseEnter = () => {
     setMouseEncima(true);
   };
@@ -29,8 +30,6 @@ const Inicio = () => {
   };
 
   const contenedor = (variable) => {
-    console.log(variable);
-
     if (variable === "inventario") {
       navigate("/registros/productos");
     }

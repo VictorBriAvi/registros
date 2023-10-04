@@ -29,7 +29,7 @@ const TiposDeGastos = () => {
         <div>
           <div>
             <div>
-              <h1 className="text-center">Tipos de pago</h1>
+              <h1 className="text-center">Tipos de gastos</h1>
             </div>
 
             <hr />

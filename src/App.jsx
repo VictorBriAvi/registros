@@ -33,9 +33,10 @@ import CategoriaServicios from "./components/servicios/CategoriaServicios";
 import AgregarCategoriaServicio from "./components/servicios/AgregarCategoriaServicio";
 import EditarCategoriaServicio from "./components/servicios/EditarCategoriaServicio";
 import { AuthProvider } from "./components/context/authContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
-import Register from "./components/Register";
+import Register from "./Register";
+import ResetPassword from "./ResetPassword";
 
 function App() {
   return (
@@ -49,7 +50,6 @@ function App() {
             </ProtectedRoute>
           }
         ></Route>
-
         {/** Aca comienza el route de productos          <Route path="/registros/" element={<Inicio />}></Route>*/}
         <Route path="/registros/productos" element={<Productos />}></Route>
         <Route
@@ -168,7 +168,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/registros/servicios/porcentaje"
           element={
@@ -289,6 +288,7 @@ function App() {
 
         <Route path="/registros/login" element={<Login />} />
         <Route path="/registros/registrar" element={<Register />} />
+        <Route path="/registros/reset-password" element={<ResetPassword />} />
       </Routes>
     </AuthProvider>
   );

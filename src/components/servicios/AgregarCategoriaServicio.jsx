@@ -4,13 +4,17 @@ import { AiOutlineRollback, AiOutlineSave } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import useCategoriasServiciosLogic from "../../Hooks/useCategoriasServiciosLogic";
 import Swal from "sweetalert2";
+import { useAuth } from "../context/authContext";
 
 const AgregarCategoriaServicio = () => {
   const navigate = useNavigate();
   const { categoriasServicios, addCategoriaServicios } =
     useCategoriasServiciosLogic();
+
+  const { user } = useAuth();
   const [categoriaServicio, setCategoriaServicio] = useState({
     nombreCategoriaServicio: "",
+    usuarioId: "",
   });
 
   const handleChange = (e) => {
@@ -47,7 +51,10 @@ const AgregarCategoriaServicio = () => {
 
     try {
       console.log(categoriaServicio);
-      const response = await addCategoriaServicios(categoriaServicio);
+      const response = await addCategoriaServicios({
+        ...categoriaServicio,
+        usuarioId: user.uid,
+      });
       Swal.fire(
         "Buen Trabajo!",
         "has agregado una nueva categoria de servicio!",

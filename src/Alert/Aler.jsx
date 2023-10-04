@@ -11,3 +11,11 @@ export const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   },
 });
+
+export const AlertaInputs = ({ message }) => {
+  return (
+    <div className="bg-dark">
+      <span>{message}</span>
+    </div>
+  );
+};

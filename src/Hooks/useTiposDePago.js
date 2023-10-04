@@ -12,8 +12,10 @@ import {
   query,
   startAfter,
   endBefore,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
+import { useAuth } from "../components/context/authContext";
 
 const useTiposDePagoLogic = () => {
   const [tiposDePago, setTiposDePago] = useState([]);
@@ -27,11 +29,15 @@ const useTiposDePagoLogic = () => {
 
   const pageSize = 10;
 
+  const { user } = useAuth();
+  const usuario = user.uid;
+
   const getTiposDePago = useCallback(async () => {
     setIsLoading(true);
     const paginacionSiguiente = query(
       collection(db, "tiposDePago"),
-      orderBy("nombreTipoDePago"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       limit(pageSize)
     );
 
@@ -61,7 +67,8 @@ const useTiposDePagoLogic = () => {
     setIsLoading(true);
     const paginacionSiguiente = query(
       collection(db, "tiposDePago"),
-      orderBy("nombreTipoDePago")
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario)
     );
 
     const documentSnapshots = await getDocs(paginacionSiguiente);
@@ -82,7 +89,8 @@ const useTiposDePagoLogic = () => {
   const paginaSiguiente = async () => {
     const paginacionSiguiente = query(
       collection(db, "tiposDePago"),
-      orderBy("nombreTipoDePago"),
+      orderBy("usuarioId"),
+      where("usuarioId", "==", usuario),
       startAfter(ultimoDoc),
       limit(pageSize)
     );
@@ -111,7 +119,8 @@ const useTiposDePagoLogic = () => {
     if (primerDocVisible) {
       const paginacionAnterior = query(
         collection(db, "tiposDePago"),
-        orderBy("nombreTipoDePago"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario),
         endBefore(primerDocVisible),
         limit(pageSize)
       );

@@ -13,6 +13,7 @@ import { Toast } from "../../Alert/Aler";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import Swal from "sweetalert2";
 import moment from "moment";
+import { useAuth } from "../context/authContext";
 
 const AgregarServicio = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const AgregarServicio = () => {
   const { colaboradoresAll } = useColaboradoresLogic();
   const { tiposDePagoAll } = useTiposDePagoLogic();
   const { tiposServiciosAll } = useTiposDeServiciosLogic();
-
+  const { user } = useAuth();
   const { addServicio } = useServicioLogic();
 
   const [servicio, setServicio] = useState({
@@ -113,6 +114,7 @@ const AgregarServicio = () => {
         nombreTipoDePago: `tiposDePago/${servicio.nombreTipoDePago.value}`,
         fechaServicio: fechaActual,
         precioProducto: servicio.precioProducto,
+        usuarioId: user.uid,
       });
       console.log(response);
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");

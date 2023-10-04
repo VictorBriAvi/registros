@@ -7,13 +7,16 @@ import moment from "moment";
 
 import useClienteLogic from "../../Hooks/useClienteLogic";
 import { Toast } from "../../Alert/Aler";
+import { useAuth } from "../context/authContext";
 
 const AgregarCliente = () => {
   const navigate = useNavigate();
-  const { clientes, isLoading, addCliente } = useClienteLogic();
+  const { clientes, addCliente } = useClienteLogic();
+  const { user } = useAuth();
   const [cliente, setCliente] = useState({
     nombreCompletoCliente: "",
     fechaNacimiento: "",
+    usuarioId: "",
   });
 
   const handleChange = (e) => {
@@ -22,7 +25,7 @@ const AgregarCliente = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+  console.log(user);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,17 +64,13 @@ const AgregarCliente = () => {
     console.log(cliente);
 
     try {
-      const respuesta = await addCliente(cliente);
+      const respuesta = await addCliente({ ...cliente, usuarioId: user.uid });
       console.log(respuesta);
       navigate("/registros/clientes");
     } catch (error) {
       console.log(error);
     }
   };
-
-  if (isLoading) {
-    return <p>Cargando...</p>;
-  }
 
   return (
     <div>
