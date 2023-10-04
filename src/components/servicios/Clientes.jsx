@@ -6,6 +6,7 @@ import useClienteLogic from "../../Hooks/useClienteLogic";
 import DataTable from "../components/dataTable";
 import { Col, Container, Row } from "react-bootstrap";
 import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import TitulosPages from "../components/TitulosPages";
 
 const Clientes = () => {
   const {
@@ -29,23 +30,17 @@ const Clientes = () => {
       <div>
         <div>
           <div>
-            <div>
-              <h1 className="text-center">Clientes</h1>
-            </div>
-
+            <TitulosPages titulo="Clientes" regresar={`/registros/servicios`} />
             <hr />
 
             <Container className="mb-3">
               <Row>
-                <Col sm={6} className="my-2">
+                <Col sm={12} className="my-2">
                   <BotonesPrincipalesAgregar
                     agregar={`/registros/crear-cliente/`}
-                    regresar={`/registros/servicios`}
                     tituloBoton={"Agregar nuevo cliente"}
                   />
                 </Col>
-
-                <Col sm={6}></Col>
               </Row>
             </Container>
 

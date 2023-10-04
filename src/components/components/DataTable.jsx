@@ -31,7 +31,7 @@ const DataTable = ({
   };
 
   return (
-    <div>
+    <div className="mt-5">
       <Container>
         <div className="contenedor_botones_datatable">
           <button
@@ -39,13 +39,11 @@ const DataTable = ({
             onClick={(e) => paginaClickAnterior(e)}
           >
             <AiOutlineArrowLeft />
-            Anteriores
           </button>
           <button
             className="botones_datatable"
             onClick={(e) => paginaClickSiguiente(e)}
           >
-            Siguiente
             <AiOutlineArrowRight />
           </button>
         </div>
@@ -68,17 +66,19 @@ const DataTable = ({
               ))}
 
               <td>
-                <Link to={`${editUrl}/${servicio.id}`}>
-                  <button className="btn btn-primary font-weight-normal me-3">
-                    {<AiFillEdit />}
+                <div>
+                  <Link to={`${editUrl}/${servicio.id}`}>
+                    <button className="btn btn-primary font-weight-normal">
+                      {<AiFillEdit />}
+                    </button>
+                  </Link>
+                  <button
+                    className="btn btn-danger font-weight-normal "
+                    onClick={() => deleteData(servicio.id)}
+                  >
+                    {<AiFillDelete />}
                   </button>
-                </Link>
-                <button
-                  className="btn btn-danger font-weight-normal "
-                  onClick={() => deleteData(servicio.id)}
-                >
-                  {<AiFillDelete />}
-                </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -91,13 +91,11 @@ const DataTable = ({
             onClick={(e) => paginaClickAnterior(e)}
           >
             <AiOutlineArrowLeft />
-            Anteriores
           </button>
           <button
             className="botones_datatable"
             onClick={(e) => paginaClickSiguiente(e)}
           >
-            Siguiente
             <AiOutlineArrowRight />
           </button>
         </div>

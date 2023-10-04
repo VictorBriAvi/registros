@@ -169,7 +169,7 @@ function App() {
           }
         />
         <Route
-          path="/registros/servicios/porcentaje"
+          path="/registros/servicios/tiposDeServicios/porcentaje"
           element={
             <ProtectedRoute>
               <CalculosPorcentaje />

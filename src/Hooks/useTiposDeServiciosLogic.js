@@ -198,7 +198,43 @@ const useTiposDeServiciosLogic = () => {
   };
 
   const subirServiciosPorCategoria = async (servicio, porcentaje) => {
+    console.log(servicio, porcentaje);
     setIsLoading(true);
+
+    if (servicio === "") {
+      // Crear una copia de los tipos de servicio con los precios actualizados
+      const nuevosPrecios = tiposServicios.map((servicio) => {
+        const precioActual = servicio.precioServicio;
+        const nuevoPrecio = precioActual * (1 + porcentaje / 100);
+        console.log(
+          `Precio actual: ${precioActual}, Nuevo precio: ${nuevoPrecio}`
+        );
+
+        return {
+          ...servicio,
+          precioServicio: nuevoPrecio,
+        };
+      });
+
+      // Iterar sobre los servicios actualizados y llamar a la función de actualización
+
+      nuevosPrecios.forEach(async (servicioActualizado) => {
+        // Obtener el ID del servicio
+        const idServicio = servicioActualizado.id;
+
+        try {
+          // Llamar a la función de actualización para cada servicio
+
+          await updateTipoDeServicio(idServicio, servicioActualizado);
+          navigate("/registros/servicios/tiposDeServicios");
+        } catch (error) {
+          console.log(
+            `Error al actualizar el servicio con ID ${idServicio}:`,
+            error
+          );
+        }
+      });
+    }
 
     const data = await getDocs(tiposServiciosCollection);
     const tipoServicioData = data.docs.map((doc) => ({
@@ -209,7 +245,6 @@ const useTiposDeServiciosLogic = () => {
     const tiposFiltrados = tipoServicioData.filter((tipo) => {
       return tipo.tipoDeTrabajo === servicio;
     });
-    console.log(tiposFiltrados);
 
     // Iniciar un bote de escritura
     const batch = writeBatch(db);
@@ -234,7 +269,6 @@ const useTiposDeServiciosLogic = () => {
     try {
       // Ejecutar el bote de escritura
       await batch.commit();
-      console.log("Precios actualizados en la base de datos");
     } catch (error) {
       console.error(
         "Error al actualizar los precios en la base de datos:",

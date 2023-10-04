@@ -7,6 +7,7 @@ import useTiposDePagoLogic from "../../Hooks/useTiposDePago";
 import DataTable from "../components/dataTable";
 import { Col, Container, Row } from "react-bootstrap";
 import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import TitulosPages from "../components/TitulosPages";
 
 const TiposDePago = () => {
   const {
@@ -27,22 +28,19 @@ const TiposDePago = () => {
       <div>
         <div>
           <div>
-            <div>
-              <h1 className="text-center">Tipos de pago</h1>
-            </div>
-
+            <TitulosPages
+              titulo="Tipos de pago"
+              regresar={`/registros/servicios`}
+            />
             <hr />
             <Container className="mb-3">
               <Row>
-                <Col sm={6} className="my-2">
+                <Col sm={12} className="my-2">
                   <BotonesPrincipalesAgregar
                     agregar={`/registros/crear-tipoDePago/`}
-                    regresar={`/registros/servicios`}
                     tituloBoton={"Agregar nuevo tipo de pago"}
                   />
                 </Col>
-
-                <Col sm={6}></Col>
               </Row>
             </Container>
             <DataTable

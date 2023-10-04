@@ -18,6 +18,7 @@ import {
 import BotonesPrincipales from "../components/BotonesPrincipalesAgregar";
 import "../../style/Servicios.css";
 import { FcSearch } from "react-icons/fc";
+import TitulosPages from "../components/TitulosPages";
 
 const Servicios = () => {
   const {
@@ -67,8 +68,11 @@ const Servicios = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="boton_servicios">
-              <h1 className="text-center">Ventas</h1>
-
+              <h1 className="text-center"></h1>
+              <TitulosPages
+                titulo="Servicios realizados"
+                regresar={`/registros/`}
+              />
               <div>
                 <DropdownButton id="dropdown-basic-button" title="Complementos">
                   <Dropdown.Item as={Link} to="/registros/colaboradores">
@@ -96,7 +100,6 @@ const Servicios = () => {
               <Col sm={6} className="my-2">
                 <BotonesPrincipales
                   agregar={`/registros/crear-servicio/`}
-                  regresar={`/registros/`}
                   tituloBoton={"Agregar nueva venta"}
                 />
               </Col>

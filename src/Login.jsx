@@ -35,22 +35,15 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(user);
-
+    setError("");
     try {
-      console.log("estamos en el try");
       await login(user.email, user.password);
       navigate("/registros/");
-      console.log("arriba del navigate");
+      console.log(user.email, user.password);
     } catch (error) {
-      setError("hola");
+      setError(error.message);
     }
   };
-
-  useEffect(() => {
-    handleShow(true);
-  }, []);
 
   return (
     <Container
@@ -59,8 +52,8 @@ const Login = () => {
     >
       <Row className="justify-content-center mt-5">
         <Col xs={4} className="text-center">
-          <div>
-            <FcInfo className="icono-info" onClick={handleShow} />
+          <div className="login_info ">
+            <FcInfo className="icono-info  " onClick={handleShow} />
           </div>
 
           <h1 className="animacion-letras">Bienvenid@s</h1>
@@ -96,9 +89,6 @@ const Login = () => {
               </Form.Group>
               <Button variant="primary" type="submit" className="w-100">
                 Login
-              </Button>
-              <Button variant="warning" type="submit" className="w-100">
-                Login sin registro
               </Button>
               <div className="d-flex justify-content-between text-center my-3">
                 <p className="text-center ">

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import { Button, Container, Form, InputGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import TitulosPages from "../components/TitulosPages";
 
 const CalculosPorcentaje = () => {
   const navigate = useNavigate();
@@ -33,13 +34,10 @@ const CalculosPorcentaje = () => {
 
   const aumentarPrecios = (e, porcentaje, categoriaSeleccionada) => {
     e.preventDefault();
-    console.log(porcentaje, categoriaSeleccionada);
 
-    if (categoriaSeleccionada) {
-      subirServiciosPorCategoria(categoriaSeleccionada, porcentaje);
-    }
+    subirServiciosPorCategoria(categoriaSeleccionada, porcentaje);
 
-    if (categoriaSeleccionada === "") {
+    /* if (categoriaSeleccionada === "") {
       // Crear una copia de los tipos de servicio con los precios actualizados
       const nuevosPrecios = tiposServicios.map((servicio) => {
         const precioActual = servicio.precioServicio;
@@ -55,12 +53,14 @@ const CalculosPorcentaje = () => {
       });
 
       // Iterar sobre los servicios actualizados y llamar a la función de actualización
+
       nuevosPrecios.forEach(async (servicioActualizado) => {
         // Obtener el ID del servicio
         const idServicio = servicioActualizado.id;
 
         try {
           // Llamar a la función de actualización para cada servicio
+
           await updateTipoDeServicio(idServicio, servicioActualizado);
           navigate("/registros/servicios/tiposDeServicios");
         } catch (error) {
@@ -71,13 +71,17 @@ const CalculosPorcentaje = () => {
         }
       });
     }
+    */
   };
 
   return (
     <Container className="ajustar-precios">
+      <TitulosPages
+        regresar={`/registros/servicios/tiposDeServicios`}
+        titulo={"Aumentar los precios de los servicios"}
+      ></TitulosPages>
+      <hr />
       <Container>
-        <h3>Ajustar Precios</h3>
-
         {/**ACA COMIENZA EL SELECT */}
         <form>
           <fieldset>
@@ -110,15 +114,13 @@ const CalculosPorcentaje = () => {
                   %
                 </InputGroup.Text>
                 <Form.Control
+                  type="number"
+                  value={porcentajeAumento}
                   aria-label="Default"
                   aria-describedby="inputGroup-sizing-default"
+                  onChange={(e) => setPorcentajeAumento(e.target.value)}
                 />
               </InputGroup>
-              <input
-                type="number"
-                value={porcentajeAumento}
-                onChange={(e) => setPorcentajeAumento(e.target.value)}
-              />
             </div>
           </fieldset>
           <Button
@@ -131,10 +133,6 @@ const CalculosPorcentaje = () => {
           </Button>
         </form>
       </Container>
-
-      <Link to={`/registros/servicios/tiposDeServicios`}>
-        <Button className="mt-5">Regresar</Button>
-      </Link>
     </Container>
   );
 };

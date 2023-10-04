@@ -7,6 +7,7 @@ import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 import DataTable from "../components/dataTable";
 import { Col, Container, Row } from "react-bootstrap";
 import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import TitulosPages from "../components/TitulosPages";
 const TiposDeGastos = () => {
   const {
     tiposDeGastos,
@@ -26,37 +27,29 @@ const TiposDeGastos = () => {
   return (
     <Container>
       <div>
-        <div>
-          <div>
-            <div>
-              <h1 className="text-center">Tipos de gastos</h1>
-            </div>
-
-            <hr />
-            <Container className="mb-3">
-              <Row>
-                <Col sm={6}>
-                  <BotonesPrincipalesAgregar
-                    agregar={`/registros/gastos/TiposDeGastos/Agregar-TipoDeGasto`}
-                    regresar={"/registros/gastos"}
-                    tituloBoton={"Agregar nuevo tipo de gasto"}
-                  />
-                </Col>
-                <Col sm={6}></Col>
-              </Row>
-            </Container>
-
-            <DataTable
-              columnaServicio={columnaServicio}
-              data={tiposDeGastos}
-              deleteData={deleteTipoDeGasto}
-              paginaSiguiente={paginaSiguiente}
-              paginaAnterior={paginaAnterior}
-              editUrl="/registros/gastos/TiposDeGastos/editar-tipoDeGasto"
-            />
-          </div>
-        </div>
+        <TitulosPages titulo="Tipos de gastos" regresar={"/registros/gastos"} />
       </div>
+
+      <hr />
+      <Container>
+        <Row>
+          <Col sm={12} className="mt-3">
+            <BotonesPrincipalesAgregar
+              agregar={`/registros/gastos/TiposDeGastos/Agregar-TipoDeGasto`}
+              tituloBoton={"Agregar nuevo tipo de gasto"}
+            />
+          </Col>
+        </Row>
+      </Container>
+
+      <DataTable
+        columnaServicio={columnaServicio}
+        data={tiposDeGastos}
+        deleteData={deleteTipoDeGasto}
+        paginaSiguiente={paginaSiguiente}
+        paginaAnterior={paginaAnterior}
+        editUrl="/registros/gastos/TiposDeGastos/editar-tipoDeGasto"
+      />
     </Container>
   );
 };

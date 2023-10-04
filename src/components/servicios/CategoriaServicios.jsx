@@ -4,6 +4,7 @@ import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 import DataTable from "../components/DataTable";
 
 import useCategoriasServiciosLogic from "../../Hooks/useCategoriasServiciosLogic";
+import TitulosPages from "../components/TitulosPages";
 
 const CategoriaServicios = () => {
   const { isLoading, categoriasServicios, deleteCategoriaServicio } =
@@ -29,15 +30,16 @@ const CategoriaServicios = () => {
   return (
     <Container>
       <div>
-        <h1 className="text-center ">Categoria Servicios</h1>
-
+        <TitulosPages
+          titulo="Categorias Servicios"
+          regresar={"/registros/servicios/tiposDeServicios"}
+        />
         <hr />
 
         <Row>
-          <Col sm={6}>
+          <Col sm={12}>
             <BotonesPrincipalesAgregar
               agregar={`/registros/servicios/tiposDeServicios/categoriaServicio/agregar-categoria-servicio`}
-              regresar={"/registros/servicios/tiposDeServicios"}
               tituloBoton={"Agregar nueva categoria"}
             />
           </Col>

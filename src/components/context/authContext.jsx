@@ -26,16 +26,28 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const singUp = (email, password) => {
-    createUserWithEmailAndPassword(auth, email, password);
+  const singUp = async (email, password) => {
+    try {
+      createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const login = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password);
+  const login = async (email, password) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const logOut = () => {
-    signOut(auth);
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const loginWithGoogle = async () => {
@@ -47,8 +59,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const resetPassword = (email) => {
-    sendPasswordResetEmail(auth, email);
+  const resetPassword = async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

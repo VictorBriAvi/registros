@@ -10,6 +10,7 @@ import DataTable from "../components/dataTable";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 import { FcSearch } from "react-icons/fc";
+import TitulosPages from "../components/TitulosPages";
 
 const TiposDeServicios = () => {
   const [servicio, setServicio] = useState({
@@ -67,21 +68,27 @@ const TiposDeServicios = () => {
         <div>
           <div>
             <div>
-              <h1 className="text-center">Tipos de servicios</h1>
-              <Link
-                to={`/registros/servicios/tiposDeServicios/categoriaServicio`}
-              >
-                <button>Categoria servicio</button>
+              <TitulosPages
+                titulo="Tipos de servicios"
+                regresar={`/registros/servicios`}
+              />
+              <Link to={"/registros/servicios/tiposDeServicios/porcentaje"}>
+                <button className="btn btn-warning font-weight-normal text-white  mb-3  ">
+                  Sumar precios segun el Porcentaje
+                </button>
               </Link>
             </div>
-
+            <Link
+              to={`/registros/servicios/tiposDeServicios/categoriaServicio`}
+            >
+              <button>Categoria servicio</button>
+            </Link>
             <hr />
             <Container className="mb-3">
               <Row>
                 <Col sm={6} className="my-2">
                   <BotonesPrincipalesAgregar
                     agregar={`/registros/servicios/tiposDeServicios/crear-tipoDeServicio`}
-                    regresar={`/registros/servicios`}
                     tituloBoton={"Agregar nuevo tipo de servicio"}
                   />
                 </Col>
@@ -89,12 +96,6 @@ const TiposDeServicios = () => {
                 <Col sm={6}>
                   <div>
                     <div className="container my-2">
-                      <Link to={"/registros/servicios/porcentaje"}>
-                        <button className="btn btn-warning font-weight-normal text-white  mb-3  ">
-                          Sumar precios segun el porcentaje Porcentaje
-                        </button>
-                      </Link>
-
                       <fieldset>
                         <label className="mb-2" htmlFor="2">
                           Buscar por la categoria del servicio
@@ -125,7 +126,7 @@ const TiposDeServicios = () => {
                                 className="boton_buscar"
                                 onClick={(e) => handleFiltraCategoria(e)}
                               >
-                                <FcSearch /> Buscar por categoria
+                                <FcSearch /> Buscar
                               </Button>
                             </div>
                           </div>

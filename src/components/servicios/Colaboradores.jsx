@@ -6,6 +6,7 @@ import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
 import DataTable from "../components/dataTable";
 import { Col, Container, Row } from "react-bootstrap";
 import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import TitulosPages from "../components/TitulosPages";
 
 const Colaboradores = () => {
   const {
@@ -31,25 +32,23 @@ const Colaboradores = () => {
       <div>
         <div className="row">
           <div className="col-md-12">
-            <div>
-              <h1 className="text-center ">Colaboradores</h1>
-            </div>
+            <TitulosPages
+              titulo="Colaboradores"
+              regresar={`/registros/servicios`}
+            />
 
             <hr />
             <Container className="mb-3">
               <Row>
-                <Col sm={6} className="my-2">
+                <Col sm={12} className="my-2">
                   <BotonesPrincipalesAgregar
                     agregar={`/registros/crear-colaborador/`}
-                    regresar={`/registros/servicios`}
                     tituloBoton={"Agregar nuevo colaborador"}
                   />
                 </Col>
-
-                <Col sm={6}></Col>
               </Row>
             </Container>
-            <div className="table-responsive">
+            <Container>
               <DataTable
                 columnaServicio={columnaServicio}
                 data={colaboradores}
@@ -58,7 +57,7 @@ const Colaboradores = () => {
                 paginaAnterior={paginaAnterior}
                 editUrl="/registros/editar-colaboradores"
               />
-            </div>
+            </Container>
           </div>
         </div>
       </div>

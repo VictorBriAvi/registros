@@ -3,17 +3,18 @@ import { Link } from "react-router-dom";
 //Importacion de iconos
 import { AiOutlineRollback } from "react-icons/ai";
 
-import { FcSearch, FcAddDatabase } from "react-icons/fc";
+import { FcSearch } from "react-icons/fc";
 
 import useProductoLogic from "../../Hooks/useProductoLogic";
 import "../../style/Productos.css";
 
 import DataTable from "../components/DataTable";
 import { useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import Select from "react-select";
 import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
 import { useAuth } from "../context/authContext";
+import TitulosPages from "../components/TitulosPages";
 
 const Productos = () => {
   const [productoState, setProductoState] = useState({
@@ -68,58 +69,63 @@ const Productos = () => {
   }
 
   return (
-    <Container>
-      <div>
-        <h1 className="text-center ">Inventario de productos</h1>
-        <hr />
-
-        <Row>
-          <Col sm={6}>
-            <BotonesPrincipalesAgregar
-              agregar={`/registros/crear-producto/`}
-              regresar={"/registros/"}
-              tituloBoton={"Agregar nuevo producto"}
-            />
-          </Col>
-
-          <Col sm={6}>
-            <div className="my-5">
-              <Container>
-                <h3 className="text-center">Buscar por nombre del producto</h3>
-                <Select
-                  options={SelectProductos}
-                  menuPlacement="bottom"
-                  onChange={(selectOption) =>
-                    handleChange(selectOption, "nombreProducto")
-                  }
-                  value={productoState.codigoProducto}
-                />
-                <div className="boton_buscar_contenedor">
-                  {/* Establecer el ancho del botón */}
-                  <button
-                    className="boton_buscar"
-                    onClick={(e) => handleFiltraCategoria(e)}
-                  >
-                    <FcSearch /> Buscar
-                  </button>
-                </div>
-              </Container>
-            </div>
-          </Col>
-        </Row>
-
-        <div className="table-responsive">
-          <DataTable
-            columnaServicio={columnaServicio}
-            data={productos}
-            deleteData={deleteProducto}
-            paginaSiguiente={paginaSiguiente}
-            paginaAnterior={paginaAnterior}
-            editUrl="/registros/editar-producto"
+    <div>
+      <Container>
+        <div>
+          <TitulosPages
+            titulo="Inventario de Productos"
+            regresar="/registros/"
           />
+          <hr />
+
+          <Row>
+            <Col sm={6}>
+              <div className="my-5">
+                <Container>
+                  <h3 className="text-center">
+                    Buscar por nombre del producto
+                  </h3>
+                  <Select
+                    options={SelectProductos}
+                    menuPlacement="bottom"
+                    onChange={(selectOption) =>
+                      handleChange(selectOption, "nombreProducto")
+                    }
+                    value={productoState.codigoProducto}
+                  />
+                  <div className="boton_buscar_contenedor">
+                    {/* Establecer el ancho del botón */}
+                    <button
+                      className="boton_buscar"
+                      onClick={(e) => handleFiltraCategoria(e)}
+                    >
+                      <FcSearch /> Buscar
+                    </button>
+                  </div>
+                </Container>
+              </div>
+            </Col>
+            <Col sm={6}>
+              <BotonesPrincipalesAgregar
+                agregar={`/registros/crear-producto/`}
+                tituloBoton={"Agregar nuevo producto"}
+              />
+            </Col>
+          </Row>
+
+          <div className="table-responsive">
+            <DataTable
+              columnaServicio={columnaServicio}
+              data={productos}
+              deleteData={deleteProducto}
+              paginaSiguiente={paginaSiguiente}
+              paginaAnterior={paginaAnterior}
+              editUrl="/registros/editar-producto"
+            />
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 };
 
