@@ -95,7 +95,7 @@ const EditarTipoDeServicio = () => {
 
     updateTipoDeServicio(tipoDeServicioById.id, tipoDeServicioActualizado);
     Swal.fire("Buen Trabajo!", "has modificado al cliente!", "success");
-    navigate("/registros/tiposDeServicios");
+    navigate("/registros/servicios/tiposDeServicios");
   };
 
   if (!tipoDeServicioById) {

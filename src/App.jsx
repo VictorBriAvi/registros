@@ -219,6 +219,14 @@ function App() {
           }
         ></Route>
         <Route
+          path="/registros/crear-tipoDeGasto/:porcentajeColaborador"
+          element={
+            <ProtectedRoute>
+              <AgregarGasto />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
           path="/registros/crear-tipoDeGasto"
           element={
             <ProtectedRoute>

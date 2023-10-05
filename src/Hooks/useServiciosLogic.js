@@ -135,9 +135,9 @@ const useServicioLogic = () => {
 
       const primeraConsulta = query(
         collection(db, "servicios"),
+        where("usuarioId", "==", usuario),
         where("fechaServicio", ">=", fechaInicio),
-        where("fechaServicio", "<=", fechaFin),
-        where("usuarioId", "==", usuario)
+        where("fechaServicio", "<=", fechaFin)
       );
 
       const documentSnapshots = await getDocs(primeraConsulta);
@@ -196,8 +196,6 @@ const useServicioLogic = () => {
         "cachedServicios",
         JSON.stringify(serviciosCompletos)
       );
-
-      console.log(serviciosCompletos);
 
       // Resto de tu código para actualizar el estado y gestionar la carga
       setCachedServicios(serviciosCompletos);

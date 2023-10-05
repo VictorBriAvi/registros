@@ -1,22 +1,31 @@
-import { Button, Container } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import useGastosLogic from "../../Hooks/useGastosLogic";
 import useServicioLogic from "../../Hooks/useServiciosLogic";
 import { VictoryPie } from "victory";
-import { AiOutlineRollback } from "react-icons/ai";
-import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { useState } from "react";
 import moment from "moment";
 import Select from "react-select";
 import useColaboradoresLogic from "../../Hooks/useColaboradoresLogic";
+import TitulosPages from "../components/TitulosPages";
+import "../../style/ArqueoDeCaja.css";
+import Cierres from "../gastos/Gastos";
+import { useNavigate } from "react-router";
+import AgregarGasto from "../gastos/AgregarGasto";
+import { Link } from "react-router-dom";
 
 const ArqueoDeCaja = () => {
+  const navigate = useNavigate();
   const [fechaInicio, setFechaInicio] = useState(null);
   const [fechaFin, setFechaFin] = useState(null);
   const { serviciosRangoFecha, isLoading, getServiciosPorRangoDeFecha } =
     useServicioLogic();
-  const { gastosRangoFecha, isLoadingGasto, getGastosPorRangoDeFecha } =
-    useGastosLogic();
+  const {
+    gastosRangoFecha,
+    isLoadingGasto,
+    getGastosPorRangoDeFecha,
+    addGasto,
+  } = useGastosLogic();
   const { colaboradores } = useColaboradoresLogic();
 
   const [totalRealizado, setTotalRealizado] = useState(0);
@@ -29,6 +38,8 @@ const ArqueoDeCaja = () => {
 
   let totalIngresos = 0;
   let totalGastos = 0;
+  const sumasPorTiposDeGastos = {};
+  const arregloDatos = [];
 
   const SelectColaborador = colaboradores
     ? colaboradores.map((colaborador) => ({
@@ -44,16 +55,45 @@ const ArqueoDeCaja = () => {
 
   gastosRangoFecha.forEach((gasto) => {
     totalGastos += parseFloat(gasto.precioGasto);
+    const nombreTipoDeGasto = gasto.nombreTipoDeGasto;
+    const precioGasto = parseFloat(gasto.precioGasto);
+
+    if (!sumasPorTiposDeGastos[nombreTipoDeGasto]) {
+      sumasPorTiposDeGastos[nombreTipoDeGasto] = precioGasto;
+      arregloDatos.push({
+        nombreTipoDeGasto: nombreTipoDeGasto,
+        precioGasto: precioGasto,
+      });
+    } else {
+      sumasPorTiposDeGastos[nombreTipoDeGasto] += precioGasto;
+      arregloDatos.forEach((dato) => {
+        if (dato.nombreTipoDeGasto === nombreTipoDeGasto) {
+          dato.precioGasto = sumasPorTiposDeGastos[nombreTipoDeGasto];
+        }
+      });
+    }
   });
+
   const gananciaPerdida = totalIngresos - totalGastos;
   const total = totalIngresos + totalGastos;
 
   const porcentajeIngresos = Math.round((totalIngresos / total) * 100);
   const porcentajeGastos = Math.round((totalGastos / total) * 100);
 
+  const gastosConPorcentaje = arregloDatos.map((gasto) => {
+    const porcentajeDeGasto =
+      (gasto.precioGasto / totalGastos) * porcentajeGastos;
+    return {
+      nombreTipoDeGasto: gasto.nombreTipoDeGasto,
+      porcentajeDeGasto: Math.round(porcentajeDeGasto),
+    };
+  });
   const data = [
-    { x: "I", y: porcentajeIngresos },
-    { x: "G", y: porcentajeGastos },
+    { x: "Ingresos", y: porcentajeIngresos },
+    ...gastosConPorcentaje.map((gasto) => ({
+      x: `${gasto.nombreTipoDeGasto}`,
+      y: gasto.porcentajeDeGasto,
+    })),
   ];
 
   const handleDateChangeInicio = (date) => {
@@ -104,93 +144,166 @@ const ArqueoDeCaja = () => {
     getGastosPorRangoDeFecha(fechaSeleccionadaInicial, fechaSeleccionadaFinal);
   };
 
+  const validacionArreglo = data.map((item) => ({
+    x: item.x || "Sin Datos",
+    y: !isNaN(item.y) ? item.y : 100,
+  }));
+
+  //const chartData = data[0].y > 0 ? defaultData : data;
+
   if (isLoading && isLoadingGasto) {
     return <p>Cargando...</p>;
   }
 
   return (
     <Container>
-      <Link to={"/registros/servicios/tiposDeServicios"}>
-        <button className="btn btn-info font-weight-normal text-white    ">
-          {<AiOutlineRollback />} Regresar
-        </button>
-      </Link>
-      <div className="row ">
-        <div className="col-md-6 bg-warning">
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <h3>Filtra por fecha </h3>
-            <DatePicker
-              selected={fechaInicio}
-              onChange={handleDateChangeInicio}
-              placeholderText="¿ Que fecha buscamos?"
-              dateFormat="dd/MM/yyyy"
-              className="custom-datepicker" // Agrega una clase personalizada
-            />
-            <DatePicker
-              selected={fechaFin}
-              onChange={handleDateChangeFin}
-              placeholderText="¿ Que fecha buscamos?"
-              dateFormat="dd/MM/yyyy"
-              className="custom-datepicker" // Agrega una clase personalizada
-            />
-            <Button onClick={(e) => handleBuscarPorRangoFecha(e)}>
-              Buscar fecha
-            </Button>
+      {/* Sección de filtros */}
+      <TitulosPages regresar={"/registros/"} titulo={"Arqueo de caja"} />
+      <hr />
+      <Container className=" my-4 ">
+        <div className="d-flex flex-column align-items-center ">
+          <h5 className="h1 ">Ingresa el rango de fechas a buscar: </h5>
+          <div className="my-5 ">
+            <Row>
+              <Col xs={12} md={4}>
+                <span className="h6">Desde :</span>
+                <DatePicker
+                  selected={fechaInicio}
+                  onChange={handleDateChangeInicio}
+                  placeholderText="¿Qué fecha buscamos?"
+                  dateFormat="dd/MM/yyyy"
+                  className="custom-datepicker mx-5"
+                />
+              </Col>
+
+              <Col xs={12} md={4}>
+                <span className="h6">Hasta :</span>
+                <DatePicker
+                  selected={fechaFin}
+                  onChange={handleDateChangeFin}
+                  placeholderText="¿Qué fecha buscamos?"
+                  dateFormat="dd/MM/yyyy"
+                  className="custom-datepicker mx-5"
+                />
+              </Col>
+              <Col xs={12} md={4}>
+                <Button
+                  variant="outline-primary h-100 w-100"
+                  onClick={(e) => handleBuscarPorRangoFecha(e)}
+                >
+                  Buscar fecha
+                </Button>
+              </Col>
+            </Row>
           </div>
-          <div className="row">
-            <div className="col-12">
-              <div className="text-center">
-                <p>Total ingreso : {`${totalIngresos}`}</p>
-              </div>
-            </div>
-            <div className="col-12">
-              <div className="text-center">
-                <p>Total gastos : {`${totalGastos}`}</p>
-              </div>
-            </div>
-            <div className="col-12">
-              <div className="text-center">
-                <p>
-                  {gananciaPerdida >= 0
-                    ? `Ganancia con ${gananciaPerdida}`
-                    : `Pérdida con ${gananciaPerdida}`}
+        </div>
+
+        <Row className="mt-5">
+          <Col xs={12} md={4} className=" text-center">
+            <p className="display-6 ">
+              Total ingreso = {`${totalIngresos.toLocaleString()}`}
+            </p>
+          </Col>
+          <Col xs={12} md={4} className=" text-center">
+            <p className="display-6 ">
+              Total gastos = {`${totalGastos.toLocaleString()}`}
+            </p>
+          </Col>
+          <Col xs={12} md={4} className="text-center">
+            <p className="display-6 ">
+              {gananciaPerdida >= 0
+                ? `Ganancia con ${gananciaPerdida.toLocaleString()}`
+                : `Pérdida con ${gananciaPerdida.toLocaleString()}`}
+            </p>
+          </Col>
+        </Row>
+      </Container>
+
+      {/* Sección de empleado y grafica */}
+      <Container>
+        <hr />
+        <Row>
+          <Col xs={12} md={6} className="p-3">
+            <Row>
+              <Col xs={12} md={12}>
+                <h1 className="h1 mb-4">Total realizado colaborador :</h1>
+                <Select
+                  options={SelectColaborador}
+                  menuPlacement="bottom"
+                  onChange={(selectOption) =>
+                    handleSelectChange(selectOption, "nombreCompletoEmpleado")
+                  }
+                  value={empleado.nombreCompletoEmpleado}
+                />
+              </Col>
+
+              <Col xs={12} md={12} className="text-center my-5">
+                <Button
+                  variant="outline-primary"
+                  onClick={(e) => handleEmpeladoCobro(e)}
+                >
+                  Buscar colaborador
+                </Button>
+              </Col>
+              <Col xs={12} md={12} className="text-center">
+                <h3 className="h4 mb-4">Datos colaborador</h3>
+                <p className="display-6">
+                  Nombre del colaborador :{" "}
+                  <span>{nombreEmpleado.toLocaleString()} </span>
                 </p>
-              </div>
+                <p className="display-6">
+                  Total realizado :{" "}
+                  <span>${totalRealizado.toLocaleString()}</span>
+                </p>
+                <p className="display-6">
+                  Total realizado porcentaje :
+                  <span>${totalPorcentaje.toLocaleString()}</span>
+                </p>
+
+                <Link to={`/registros/crear-tipoDeGasto/${totalPorcentaje}`}>
+                  <Button>Agregar gasto del porcentaje del empleado</Button>
+                </Link>
+              </Col>
+            </Row>
+          </Col>
+
+          {/* Gráfico de VictoryPie */}
+          <Col xs={12} md={6}>
+            <div>
+              <VictoryPie
+                data={validacionArreglo}
+                colorScale={[
+                  "#66BB6A",
+                  "#EF5350",
+                  "#22223B",
+                  "#ACFCD9",
+                  "#FF715B",
+                  "#E6AF2E",
+                  "#5C6F68",
+                  "#654C4F",
+                  "#F42C04",
+                  "#582707",
+                ]}
+                animate={{ duration: 2000 }}
+                responsive={true}
+                width={250}
+                height={250}
+                padAngle={({ datum }) => datum.y}
+                style={{
+                  data: {
+                    stroke: "#000",
+                    strokeWidth: 0.5,
+                  },
+                  labels: {
+                    fontSize: 5,
+                    fill: "#c43a31",
+                  },
+                }}
+              />
             </div>
-          </div>
-        </div>
-        <div className="col-md-6 bg-success">
-          {/* Establecer el ancho del select */}
-          <Select
-            options={SelectColaborador}
-            menuPlacement="bottom"
-            onChange={(selectOption) =>
-              handleSelectChange(selectOption, "nombreCompletoEmpleado")
-            }
-            value={empleado.nombreCompletoEmpleado}
-          />
-          <Button variant="primary" onClick={(e) => handleEmpeladoCobro(e)}>
-            Buscar por codigo
-          </Button>
-
-          <h3>Empleado: {nombreEmpleado} </h3>
-          <h5>Total realizado: {totalRealizado}</h5>
-          <h5>Total a pagar: {totalPorcentaje}</h5>
-        </div>
-
-        {/*Aca comienza el grafico*/}
-        <div className="col-md-6  ">
-          <div style={{ width: "100%", maxWidth: "5000px", margin: "auto" }}>
-            <VictoryPie
-              data={data}
-              colorScale={["#66BB6A", "#EF5350"]} // Colores para Ingresos y Gastos
-              animate={{ duration: 2000 }}
-              responsive={true}
-              width={300} // Ajusta el ancho según tus necesidades
-            />
-          </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
     </Container>
   );
 };

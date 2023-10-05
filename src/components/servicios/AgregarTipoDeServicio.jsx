@@ -3,40 +3,39 @@ import { AiOutlineSave, AiOutlineRollback } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
-
+import Select from "react-select";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 import { Toast } from "../../Alert/Aler";
 import { useAuth } from "../context/authContext";
+import useCategoriasServiciosLogic from "../../Hooks/useCategoriasServiciosLogic";
 
 const AgregarTipoDeServicio = () => {
   const navigate = useNavigate();
   const { addTipoDeServicio, tiposServicios } = useTiposDeServiciosLogic();
+  const { categoriasServicios, isLoading } = useCategoriasServiciosLogic();
   const { user } = useAuth();
-  const opcionesServicio = [
-    "Manicura",
-    "Peluquería",
-    "Depilación",
-    "Pestaña",
-    "Color",
-  ];
+
+  console.log(categoriasServicios);
 
   const [servicio, setServicio] = useState({
     nombreServicio: "",
     tipoDeTrabajo: "",
     precioServicio: "",
   });
-  const handleChange = (e) => {
-    let value = e.target.value;
 
-    // Si el campo es "precioServicio", convierte el valor a número
-    if (e.target.name === "precioServicio") {
-      value = parseFloat(value); // O parseInt si deseas un número entero
-    }
+  const SelectCategoria = categoriasServicios
+    ? categoriasServicios.map((tipoDeServicio) => ({
+        value: tipoDeServicio.id,
+        label: tipoDeServicio.nombreCategoriaServicio,
+      }))
+    : [];
 
-    setServicio({
-      ...servicio,
-      [e.target.name]: value,
-    });
+  console.log(SelectCategoria);
+  const handleChange = (selectOption, name) => {
+    setServicio((prevServicio) => ({
+      ...prevServicio,
+      [name]: selectOption.value, // Cambia selectOption a selectOption.value
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -75,6 +74,10 @@ const AgregarTipoDeServicio = () => {
       console.log(error);
     }
   };
+
+  if (isLoading) {
+    return <p>Cargando...</p>;
+  }
   return (
     <div>
       <div className="container">
@@ -107,22 +110,22 @@ const AgregarTipoDeServicio = () => {
                   <label htmlFor="1">Ingrese el servicio </label>
                 </div>
               </div>
-              <div className="form-floating mb-3">
-                <select
-                  className="form-select"
-                  id="2"
-                  name="tipoDeTrabajo"
-                  value={servicio.tipoDeTrabajo}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccione un servicio</option>
-                  {opcionesServicio.map((opcion, index) => (
-                    <option key={index} value={opcion}>
-                      {opcion}
-                    </option>
-                  ))}
-                </select>
-                <label htmlFor="2">Seleccione el servicio</label>
+
+              <div>
+                <label htmlFor="1">
+                  Ingrese el tipo de servicio
+                  <span className="text-danger  fw-bold">*</span>
+                </label>
+                <Select
+                  options={SelectCategoria}
+                  menuPlacement="bottom"
+                  onChange={(selectOption) =>
+                    handleChange(selectOption, "tipoDeTrabajo")
+                  }
+                  value={SelectCategoria.find(
+                    (option) => option.value === servicio.tipoDeTrabajo
+                  )} // Actualiza el valor
+                />
               </div>
 
               <div className="my-2">

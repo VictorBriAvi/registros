@@ -20,7 +20,7 @@ const Productos = () => {
   const [productoState, setProductoState] = useState({
     nombreProducto: "", // Estado para almacenar la categoría seleccionada en el select
   });
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const {
     productos,
@@ -61,10 +61,11 @@ const Productos = () => {
       getProductos();
     } else {
       buscarCategoria(productoState.nombreProducto);
+      setProductoState({ nombreProducto: "" });
     }
   };
 
-  if (isLoading) {
+  if (isLoading && loading) {
     return <p>Cargando...</p>;
   }
 

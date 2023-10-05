@@ -14,7 +14,6 @@ const AgregarCategoriaServicio = () => {
   const { user } = useAuth();
   const [categoriaServicio, setCategoriaServicio] = useState({
     nombreCategoriaServicio: "",
-    usuarioId: "",
   });
 
   const handleChange = (e) => {

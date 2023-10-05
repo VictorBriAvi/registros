@@ -1,6 +1,6 @@
 import { AiOutlineSave, AiOutlineRollback } from "react-icons/ai";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import Select from "react-select";
 
@@ -16,18 +16,34 @@ import useTiposDeGastosLogic from "../../Hooks/useTiposDeGastosLogic";
 import { useAuth } from "../context/authContext";
 
 const AgregarGasto = () => {
+  const param = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { tiposDeGastos, isLoading } = useTiposDeGastosLogic();
 
   const { addGasto } = useGastosLogic();
 
-  const [gasto, setGasto] = useState({
-    precioGasto: "",
-    descripcionGasto: "",
-    nombreTipoDeGasto: "",
-    fechaGasto: "",
+  const [gasto, setGasto] = useState(() => {
+    if (param.porcentajeColaborador) {
+      // Si param.porcentajeColaborador tiene datos, configura el estado inicial con esos datos
+      return {
+        precioGasto: param.porcentajeColaborador,
+        descripcionGasto: "", // Deja este campo vacío o configúralo según sea necesario
+        nombreTipoDeGasto: "", // Deja este campo vacío o configúralo según sea necesario
+        fechaGasto: "", // Deja este campo vacío o configúralo según sea necesario
+      };
+    } else {
+      // Si param.porcentajeColaborador no tiene datos, configura el estado inicial con campos vacíos
+      return {
+        precioGasto: "",
+        descripcionGasto: "",
+        nombreTipoDeGasto: "",
+        fechaGasto: "",
+      };
+    }
   });
+
+  console.log(param.porcentajeColaborador);
 
   const SelectTiposDeGastos = tiposDeGastos
     ? tiposDeGastos.map((tipoDeGasto) => ({
@@ -87,7 +103,11 @@ const AgregarGasto = () => {
       });
       console.log(response);
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");
-      navigate("/registros/gastos");
+      if (param) {
+        navigate("/registros/arqueo-de-caja");
+      } else {
+        navigate("/registros/gastos");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -171,7 +191,13 @@ const AgregarGasto = () => {
                 <button className="btn btn-primary font-weight-normal me-4">
                   {<AiOutlineSave />} Agregar
                 </button>
-                <Link to={"/registros/gastos"}>
+                <Link
+                  to={
+                    param.porcentajeColaborador
+                      ? "/registros/arqueo-de-caja"
+                      : "/registros/gastos"
+                  }
+                >
                   <button className="btn btn-info font-weight-normal">
                     {<AiOutlineRollback />} Regresar
                   </button>

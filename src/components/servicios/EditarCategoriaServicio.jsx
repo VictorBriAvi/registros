@@ -21,6 +21,7 @@ const EditarCategoriaServicio = () => {
   const [categoriaServicioEdit, setCategoriaServicioEdit] = useState({
     nombreCategoriaServicio: "",
   });
+
   useEffect(() => {
     const handleGetCategoriaServicioById = async (id) => {
       const categoria = await getCategoriasServiciosById(id);
@@ -121,7 +122,7 @@ const EditarCategoriaServicio = () => {
                       className="form-control"
                       id="1"
                       placeholder="name@example.com"
-                      name="nombreTipoDeGasto"
+                      name="nombreCategoriaServicio"
                       value={categoriaServicioEdit.nombreCategoriaServicio}
                       onChange={handleChange}
                     />

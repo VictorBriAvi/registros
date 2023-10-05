@@ -19,12 +19,14 @@ import { db } from "../firebaseConfig/firebase";
 
 import { useEffect } from "react";
 import { useAuth } from "../components/context/authContext";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const useTiposDeServiciosLogic = () => {
   const [tiposServicios, setTiposServicios] = useState([]);
   const [tiposServiciosAll, setTiposServiciosAll] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const navigate = useNavigate();
   const [ultimoDoc, setUltimoDoc] = useState(null);
   const [primerDocVisible, setPrimerDocVisible] = useState([0]);
 
@@ -205,7 +207,10 @@ const useTiposDeServiciosLogic = () => {
       // Crear una copia de los tipos de servicio con los precios actualizados
       const nuevosPrecios = tiposServicios.map((servicio) => {
         const precioActual = servicio.precioServicio;
-        const nuevoPrecio = precioActual * (1 + porcentaje / 100);
+        const nuevoPrecio = Math.round(
+          precioActual + (precioActual * porcentaje) / 100
+        );
+
         console.log(
           `Precio actual: ${precioActual}, Nuevo precio: ${nuevoPrecio}`
         );
@@ -226,6 +231,7 @@ const useTiposDeServiciosLogic = () => {
           // Llamar a la función de actualización para cada servicio
 
           await updateTipoDeServicio(idServicio, servicioActualizado);
+
           navigate("/registros/servicios/tiposDeServicios");
         } catch (error) {
           console.log(
@@ -258,7 +264,9 @@ const useTiposDeServiciosLogic = () => {
       console.log(tipo);
 
       // Calcular el nuevo valor con el porcentaje
-      const nuevoPrecio = precioActual + (precioActual * porcentaje) / 100;
+      const nuevoPrecio = Math.round(
+        precioActual + (precioActual * porcentaje) / 100
+      );
 
       console.log(nuevoPrecio);
 
@@ -269,6 +277,12 @@ const useTiposDeServiciosLogic = () => {
     try {
       // Ejecutar el bote de escritura
       await batch.commit();
+      Swal.fire(
+        "Buen Trabajo!",
+        `has incrementado el valor del servicio `,
+        "success"
+      );
+      navigate("/registros/servicios/tiposDeServicios");
     } catch (error) {
       console.error(
         "Error al actualizar los precios en la base de datos:",

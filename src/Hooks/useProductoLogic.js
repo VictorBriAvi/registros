@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebaseConfig/firebase";
 import { useAuth } from "../components/context/authContext";
+import { useCallback } from "react";
 
 const useProductoLogic = () => {
   const [productos, setProductos] = useState([]);
@@ -29,10 +30,9 @@ const useProductoLogic = () => {
   const productosColletion = collection(db, "productos");
   const pageSize = 10;
 
-  const { user } = useAuth();
-  const usuario = user.uid;
-
-  const getProductos = async () => {
+  const { user, loading } = useAuth();
+  const usuario = loading ? "" : user ? user.uid || "" : "";
+  const getProductos = useCallback(async () => {
     /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
 
     const primeraConsulta = query(
@@ -57,7 +57,7 @@ const useProductoLogic = () => {
     setPrimerDocVisible(primerVisible);
     setProductos(productosData);
     setIsLoading(false);
-  };
+  }, [productosColletion]);
   const getProductosAll = async () => {
     /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
 
@@ -209,7 +209,7 @@ const useProductoLogic = () => {
   useEffect(() => {
     getProductos();
     getProductosAll();
-  }, []);
+  }, [user]);
 
   return {
     productos,

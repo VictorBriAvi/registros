@@ -99,9 +99,9 @@ const useGastosLogic = () => {
     try {
       const primeraConsulta = query(
         collection(db, "gastos"),
+        where("usuarioId", "==", usuario),
         where("fechaGasto", ">=", fechaInicio),
         where("fechaGasto", "<=", fechaFin),
-        where("usuarioId", "==", usuario),
 
         limit(pageSize)
       );
@@ -318,6 +318,7 @@ const useGastosLogic = () => {
   };
 
   const addGasto = async (nuevoGasto) => {
+    console.log(nuevoGasto);
     try {
       console.log(nuevoGasto);
       const gastoRef = doc(db, nuevoGasto.nombreTipoDeGasto);
