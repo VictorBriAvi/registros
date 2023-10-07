@@ -17,7 +17,7 @@ const EditarProducto = () => {
     codigoProducto: "",
     nombreProducto: "",
     descripcionProducto: "",
-    precioProducto: "",
+    precioProducto: 0,
   });
 
   useEffect(() => {
@@ -37,8 +37,7 @@ const EditarProducto = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(productoEdit);
-    console.log(params.id);
+
     const productoActualizado = {};
 
     if (

@@ -1,23 +1,25 @@
 import { AiOutlineSave, AiOutlineRollback } from "react-icons/ai";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
+import Select from "react-select";
 import { useEffect, useState } from "react";
 
 import Swal from "sweetalert2";
 import { Toast } from "../../Alert/Aler";
 import useTiposDeServiciosLogic from "../../Hooks/useTiposDeServiciosLogic";
 
+import useCategoriasServiciosLogic from "../../Hooks/useCategoriasServiciosLogic";
+
 const EditarTipoDeServicio = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const { categoriasServicios } = useCategoriasServiciosLogic();
 
-  const opcionesServicio = [
-    "Manicura",
-    "Peluquería",
-    "Depilación",
-    "Pestaña",
-    "Color",
-  ];
+  const SelectCategoria = categoriasServicios
+    ? categoriasServicios.map((tipoDeServicio) => ({
+        value: tipoDeServicio.id,
+        label: tipoDeServicio.nombreCategoriaServicio,
+      }))
+    : [];
 
   const { tiposServicios, getTipoDeServicioById, updateTipoDeServicio } =
     useTiposDeServiciosLogic();
@@ -37,18 +39,18 @@ const EditarTipoDeServicio = () => {
     handleGetTipoDeServicioById(params.id);
   }, []);
 
-  const handleChange = (e) => {
-    let value = e.target.value;
-
-    // Si el campo es "precioServicio", convierte el valor a número
-    if (e.target.name === "precioServicio") {
-      value = parseFloat(value); // O parseInt si deseas un número entero
+  const handleChange = (e, name) => {
+    if (name === "nombreServicio" || name === "precioServicio") {
+      setTipoDeServicioEdit((prevServicio) => ({
+        ...prevServicio,
+        [name]: e.target.value,
+      }));
+    } else {
+      setTipoDeServicioEdit((prevServicio) => ({
+        ...prevServicio,
+        [name]: e.label,
+      }));
     }
-
-    setTipoDeServicioEdit({
-      ...tipoDeServicioEdit,
-      [e.target.name]: value,
-    });
   };
 
   const handleSubmit = (e) => {
@@ -144,28 +146,30 @@ const EditarTipoDeServicio = () => {
                       placeholder="name@example.com"
                       name="nombreServicio"
                       value={tipoDeServicioEdit.nombreServicio}
-                      onChange={handleChange}
+                      onChange={(selectOption) =>
+                        handleChange(selectOption, "nombreServicio")
+                      }
                     />
                     <label htmlFor="1">Codigo Producto</label>
                   </div>
                 </div>
 
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-select"
-                    id="2"
-                    name="tipoDeTrabajo"
-                    value={tipoDeServicioEdit.tipoDeTrabajo}
-                    onChange={handleChange}
-                  >
-                    <option value="">Seleccione un servicio</option>
-                    {opcionesServicio.map((opcion, index) => (
-                      <option key={index} value={opcion}>
-                        {opcion}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="2">Seleccione el servicio</label>
+                <div>
+                  <label htmlFor="1">
+                    Ingrese el tipo de servicio
+                    <span className="text-danger  fw-bold">*</span>
+                  </label>
+                  <Select
+                    options={SelectCategoria}
+                    menuPlacement="bottom"
+                    onChange={(selectOption) =>
+                      handleChange(selectOption, "tipoDeTrabajo")
+                    }
+                    value={SelectCategoria.find(
+                      (option) =>
+                        option.value === tipoDeServicioEdit.tipoDeTrabajo
+                    )} // Actualiza el valor
+                  />
                 </div>
 
                 <div className="my-2">

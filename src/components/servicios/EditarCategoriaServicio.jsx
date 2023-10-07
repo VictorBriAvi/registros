@@ -21,7 +21,6 @@ const EditarCategoriaServicio = () => {
   const [categoriaServicioEdit, setCategoriaServicioEdit] = useState({
     nombreCategoriaServicio: "",
   });
-
   useEffect(() => {
     const handleGetCategoriaServicioById = async (id) => {
       const categoria = await getCategoriasServiciosById(id);
@@ -30,15 +29,13 @@ const EditarCategoriaServicio = () => {
     handleGetCategoriaServicioById(params.id);
   }, [params.id]);
 
-  console.log(categoriaServicioId.nombreCategoriaServicio);
-
-  const handleChange = (e) => {
-    setCategoriaServicioEdit({
-      ...categoriaServicioEdit,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (e, name) => {
+    setCategoriaServicioEdit((prevCategoria) => ({
+      ...prevCategoria,
+      [name]: e.target.value,
+    }));
   };
-
+  console.log(categoriaServicioEdit);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -124,7 +121,9 @@ const EditarCategoriaServicio = () => {
                       placeholder="name@example.com"
                       name="nombreCategoriaServicio"
                       value={categoriaServicioEdit.nombreCategoriaServicio}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        handleChange(e, "nombreCategoriaServicio")
+                      }
                     />
                     <label htmlFor="1">
                       Edite el tipo de nombre que va a editar

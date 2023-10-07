@@ -37,6 +37,9 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
 import ResetPassword from "./ResetPassword";
+import HistorialClientes from "./components/servicios/HistorialClientes";
+import EditarHistorialCliente from "./components/servicios/EditarHistorialCliente";
+import AgregarHistorialClientes from "./components/servicios/AgregarHistorialClientes";
 
 function App() {
   return (
@@ -292,6 +295,19 @@ function App() {
               <EditarCategoriaServicio />
             </ProtectedRoute>
           }
+        />
+
+        <Route
+          path="/registros/servicios/historial-clientes"
+          element={<HistorialClientes />}
+        />
+        <Route
+          path="/registros/servicios/historial-clientes/agregar-historial-clientes"
+          element={<AgregarHistorialClientes />}
+        />
+        <Route
+          path="/registros/servicios/historial-clientes/editar-historial-clientes/:id"
+          element={<EditarHistorialCliente />}
         />
 
         <Route path="/registros/login" element={<Login />} />

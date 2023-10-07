@@ -32,9 +32,10 @@ const useProductoLogic = () => {
 
   const { user, loading } = useAuth();
   const usuario = loading ? "" : user ? user.uid || "" : "";
-  const getProductos = useCallback(async () => {
-    /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
 
+  /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
+
+  const getProductos = useCallback(async () => {
     const primeraConsulta = query(
       collection(db, "productos"),
       orderBy("usuarioId"),
@@ -58,6 +59,7 @@ const useProductoLogic = () => {
     setProductos(productosData);
     setIsLoading(false);
   }, [productosColletion]);
+
   const getProductosAll = async () => {
     /** ACA ESOTOY HACIENDO CONSULTA DE LA COLECCION tiposDeServicios (DATABASE) */
 
@@ -192,6 +194,7 @@ const useProductoLogic = () => {
 
   const updateProducto = async (id, productoActualizado) => {
     try {
+      console.log(productoActualizado);
       const productoDoc = doc(db, "productos", id);
       await updateDoc(productoDoc, productoActualizado);
       getProductos();

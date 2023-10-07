@@ -15,8 +15,6 @@ const AgregarTipoDeServicio = () => {
   const { categoriasServicios, isLoading } = useCategoriasServiciosLogic();
   const { user } = useAuth();
 
-  console.log(categoriasServicios);
-
   const [servicio, setServicio] = useState({
     nombreServicio: "",
     tipoDeTrabajo: "",
@@ -30,17 +28,24 @@ const AgregarTipoDeServicio = () => {
       }))
     : [];
 
-  console.log(SelectCategoria);
   const handleChange = (selectOption, name) => {
-    setServicio((prevServicio) => ({
-      ...prevServicio,
-      [name]: selectOption.value, // Cambia selectOption a selectOption.value
-    }));
+    if (name === "nombreServicio" || name === "precioServicio") {
+      setServicio((prevServicio) => ({
+        ...prevServicio,
+        [name]: selectOption.target.value,
+      }));
+    } else {
+      setServicio((prevServicio) => ({
+        ...prevServicio,
+        [name]: selectOption.label,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log(servicio);
     if (servicio.nombreServicio.trim() === "") {
       Toast.fire({
         icon: "error",
@@ -104,8 +109,10 @@ const AgregarTipoDeServicio = () => {
                     id="1"
                     placeholder="servicio"
                     name="nombreServicio"
+                    onChange={(selectOption) =>
+                      handleChange(selectOption, "nombreServicio")
+                    }
                     value={servicio.nombreServicio}
-                    onChange={handleChange}
                   />
                   <label htmlFor="1">Ingrese el servicio </label>
                 </div>

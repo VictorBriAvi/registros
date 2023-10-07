@@ -65,20 +65,25 @@ const useTiposDeServiciosLogic = () => {
   };
 
   const getTiposDeServiciosAll = async () => {
-    const primeraConsulta = query(
-      collection(db, "tiposDeServicios"),
-      orderBy("usuarioId"),
-      where("usuarioId", "==", usuario)
-    );
-    const documentSnapshots = await getDocs(primeraConsulta);
+    try {
+      setIsLoading(true);
+      const primeraConsulta = query(
+        collection(db, "tiposDeServicios"),
+        orderBy("usuarioId"),
+        where("usuarioId", "==", usuario)
+      );
+      const documentSnapshots = await getDocs(primeraConsulta);
 
-    const tiposDeServiciosData = documentSnapshots.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+      const tiposDeServiciosData = documentSnapshots.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
 
-    setTiposServiciosAll(tiposDeServiciosData);
-    setIsLoading(false);
+      setTiposServiciosAll(tiposDeServiciosData);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   /** paginaSiguiente : Esta funcion cuando le dan al boton Siguiente y avanzo a los 4 valores siguientes */

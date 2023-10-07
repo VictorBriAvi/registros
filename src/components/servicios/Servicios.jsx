@@ -90,6 +90,12 @@ const Servicios = () => {
                   <Dropdown.Item as={Link} to="/registros/tiposDePago">
                     Tipos de pago
                   </Dropdown.Item>
+                  <Dropdown.Item
+                    as={Link}
+                    to="/registros/servicios/historial-clientes"
+                  >
+                    Historial Clientes
+                  </Dropdown.Item>
                 </DropdownButton>
               </div>
             </div>

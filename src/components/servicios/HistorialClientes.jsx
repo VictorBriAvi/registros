@@ -1,40 +1,46 @@
-import { Link } from "react-router-dom";
-
-import useGastosLogic from "../../Hooks/useGastosLogic";
-
-import DatePicker from "react-datepicker";
-import DataTable from "../components/dataTable";
-import { Button, Col, Container, Row } from "react-bootstrap";
 import moment from "moment";
 import { useState } from "react";
+import useHistorialClientesLogic from "../../Hooks/useHistorialClientesLogic";
 import { useEffect } from "react";
-import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
-import { FcSearch } from "react-icons/fc";
+import { Link } from "react-router-dom";
 import TitulosPages from "../components/TitulosPages";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import BotonesPrincipalesAgregar from "../components/BotonesPrincipalesAgregar";
+import DatePicker from "react-datepicker";
+import { FcSearch } from "react-icons/fc";
+import DataTable from "../components/dataTable";
 
-const Cierres = () => {
-  const {
-    gastos,
-    isLoadingGasto,
-    deleteGasto,
-    paginaSiguiente,
-    paginaAnterior,
-    getGastos,
-  } = useGastosLogic();
+const HistorialClientes = () => {
   const [fechaActual, setFechaActual] = useState("");
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
+  const { isLoading, historialClientes, getHistorialClientes } =
+    useHistorialClientesLogic();
+
+  console.log(historialClientes);
   const columnaServicio = [
-    { key: "nombreTipoDeGasto", label: "Tipo de gasto" },
-    { key: "descripcionGasto", label: "Descripcion" },
-    { key: "precioGasto", label: "Valor Gasto" },
-    { key: "fechaGasto", label: "Fecha del gasto" },
+    { key: "nombreDeHistorialCliente", label: "Historial" },
+    { key: "descripcionHistorialCliente", label: "Desripcion" },
+    { key: "nombreCompletoCliente", label: "Nombre Cliente" },
+    { key: "fechaHistorial", label: "Fecha de historial" },
   ];
+
+  const deleteGasto = () => {
+    console.log("delete");
+  };
+
+  const paginaSiguiente = () => {
+    console.log("siguiente");
+  };
+
+  const paginaAnterior = () => {
+    console.log("Anterior");
+  };
 
   const handleBuscarPorFecha = (e) => {
     e.preventDefault();
     const fecha = moment(fechaSeleccionada).format("YYYY-MM-DD");
-    getGastos(fecha);
+    getHistorialClientes(fecha);
   };
 
   useEffect(() => {
@@ -47,18 +53,13 @@ const Cierres = () => {
     setFechaSeleccionada(date);
   };
 
-  if (isLoadingGasto) {
+  if (isLoading) {
     return <p>Cargando...</p>;
   }
   return (
     <div>
       <div>
-        <Link to={"/registros/gastos/TiposDeGastos"}>
-          <button className="btn btn-outline-primary me-3 float-end">
-            Tipos de gastos
-          </button>
-        </Link>
-        <TitulosPages titulo="Gastos" regresar={`/registros/`} />
+        <TitulosPages titulo="Historial Cliente" regresar={`/registros/`} />
       </div>
 
       <hr />
@@ -67,7 +68,7 @@ const Cierres = () => {
         <Row>
           <Col sm={6} className="my-2">
             <BotonesPrincipalesAgregar
-              agregar={`/registros/crear-tipoDeGasto`}
+              agregar={`/registros/servicios/historial-clientes/agregar-historial-clientes`}
               tituloBoton={"Agregar nueva gasto"}
             />
           </Col>
@@ -97,7 +98,7 @@ const Cierres = () => {
         <h4 className="text-center my-5">Fecha actual: {fechaActual}</h4>
         <DataTable
           columnaServicio={columnaServicio}
-          data={gastos}
+          data={historialClientes}
           deleteData={deleteGasto}
           paginaSiguiente={paginaSiguiente}
           paginaAnterior={paginaAnterior}
@@ -108,4 +109,4 @@ const Cierres = () => {
   );
 };
 
-export default Cierres;
+export default HistorialClientes;

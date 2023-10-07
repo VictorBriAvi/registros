@@ -43,8 +43,6 @@ const AgregarGasto = () => {
     }
   });
 
-  console.log(param.porcentajeColaborador);
-
   const SelectTiposDeGastos = tiposDeGastos
     ? tiposDeGastos.map((tipoDeGasto) => ({
         value: tipoDeGasto.id,
@@ -67,7 +65,7 @@ const AgregarGasto = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(gasto);
+    console.log(param);
 
     if (!gasto.nombreTipoDeGasto) {
       Toast.fire({
@@ -103,10 +101,13 @@ const AgregarGasto = () => {
       });
       console.log(response);
       Swal.fire("Buen Trabajo!", "has agregado un producto!", "success");
-      if (param) {
-        navigate("/registros/arqueo-de-caja");
-      } else {
+
+      if (!param.porcentajeColaborador) {
         navigate("/registros/gastos");
+      }
+
+      if (param.porcentajeColaborador) {
+        navigate("/registros/arqueo-de-caja");
       }
     } catch (error) {
       console.log(error);
